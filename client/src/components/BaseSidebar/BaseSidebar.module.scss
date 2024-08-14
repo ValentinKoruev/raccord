@@ -1,0 +1,8 @@
+@use './../../styles/variables' as *;
+
+.BaseSidebar {
+    height: 100%;
+    width: 250px;
+
+    background-color: $color-background-3;
+}

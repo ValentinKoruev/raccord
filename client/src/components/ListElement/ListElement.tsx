@@ -1,6 +1,6 @@
 import styles from './ListElement.module.scss';
 
-type ListElementProps = {
+export type ListElementProps = {
   image: string,
   tooltip: string
 }

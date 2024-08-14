@@ -1,0 +1,8 @@
+@use './../../styles/variables' as *;
+
+.Content {
+    height: 100%;
+    flex-grow: 1;
+
+    background-color: $color-background-2;
+}
