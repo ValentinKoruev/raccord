@@ -1,6 +1,6 @@
 import styles from './Channel.module.scss';
 import VolumeHigh from '@components/shared/svgs/VolumeHigh';
-import Hashtag from '@components/shared/svgs/Hasttag';
+import Hashtag from '@components/shared/svgs/Hashtag';
 
 export enum ChannelType {
     text,
@@ -18,8 +18,8 @@ const Channel = ({type, name} : ChannelProps) => {
 
     const renderIcon = (type: ChannelType) => {
         switch(type) {
-            case ChannelType.text: return <VolumeHigh width={iconSize} height={iconSize} /> 
-            case ChannelType.voice: return <Hashtag width={iconSize} height={iconSize} />
+            case ChannelType.text: return <Hashtag width={iconSize} height={iconSize} />
+            case ChannelType.voice: return <VolumeHigh width={iconSize} height={iconSize} /> 
         }
     }
 
