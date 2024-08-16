@@ -1,5 +1,6 @@
-import ChevronDown from '@components/shared/ChevronDown';
+import ChevronDown from '@components/shared/svgs/ChevronDown';
 import styles from './ServerSidebar.module.scss';
+import Channel, { ChannelType } from '@components/Channel';
 
 export type ServerSidebarProps = {
     name: string,
@@ -26,7 +27,8 @@ const ServerSidebar = ({name, banner} : ServerSidebarProps) => {
             </div>
             { banner && <div className={styles.BannerWhitespace} aria-label='hidden' /> /* whitespace for banner */ } 
             <div className={styles.ChannelsContainer}>
-                
+                <Channel type={ChannelType.text} name="General"/>
+                <Channel type={ChannelType.voice} name="GeneralGeneralGeneralGeneralGeneral"/>
             </div>
         </div>
     );

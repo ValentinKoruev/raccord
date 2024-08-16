@@ -1,10 +1,6 @@
-export type ChevronDownProps = {
-    fill?: string,
-    width?: string,
-    height?: string
-};
+import { SVGProps } from "react";
 
-const ChevronDown = (props : ChevronDownProps) => {
+const ChevronDown = (props : SVGProps<SVGElement>) => {
 
     return (
     <svg 

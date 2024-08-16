@@ -1,0 +1,40 @@
+@use '../../styles/variables' as *;
+
+.Channel {
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    width: 100%;
+    gap: 5px;
+
+    color: gray;
+    fill: gray;
+
+    border-radius: 3px;
+
+    font-size: $font-sm;
+    
+    .ChannelName {
+        width: 100%;
+        flex-grow: 1;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space:nowrap;
+    }
+
+    svg {
+        flex-shrink: 0;
+    }
+
+    .OptionsMenu {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+    }
+
+    &:hover {
+        cursor: pointer;
+        background-color: $color-background-1;
+        color: lightgray;
+    }
+}

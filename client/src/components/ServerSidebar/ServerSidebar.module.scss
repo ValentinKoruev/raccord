@@ -33,6 +33,7 @@ $bannerHeight: 140px;
             .ServerName {
                 width: 100%;
                 flex-grow: 1;
+                font-size: $font-sm;
                 text-overflow: ellipsis;
                 text-wrap: nowrap;
                 overflow:hidden;
