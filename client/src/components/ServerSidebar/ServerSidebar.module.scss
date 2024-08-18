@@ -1,8 +1,5 @@
 @use '../../styles/variables' as *;
 
-$titleHeight: 50px;
-$bannerHeight: 140px;
-
 .ServerSidebar {
     height: 100%;
     width: 100%;
@@ -13,7 +10,7 @@ $bannerHeight: 140px;
         .ServerInfo {
             position: relative;
             width: 100%;
-            height: $titleHeight;
+            height: $height-header;
             padding: 0 0.8em;
             
             display: flex;
@@ -55,7 +52,7 @@ $bannerHeight: 140px;
             top: 0;
             left: 0;
             width: 100%;
-            height: 140px;
+            height: $height-banner;
 
             .ServerBanner {
                 width: 100%;
@@ -66,7 +63,7 @@ $bannerHeight: 140px;
     }
 
     .BannerWhitespace {
-        height: $bannerHeight - $titleHeight;
+        height: $height-banner - $height-header;
     }
 
     .ChannelsContainer {
