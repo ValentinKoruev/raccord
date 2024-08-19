@@ -1,0 +1,41 @@
+@use '../../styles/variables' as *;
+
+.Chat {
+    width: 100%;
+    height: 100%;
+
+    background-color: $color-background-2;
+
+    .ChatHeader {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        width: 100%;
+        height: $height-header;
+        padding: 0 1em;
+
+        box-shadow: 0 2px 4px -4px #000;
+        color: white;
+
+        .ChatTitle {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-grow: 1;
+            span {
+                width: 0px;
+                flex-grow: 1;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space:nowrap;
+            }
+        }
+
+        .HeaderIcon {
+            width: 1.5em;
+            height: 1.5em;
+            fill: gray;
+        }
+    }
+}
