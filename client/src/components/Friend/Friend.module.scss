@@ -1,0 +1,31 @@
+@use '../../styles/variables' as *;
+
+$imageSize: 35px;
+
+.Friend {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    color: lightgray;
+    .ImageWrapper {
+        width: $imageSize;
+        height: $imageSize;
+        border-radius: 100%;
+        overflow: hidden;
+
+        .Image {
+            width: 100%;
+            height: 100%;
+        }
+    }
+    .FriendName {
+        height: 100%;
+        display: flex;
+        flex-direction: row; 
+
+        span {
+            font-size: $font-xs;
+        }
+    }
+}
