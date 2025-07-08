@@ -13,8 +13,6 @@ const ChatBottomBar = () => {
             <div onClick={onInputParentFocus} className={styles.InputContainer}>
                 <input ref={inputRef} className={styles.Input} type="text" placeholder="Message"/>
             </div>
-
-
         </div>
     )
 }

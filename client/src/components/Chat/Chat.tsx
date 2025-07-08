@@ -1,16 +1,27 @@
 import Hashtag from '@components/shared/svgs/Hashtag';
 import styles from './Chat.module.scss';
 import ChatBottomBar from '@components/ChatBottomBar';
-import Message from '@components/Message';
-import pamela from '../../assets/whatsapp.jpg'
+import Message, { MessageProps } from '@components/Message';
+import { addMinutes } from 'date-fns';
+import pamela from '../../assets/whatsapp.jpg';
+import nemanja from '../../assets/nemanja.png';
+import bigu from '../../assets/bigu.jpg';
 
 export type ChatProps = {
     title: string
 }
 
+const msgDate = new Date(2024, 7, 24, 2, 0, 0);
+
+const messages : Array<MessageProps> = [
+    { name: 'Whatsapp Malphite', image: pamela, content: "I'm moving as fast as I can", detailed: true, date: msgDate },
+    { name: 'Whatsapp Malphite', image: pamela, content: "i hate oranges", detailed: false, date: msgDate },
+    { name: 'Harmless Goblin', image: nemanja, content: "What is the meaning of the meaningless meaning", detailed: true, date: addMinutes(msgDate, 1) },
+    { name: 'Big Guy', image: bigu, content: "tragedy", detailed: true, date: addMinutes(msgDate, 1) },
+]
+
 const Chat = ({title} : ChatProps) => {
 
-    const msgDate = new Date(2024, 7, 22, 2, 0, 0);
 
     return (
         <div className={styles.Chat}>
@@ -25,10 +36,7 @@ const Chat = ({title} : ChatProps) => {
             </div>
             <div className={styles.ChatContent}>
                 <div className={styles.ChatMessages}>
-                    <Message name='Pamela' image={pamela} content='helloo >.<' detailed={true} date={msgDate}/>
-                    <Message name='Pamela' image={pamela} content='im pamela' detailed={false} date={msgDate}/>
-                    <Message nameColor='#f00' name='Dbeliq' image={pamela} content='erm' detailed={true} date={msgDate}/>
-                    <Message name='Pamela' image={pamela} content='test test' detailed={true} date={msgDate}/>
+                    { messages.map((message, index) => <Message key={`message-${index}`} {...message} />)}
                 </div>
                 <ChatBottomBar />
             </div>
