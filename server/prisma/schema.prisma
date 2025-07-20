@@ -9,62 +9,97 @@ datasource db {
 }
 
 model User {
-  id    Int     @default(autoincrement()) @id
-  email String  @unique
-  name  String
-  password String
-  descripton String?
-  servers Server[]
-  sentMessages   DirectMessage[] @relation("Sender")
-  receivedMessages DirectMessage[] @relation("Receiver")
+  id              Int             @id @default(autoincrement())
+  email           String          @unique
+  name            String
+  password        String
+  description     String?
+  icon            String?
+
+  ownedGuilds     Guild[]
+  joinedGuilds    UserOnGuild[]
+  directChannels  UserOnDirectChannel[]
+
+  directMessages  DirectMessage[]
+  guildMessages   GuildMessage[]
 }
 
-model Server {
-  id    Int     @default(autoincrement()) @id
-  name String
-  banner String?
-  owner User @relation(fields: [ownerId], references: [id])
-  ownerId Int
-  channels Channel[]
+// GUILD
+
+model Guild {
+  id            Int             @id @default(autoincrement())
+  name          String
+  icon          String?
+  banner        String?  
+  ownerId       Int
+
+  owner         User            @relation(fields: [ownerId], references: [id])
+  members       UserOnGuild[]
+  channels      GuildChannel[]
 }
 
-model Channel {
-  id    Int     @default(autoincrement()) @id
-  name String
-  type ChannelType @default(TEXT)
-  server Server @relation(fields: [serverId], references: [id])
-  serverId Int
-  messages Message[]
+model UserOnGuild {
+  userId        Int
+  guildId       Int
+  role          String?         // admin, member, etc. To be added...
+
+  user          User            @relation(fields: [userId], references: [id])
+  guild         Guild           @relation(fields: [guildId], references: [id])
+
+  @@id([userId, guildId])
+}
+
+model GuildChannel {
+  id            Int             @id @default(autoincrement())
+  name          String
+
+  guildId       Int
+  guild         Guild           @relation(fields: [guildId], references: [id])
+
+  messages      GuildMessage[]
+}
+
+model GuildMessage {
+  id            Int             @id @default(autoincrement())
+  content       String
+  createdAt     DateTime        @default(now())
+
+  senderId      Int
+  channelId     Int
+
+  sender        User            @relation(fields: [senderId], references: [id])
+  channel       GuildChannel    @relation(fields: [channelId], references: [id])
+}
+
+// END GUILD
+
+// DIRECT
+
+model DirectChannel {
+  id        Int                     @id @default(autoincrement())
+  users     UserOnDirectChannel[]
+  messages  DirectMessage[]
+}
+
+model UserOnDirectChannel {
+  userId      Int
+  directChannelId Int
+
+  user        User                  @relation(fields: [userId], references: [id])
+  channel     DirectChannel         @relation(fields: [directChannelId], references: [id])
+
+  @@id([userId, directChannelId])
 }
 
 model DirectMessage {
-  id Int @default(autoincrement()) @id
-  sender User @relation(name: "Sender", fields: [user1Id], references: [id])
-  user1Id Int
-  receiver User @relation(name: "Receiver", fields: [user2Id], references: [id])
-  user2Id Int
-  messages Message[]
+  id                Int                 @id @default(autoincrement())
+  content           String
+  createdAt         DateTime            @default(now())
+  senderId          Int
+  directChannelId   Int
+
+  sender            User                @relation(fields: [senderId], references: [id])
+  directChannel     DirectChannel       @relation(fields: [directChannelId], references: [id])
 }
 
-model Message {
-  id Int @default(autoincrement()) @id
-  type MessageType
-  content String
-  timestamp DateTime @default(now())
-
-  directMessage DirectMessage? @relation(fields: [directMessageId], references: [id])
-  directMessageId Int?
-
-  channel Channel? @relation(fields: [channelId], references: [id])
-  channelId Int
-}
-
-enum ChannelType {
-  TEXT
-  VOICE
-}
-
-enum MessageType {
-  CHANNEL
-  DIRECT
-}
+// END DIRECT
