@@ -1,24 +1,16 @@
-import GuildListElement, {
-  GuildListElementProps,
-} from "@components/GuildListElement";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import styles from "./GuildList.module.scss";
-import { useEffect, useState } from "react";
-
-// TODO: Response Type
-type getGuildsResponse = Array<{
-  name: string;
-  icon: string;
-  banner: string;
-}>;
+import GuildListElement, { GuildListElementProps } from '@components/GuildListElement';
+import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { GetUserGuildsRequest, GetUserGuildsResponse } from '@shared/types/getUserGuilds';
+import styles from './GuildList.module.scss';
 
 const GuildList = () => {
   const [guilds, setGuilds] = useState<GuildListElementProps[]>([]);
 
   // TODO: Send connected user information when auth is added.
-  const { data, isSuccess, error } = useQuery<getGuildsResponse, Error>({
-    queryKey: ["messages", "1"],
+  const { data, isSuccess, error } = useQuery<GetUserGuildsResponse, Error>({
+    queryKey: ['messages', '1'],
     queryFn: async () => {
       const response = await axios.get<[]>(`http://localhost:4000/user/guilds`);
       return response.data;
@@ -30,8 +22,8 @@ const GuildList = () => {
   useEffect(() => {
     if (isSuccess && data) {
       const guilds: GuildListElementProps[] = data.map((guild) => ({
-        image: guild.icon,
-        tooltip: guild.name,
+        image: guild.icon!,
+        tooltip: guild.guildName,
       }));
 
       setGuilds(guilds);
@@ -43,11 +35,7 @@ const GuildList = () => {
   return (
     <div className={styles.ListContainer}>
       {guilds.map((guild, index) => (
-        <GuildListElement
-          key={`guild-${index}`}
-          image={`${guild.image}`}
-          tooltip={`${guild.tooltip}`}
-        />
+        <GuildListElement key={`guild-${index}`} image={`${guild.image}`} tooltip={`${guild.tooltip}`} />
       ))}
     </div>
   );

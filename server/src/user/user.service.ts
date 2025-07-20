@@ -1,20 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { GetUserGuildsRequest, GetUserGuildsResponse } from '@shared/types/getUserGuilds';
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async getUserGuilds(userId: number) {
-    const response = await this.prisma.userOnGuild.findMany({
+  async getUserGuilds(getUserGuildsReq: GetUserGuildsRequest): Promise<GetUserGuildsResponse> {
+    const query = await this.prisma.userOnGuild.findMany({
       where: {
-        userId: userId,
+        userId: getUserGuildsReq.userId,
       },
       include: {
         guild: true,
       },
     });
 
-    return response.map((g) => g.guild);
+    const response: GetUserGuildsResponse = query.map((g) => ({
+      guildName: g.guild.name,
+      icon: g.guild.icon ?? undefined,
+      banner: g.guild.banner ?? undefined,
+    }));
+
+    return response;
   }
 }

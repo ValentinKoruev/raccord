@@ -8,6 +8,6 @@ export class UserController {
   // TODO: Get servers for current logged in user when auth is added, temp using id of -1, which is the seeded user
   @Get('guilds')
   getUserServers() {
-    return this.userService.getUserGuilds(-1);
+    return this.userService.getUserGuilds({ userId: -1 });
   }
 }
