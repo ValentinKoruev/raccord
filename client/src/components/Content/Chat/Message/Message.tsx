@@ -11,14 +11,6 @@ export type MessageProps = {
   nameColor?: string;
 };
 
-// TODO: Export into message.types.ts
-export type MessageResponse = {
-  username: string;
-  content: string;
-  image: string;
-  date: Date;
-};
-
 const Message: FC<MessageProps> = ({ username, image, content, detailed, date, nameColor }) => {
   return (
     <div className={`${styles.Message} ${detailed ? styles.Detailed : ''}`}>

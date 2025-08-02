@@ -1,57 +1,34 @@
-import axios from 'axios';
-import { FC, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { FC } from 'react';
 import useChat from './hooks/useChat';
 import ChatBottomBar from '@components/Content/Chat/ChatBottomBar';
-import Message, { MessageProps } from '@components/Content/Chat/Message';
+import Message from '@components/Content/Chat/Message';
 import Icon from '@shared/components/Icon';
 import styles from './Chat.module.scss';
+import { MessageDto } from '@shared/types/dto/Message';
 
 export type ChatProps = {
   title: string;
+  initialMessages: Array<MessageDto>;
 };
 
-type Channel = {
-  name: string;
-  type: string;
-  messages: Array<{
-    content: string;
-    createdAt: Date;
-    sender: {
-      name: string;
-      icon: string;
-    };
-  }>;
-};
+const Chat: FC<ChatProps> = ({ title, initialMessages }) => {
+  const { messages, setMessages } = useChat({ initialMessages });
 
-const Chat: FC<ChatProps> = ({ title }) => {
-  const { data, isSuccess, error } = useQuery<Channel[], Error>({
-    queryKey: ['messages', '2'],
-    queryFn: async () => {
-      const response = await axios.get<Channel[]>(`http://localhost:4000/guild/channels`);
-      return response.data;
-    },
-    staleTime: Infinity,
-    refetchOnWindowFocus: false,
-  });
-
-  const { messages, setMessages } = useChat();
-
-  useEffect(() => {
-    if (isSuccess && data) {
-      const messages: MessageProps[] = data[0].messages.map((msg) => ({
-        username: msg.sender.name,
-        image: msg.sender.icon,
-        content: msg.content,
-        detailed: true,
-        date: msg.createdAt,
-      }));
-
-      setMessages(messages);
-    }
-  }, [isSuccess, data]);
-
-  if (error) return <p>Error loading messages: {error.message}</p>;
+  const renderMessages = () => {
+    return messages.map((mes, index, array) => {
+      const isDetailed = array[index - 1]?.senderId !== mes.senderId;
+      return (
+        <Message
+          key={`message-${index}`}
+          detailed={isDetailed}
+          username={mes.senderName}
+          date={mes.date}
+          content={mes.content}
+          image={mes.icon}
+        />
+      );
+    });
+  };
 
   return (
     <div className={styles.Chat}>
@@ -63,11 +40,7 @@ const Chat: FC<ChatProps> = ({ title }) => {
         <div></div>
       </div>
       <div className={styles.ChatContent}>
-        <div className={styles.ChatMessages}>
-          {messages.map((message, index) => (
-            <Message key={`message-${index}`} {...message} />
-          ))}
-        </div>
+        <div className={styles.ChatMessages}>{renderMessages()}</div>
         <ChatBottomBar />
       </div>
     </div>

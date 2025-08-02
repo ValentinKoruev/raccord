@@ -1,32 +1,37 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
+import { GuildDto } from '@shared/types/dto/Guild';
 import DirectSidebar from './DirectSidebar';
 import GuildSidebar from './GuildSidebar';
 import GuildList from './GuildList';
 import styles from './Sidebar.module.scss';
 
+export type SidebarProps = {
+  guilds: Array<GuildDto>;
+};
+
 export type SidebarState = {
   type: 'direct' | 'guild';
-  guildId?: number;
+  currentGuild?: GuildDto;
 };
 
 const initialState: SidebarState = {
-  type: 'guild',
+  type: 'direct',
 };
 
-const Sidebar = () => {
+const Sidebar: FC<SidebarProps> = ({ guilds }) => {
   const [sidebar, setSidebar] = useState<SidebarState>(initialState);
 
   const renderSidebar = (sidebar: SidebarState) => {
     if (sidebar.type == 'direct') return <DirectSidebar />;
 
-    if (sidebar.type == 'guild') return <GuildSidebar name="Pamela" />;
+    if (sidebar.type == 'guild' && sidebar.currentGuild) return <GuildSidebar guild={sidebar.currentGuild} />;
 
     return null;
   };
 
   return (
     <div className={styles.Sidebar}>
-      <GuildList />
+      <GuildList guilds={guilds} setSidebar={setSidebar} />
       {renderSidebar(sidebar)}
     </div>
   );

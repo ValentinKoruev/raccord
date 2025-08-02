@@ -1,33 +1,23 @@
-import { MessageProps, MessageResponse } from '@components/Content/Chat/Message';
+import { MessageDto } from '@shared/types/dto/Message';
+import { MessageSocketResponse } from '@shared/types/messageSocket';
 import { useEffect, useRef, useState } from 'react';
 import { socket } from 'src/socket';
 
-type UseChatType = {
-  messages: Array<MessageProps>;
-  setMessages: React.Dispatch<React.SetStateAction<MessageProps[]>>;
+type UseChatProps = {
+  initialMessages: Array<MessageDto>;
 };
 
-const useChat = (): UseChatType => {
-  const [messages, setMessages] = useState<Array<MessageProps>>([]);
-  const messagesRef = useRef<Array<MessageProps>>([]);
+type UseChatType = {
+  messages: Array<MessageDto>;
+  setMessages: React.Dispatch<React.SetStateAction<MessageDto[]>>;
+};
 
-  const shouldMessageBeDetailed = (username: string): boolean => {
-    const currentMessages = messagesRef.current;
+const useChat = ({ initialMessages }: UseChatProps): UseChatType => {
+  const [messages, setMessages] = useState<Array<MessageDto>>(initialMessages);
+  const messagesRef = useRef<Array<MessageDto>>([]);
 
-    if (currentMessages.length <= 0) return true;
-
-    return currentMessages[currentMessages.length - 1].username != username;
-  };
-
-  const onMessage = (messageResponse: MessageResponse) => {
-    const message: MessageProps = {
-      username: messageResponse.username,
-      image: messageResponse.image,
-      content: messageResponse.content,
-      detailed: shouldMessageBeDetailed(messageResponse.username),
-      date: messageResponse.date,
-    };
-    setMessages((state) => [...state, message]);
+  const onMessage = (messageResponse: MessageSocketResponse) => {
+    setMessages((state) => [...state, messageResponse.message]);
   };
 
   useEffect(() => {
@@ -41,6 +31,10 @@ const useChat = (): UseChatType => {
   useEffect(() => {
     messagesRef.current = messages;
   }, [messages]);
+
+  useEffect(() => {
+    setMessages(initialMessages);
+  }, [initialMessages]);
 
   return { messages, setMessages };
 };
