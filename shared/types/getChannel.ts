@@ -1,7 +1,7 @@
 import { ChannelDto } from "./dto/Channel";
 
 export type GetChannelRequest = {
-  channelId: number;
+  channelId: string;
 };
 
 export type GetChannelResponse = ChannelDto | null;

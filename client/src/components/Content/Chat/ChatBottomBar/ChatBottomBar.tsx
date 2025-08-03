@@ -1,11 +1,13 @@
 import { MouseEventHandler, useEffect, useRef } from 'react';
 import { socket } from 'src/socket';
 import styles from './ChatBottomBar.module.scss';
+import { useAppSelector } from 'src/redux/store';
 
 const ChatBottomBar = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const onInputParentFocus: MouseEventHandler = (e) => {
+  const activeChannelId = useAppSelector((state) => state.chat.activeChannelId);
+  const activeChannelIdRef = useRef(activeChannelId); // to be used for socketio callback fn
+  const onInputParentFocus: MouseEventHandler = () => {
     inputRef.current && inputRef.current.focus();
   };
 
@@ -22,6 +24,7 @@ const ChatBottomBar = () => {
       socket.emit('message', {
         user: 'Dbeliq',
         content: inputCurrent.value,
+        channelId: activeChannelIdRef.current,
       });
 
       inputCurrent.value = '';
@@ -35,6 +38,10 @@ const ChatBottomBar = () => {
       document.removeEventListener('keydown', onKeyDown);
     };
   }, []);
+
+  useEffect(() => {
+    activeChannelIdRef.current = activeChannelId;
+  }, [activeChannelId]);
 
   return (
     <div className={styles.ChatBottomBar}>

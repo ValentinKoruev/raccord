@@ -10,4 +10,9 @@ export class UserController {
   getUserServers() {
     return this.userService.getUserGuilds({ userId: -1 });
   }
+
+  @Get('channels')
+  getUserChannels() {
+    return this.userService.getAllUserChannels(-1);
+  }
 }

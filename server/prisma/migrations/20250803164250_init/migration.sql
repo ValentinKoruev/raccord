@@ -1,6 +1,7 @@
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
+    "publicId" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "password" TEXT NOT NULL,
@@ -13,6 +14,7 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Guild" (
     "id" SERIAL NOT NULL,
+    "publicId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "icon" TEXT,
     "banner" TEXT,
@@ -33,6 +35,7 @@ CREATE TABLE "UserOnGuild" (
 -- CreateTable
 CREATE TABLE "GuildChannel" (
     "id" SERIAL NOT NULL,
+    "publicId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "guildId" INTEGER NOT NULL,
 
@@ -53,6 +56,7 @@ CREATE TABLE "GuildMessage" (
 -- CreateTable
 CREATE TABLE "DirectChannel" (
     "id" SERIAL NOT NULL,
+    "publicId" TEXT NOT NULL,
 
     CONSTRAINT "DirectChannel_pkey" PRIMARY KEY ("id")
 );
@@ -77,7 +81,19 @@ CREATE TABLE "DirectMessage" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_publicId_key" ON "User"("publicId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Guild_publicId_key" ON "Guild"("publicId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "GuildChannel_publicId_key" ON "GuildChannel"("publicId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "DirectChannel_publicId_key" ON "DirectChannel"("publicId");
 
 -- AddForeignKey
 ALTER TABLE "Guild" ADD CONSTRAINT "Guild_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

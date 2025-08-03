@@ -7,7 +7,6 @@ export class ChannelController {
 
   @Get('/:id')
   getChannel(@Param() params: any) {
-    const channelId: number = Number.parseInt(params.id);
-    return this.channelService.getChannel({ channelId });
+    return this.channelService.getChannel({ channelId: params.id });
   }
 }

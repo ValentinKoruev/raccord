@@ -10,6 +10,7 @@ datasource db {
 
 model User {
   id              Int             @id @default(autoincrement())
+  publicId        String          @default(uuid()) @unique
   email           String          @unique
   name            String
   password        String
@@ -28,6 +29,7 @@ model User {
 
 model Guild {
   id            Int             @id @default(autoincrement())
+  publicId      String          @default(uuid()) @unique
   name          String
   icon          String?
   banner        String?  
@@ -51,6 +53,7 @@ model UserOnGuild {
 
 model GuildChannel {
   id            Int             @id @default(autoincrement())
+  publicId      String          @default(uuid()) @unique
   name          String
 
   guildId       Int
@@ -76,13 +79,14 @@ model GuildMessage {
 // DIRECT
 
 model DirectChannel {
-  id        Int                     @id @default(autoincrement())
+  id        Int                   @id @default(autoincrement())
+  publicId  String                @default(uuid()) @unique
   users     UserOnDirectChannel[]
   messages  DirectMessage[]
 }
 
 model UserOnDirectChannel {
-  userId      Int
+  userId          Int
   directChannelId Int
 
   user        User                  @relation(fields: [userId], references: [id])

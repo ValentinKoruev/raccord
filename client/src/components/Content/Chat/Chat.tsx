@@ -1,20 +1,18 @@
 import { FC } from 'react';
 import useChat from './hooks/useChat';
-import ChatBottomBar from '@components/Content/Chat/ChatBottomBar';
-import Message from '@components/Content/Chat/Message';
 import Icon from '@shared/components/Icon';
+import Message from './Message';
+import ChatBottomBar from '@components/Content/Chat/ChatBottomBar';
 import styles from './Chat.module.scss';
-import { MessageDto } from '@shared/types/dto/Message';
 
-export type ChatProps = {
-  title: string;
-  initialMessages: Array<MessageDto>;
-};
+export type ChatProps = {};
 
-const Chat: FC<ChatProps> = ({ title, initialMessages }) => {
-  const { messages, setMessages } = useChat({ initialMessages });
+const Chat: FC<ChatProps> = () => {
+  const { activeChannelId, messages, title } = useChat();
 
   const renderMessages = () => {
+    if (!activeChannelId) return;
+
     return messages.map((mes, index, array) => {
       const isDetailed = array[index - 1]?.senderId !== mes.senderId;
       return (
@@ -24,7 +22,7 @@ const Chat: FC<ChatProps> = ({ title, initialMessages }) => {
           username={mes.senderName}
           date={mes.date}
           content={mes.content}
-          image={mes.icon}
+          image={mes.icon!}
         />
       );
     });

@@ -34,7 +34,7 @@ export class GuildService {
       banner: guild.banner ?? undefined,
       channels: guild.channels.map((c) => {
         return {
-          id: c.id,
+          id: c.publicId, // TODO: use DTO
           name: c.name,
           type: 'text', // TODO: Change this when voice support is added
         };

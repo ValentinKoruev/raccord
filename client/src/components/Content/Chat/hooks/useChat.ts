@@ -1,23 +1,17 @@
-import { MessageDto } from '@shared/types/dto/Message';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { MessageSocketResponse } from '@shared/types/messageSocket';
-import { useEffect, useRef, useState } from 'react';
+import { receiveMessage } from 'src/redux/slices/chatSlice';
 import { socket } from 'src/socket';
 
-type UseChatProps = {
-  initialMessages: Array<MessageDto>;
-};
-
-type UseChatType = {
-  messages: Array<MessageDto>;
-  setMessages: React.Dispatch<React.SetStateAction<MessageDto[]>>;
-};
-
-const useChat = ({ initialMessages }: UseChatProps): UseChatType => {
-  const [messages, setMessages] = useState<Array<MessageDto>>(initialMessages);
-  const messagesRef = useRef<Array<MessageDto>>([]);
+const useChat = () => {
+  const dispatch = useAppDispatch();
+  const title = useAppSelector((state) => state.chat.title);
+  const activeChannelId = useAppSelector((state) => state.chat.activeChannelId);
+  const messages = useAppSelector((state) => state.chat.messages);
 
   const onMessage = (messageResponse: MessageSocketResponse) => {
-    setMessages((state) => [...state, messageResponse.message]);
+    dispatch(receiveMessage(messageResponse));
   };
 
   useEffect(() => {
@@ -28,15 +22,7 @@ const useChat = ({ initialMessages }: UseChatProps): UseChatType => {
     };
   }, []);
 
-  useEffect(() => {
-    messagesRef.current = messages;
-  }, [messages]);
-
-  useEffect(() => {
-    setMessages(initialMessages);
-  }, [initialMessages]);
-
-  return { messages, setMessages };
+  return { activeChannelId, messages, title };
 };
 
 export default useChat;

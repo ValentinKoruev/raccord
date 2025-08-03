@@ -1,15 +1,15 @@
 import { Dispatch, SetStateAction, FC } from 'react';
-import { GuildDto } from '@shared/types/dto/Guild';
-import GuildListElement from '@components/Sidebar/GuildList/GuildListElement';
-import { SidebarState } from '../Sidebar';
-import styles from './GuildList.module.scss';
-import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
 import config from 'src/config';
-import { GetGuildResponse } from '@shared/types/getGuild';
 import { useAppDispatch } from 'src/redux/store';
-import { setContentToChat } from 'src/redux/slices/contentSlice';
+import { setChatChannel } from 'src/redux/slices/chatSlice';
+import { SidebarState } from '../Sidebar';
+import { GuildDto } from '@shared/types/dto/Guild';
+import { GetGuildResponse } from '@shared/types/getGuild';
 import { GetChannelResponse } from '@shared/types/getChannel';
+import GuildListElement from '@components/Sidebar/GuildList/GuildListElement';
+import styles from './GuildList.module.scss';
 
 type GuildListProps = {
   guilds: Array<GuildDto>;
@@ -43,9 +43,9 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
         }
 
         dispatch(
-          setContentToChat({
-            variant: 'chat',
-            content: { title: initialGuildChannel.name, messages: initialGuildChannel.messages ?? [] },
+          setChatChannel({
+            channelId: initialGuildChannel.id,
+            messages: initialGuildChannel.messages,
           }),
         );
       }

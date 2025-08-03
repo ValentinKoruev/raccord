@@ -10,7 +10,7 @@ export class ChannelService {
   async getChannel(request: GetChannelRequest): Promise<GetChannelResponse> {
     const channel = await this.prisma.guildChannel.findFirst({
       where: {
-        id: request.channelId,
+        publicId: request.channelId,
       },
       include: {
         messages: {
@@ -24,7 +24,7 @@ export class ChannelService {
     if (!channel) return null;
 
     return {
-      id: channel.id,
+      id: channel.publicId, // ! refactor this to be clear that it;s using publicId, not internal id
       type: 'text', // TODO: Change when voice is added
       name: channel.name,
       messages: channel.messages.map((m) => ({
