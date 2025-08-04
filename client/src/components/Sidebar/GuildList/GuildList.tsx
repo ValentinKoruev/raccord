@@ -44,6 +44,7 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
 
         dispatch(
           setChatChannel({
+            channelName: initialGuildChannel.name,
             channelId: initialGuildChannel.id,
             messages: initialGuildChannel.messages,
           }),

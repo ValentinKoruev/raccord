@@ -28,8 +28,9 @@ export const chatSlice = createSlice({
       state.unreadFlags[channelId] = false;
     },
     setChatChannel: (state, action) => {
-      const payload = action.payload as { channelId: string; messages: MessageDto[] };
+      const payload = action.payload as { channelName: string; channelId: string; messages: MessageDto[] };
       state.messages = [...payload.messages];
+      state.title = payload.channelName;
       state.activeChannelId = payload.channelId;
       state.unreadFlags[payload.channelId] = false;
     },

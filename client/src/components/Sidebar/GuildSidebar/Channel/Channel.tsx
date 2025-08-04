@@ -30,9 +30,7 @@ const Channel: FC<ChannelProps> = ({ type, name, isActive, isUnread, channelId }
       return response.data;
     },
     onSuccess: async (channel) => {
-      if (!channel) return;
-
-      // TODO: expand this error handler
+      // TODO: expand this error handler or handle it in onError
       if (!channel) {
         console.assert('Error: No channel found');
         return;
@@ -40,6 +38,7 @@ const Channel: FC<ChannelProps> = ({ type, name, isActive, isUnread, channelId }
 
       dispatch(
         setChatChannel({
+          channelName: channel.name,
           channelId: channel.id,
           messages: channel.messages,
         }),
