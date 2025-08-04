@@ -6,6 +6,14 @@ import { GetUserGuildsRequest, GetUserGuildsResponse } from '@shared/types/getUs
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
+  async getUser(userId: number) {
+    return await this.prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+  }
+
   async getUserGuilds(getUserGuildsReq: GetUserGuildsRequest): Promise<GetUserGuildsResponse> {
     const query = await this.prisma.userOnGuild.findMany({
       where: {

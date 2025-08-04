@@ -22,7 +22,7 @@ const ChatBottomBar = () => {
       if (inputCurrent.value.trim().length == 0) return;
 
       socket.emit('message', {
-        user: 'Dbeliq',
+        senderId: -1,
         content: inputCurrent.value,
         channelId: activeChannelIdRef.current,
       });

@@ -11,6 +11,7 @@ import { MessageSocketRequest, MessageSocketResponse } from '@shared/types/messa
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 import { UserService } from 'src/user/user.service';
+import { MessageService } from 'src/message/message.service';
 
 @WebSocketGateway({
   cors: {
@@ -21,6 +22,7 @@ export class ChatGateway implements OnGatewayConnection {
   constructor(
     private readonly chatService: ChatService,
     private readonly userService: UserService,
+    private readonly messageService: MessageService,
   ) {}
 
   @WebSocketServer()
@@ -38,19 +40,29 @@ export class ChatGateway implements OnGatewayConnection {
   }
 
   @SubscribeMessage('message')
-  handleMessage(@ConnectedSocket() client: Socket, @MessageBody() messageRequest: MessageSocketRequest): void {
+  async handleMessage(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() messageRequest: MessageSocketRequest,
+  ): Promise<void> {
+    const user = await this.userService.getUser(messageRequest.senderId);
+
+    if (!user) return;
+
     // TODO: get user info when database and auth is implemented
     // for now just use dummy data
     const messageResponse: MessageSocketResponse = {
       message: {
-        senderId: messageRequest.senderId,
-        senderName: 'Raccford IV', // temporary, find sender name with id
-        icon: '/src/assets/racc.jpeg',
+        senderId: user.id,
+        senderName: user.name,
+        icon: user.icon ?? undefined,
         content: messageRequest.content,
         date: new Date(),
       },
       channelId: messageRequest.channelId,
     };
+
+    // ? refactor when adding sent/delivered/seen functionality
+    await this.messageService.createMessage({ channelId: messageRequest.channelId, message: messageResponse.message });
 
     // ? currently doesn't use rooms, but user does join them, they just aren't used yet
     client.broadcast.emit('message', messageResponse);
