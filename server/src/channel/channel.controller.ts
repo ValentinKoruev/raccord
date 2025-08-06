@@ -5,11 +5,6 @@ import { ChannelService } from './channel.service';
 export class ChannelController {
   constructor(private readonly channelService: ChannelService) {}
 
-  @Get('/direct')
-  getDirectChannels() {
-    return this.channelService.getDirectChannels(-1);
-  }
-
   @Get('/:id')
   getChannel(@Param() params: { id: string }) {
     // ? Id can be formatted like G_[channelId] or D_[channelId] depending on what type of channel it is
