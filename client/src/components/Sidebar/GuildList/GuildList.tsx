@@ -10,6 +10,7 @@ import { GetGuildResponse } from '@shared/types/getGuild';
 import { GetChannelResponse } from '@shared/types/getChannel';
 import GuildListElement from '@components/Sidebar/GuildList/GuildListElement';
 import styles from './GuildList.module.scss';
+import { formatGuildChannel } from '@shared/utils/channelFormater';
 
 type GuildListProps = {
   guilds: Array<GuildDto>;
@@ -31,7 +32,9 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
       setSidebar({ type: 'guild', currentGuild: guild });
 
       if (guild.channels) {
-        const channelResponse = await axios.get<GetChannelResponse>(`${config.apiUrl}/channel/${guild.channels[0].id}`);
+        const channelResponse = await axios.get<GetChannelResponse>(
+          `${config.apiUrl}/channels/${formatGuildChannel(guild.channels[0].id)}`,
+        );
 
         // TODO: Change it to last visited channel when it is supported
         const initialGuildChannel = channelResponse.data;
@@ -45,7 +48,7 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
         dispatch(
           setChatChannel({
             channelName: initialGuildChannel.name,
-            channelId: initialGuildChannel.id,
+            channelId: formatGuildChannel(initialGuildChannel.id),
             messages: initialGuildChannel.messages,
           }),
         );
@@ -53,8 +56,26 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
     },
   });
 
+  const directMutate = useMutation({
+    mutationFn: async () => {
+      const response = await axios.get(`${config.apiUrl}/user/direct`);
+
+      return response.data;
+    },
+    onSuccess: (directChannels: Array<any>) => {
+      // !NOTE: Lord forgive me
+      const directChannelsF = directChannels.map((d) => ({
+        publicId: d.publicId,
+        name: d.users[0].user.name,
+        icon: d.users[0].user.icon,
+      }));
+
+      setSidebar({ type: 'direct', friends: directChannelsF });
+    },
+  });
+
   const onDirectMessagesClick = () => {
-    setSidebar({ type: 'direct' });
+    directMutate.mutate();
   };
 
   const onGuildClick = (guild: GuildDto) => {

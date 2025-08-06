@@ -15,4 +15,14 @@ export class UserController {
   getUserChannels() {
     return this.userService.getAllUserChannels(-1);
   }
+
+  @Get('friends')
+  getUserFriends() {
+    return this.userService.getUserFriends(-1);
+  }
+
+  @Get('direct')
+  getUserDirectChannels() {
+    return this.userService.getUserDirectChannels(-1);
+  }
 }

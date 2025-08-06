@@ -17,6 +17,9 @@ model User {
   description     String?
   icon            String?
 
+  friends         User[]          @relation("UserFriends")
+  friendsOf       User[]          @relation("UserFriends")
+
   ownedGuilds     Guild[]
   joinedGuilds    UserOnGuild[]
   directChannels  UserOnDirectChannel[]

@@ -6,32 +6,67 @@ import { MessageDto } from '@shared/types/dto/Message';
 export class MessageService {
   constructor(private prisma: PrismaService) {}
 
-  createMessage = async ({ channelId, message }: { channelId: string; message: MessageDto }) => {
-    const channel = await this.prisma.guildChannel.findFirst({
-      where: {
-        publicId: channelId,
-      },
-    });
+  createMessage = async ({ channelInfo, message }: { channelInfo: string; message: MessageDto }) => {
+    const [channelType = undefined, channelId = undefined] = channelInfo.split('_', 2);
 
-    if (!channel) return null;
+    if (channelType == 'G') {
+      const channel = await this.prisma.guildChannel.findFirst({
+        where: {
+          publicId: channelId,
+        },
+      });
 
-    const result = await this.prisma.guildMessage.create({
-      data: {
-        content: message.content,
-        createdAt: message.date,
-        sender: {
-          connect: {
-            id: message.senderId,
+      if (!channel) return null;
+
+      const result = await this.prisma.guildMessage.create({
+        data: {
+          content: message.content,
+          createdAt: message.date,
+          sender: {
+            connect: {
+              id: message.senderId,
+            },
+          },
+          channel: {
+            connect: {
+              id: channel.id,
+            },
           },
         },
-        channel: {
-          connect: {
-            id: channel.id,
+      });
+
+      return result;
+    }
+
+    if (channelType == 'D') {
+      const channel = await this.prisma.directChannel.findFirst({
+        where: {
+          publicId: channelId,
+        },
+      });
+
+      if (!channel) return null;
+
+      const result = await this.prisma.directMessage.create({
+        data: {
+          content: message.content,
+          createdAt: message.date,
+          sender: {
+            connect: {
+              id: message.senderId,
+            },
+          },
+          directChannel: {
+            connect: {
+              publicId: channelId,
+            },
           },
         },
-      },
-    });
+      });
 
-    return result;
+      return result;
+    }
+
+    return;
   };
 }

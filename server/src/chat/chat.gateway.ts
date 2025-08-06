@@ -62,7 +62,10 @@ export class ChatGateway implements OnGatewayConnection {
     };
 
     // ? refactor when adding sent/delivered/seen functionality
-    await this.messageService.createMessage({ channelId: messageRequest.channelId, message: messageResponse.message });
+    await this.messageService.createMessage({
+      channelInfo: messageRequest.channelId,
+      message: messageResponse.message,
+    });
 
     // ? currently doesn't use rooms, but user does join them, they just aren't used yet
     client.broadcast.emit('message', messageResponse);

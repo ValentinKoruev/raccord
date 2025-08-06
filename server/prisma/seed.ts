@@ -6,7 +6,7 @@ async function main() {
     data: {
       id: -1,
       email: 'dbelium@gmail.com',
-      name: 'Dbelius III',
+      name: 'Dbeliq',
       password: 'test123',
       icon: '/src/assets/whatsapp.jpg',
       ownedGuilds: {
@@ -66,6 +66,34 @@ async function main() {
       },
       joinedGuilds: {
         create: [{ guildId: -1 }, { guildId: -2 }],
+      },
+    },
+  });
+
+  const raccford = await prisma.user.create({
+    data: {
+      id: -2,
+      email: 'raccford@gmail.com',
+      name: 'Sir Raccford IV',
+      password: 'test123',
+      icon: '/src/assets/racc.jpeg',
+      friends: {
+        connect: {
+          id: dbeliq.id,
+        },
+      },
+      friendsOf: {
+        connect: {
+          id: dbeliq.id,
+        },
+      },
+    },
+  });
+
+  const channel = await prisma.directChannel.create({
+    data: {
+      users: {
+        create: [{ user: { connect: { id: dbeliq.id } } }, { user: { connect: { id: raccford.id } } }],
       },
     },
   });

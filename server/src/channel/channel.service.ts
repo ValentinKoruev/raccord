@@ -6,8 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class ChannelService {
   constructor(private prisma: PrismaService) {}
 
-  // ! ONLY WORKS FOR GUILD CHANNELS, FURTHER IMPLEMENTATION NEEDED FOR DIRECT
-  async getChannel(request: GetChannelRequest): Promise<GetChannelResponse> {
+  async getGuildChannel(request: GetChannelRequest): Promise<GetChannelResponse> {
     const channel = await this.prisma.guildChannel.findFirst({
       where: {
         publicId: request.channelId,
@@ -24,9 +23,51 @@ export class ChannelService {
     if (!channel) return null;
 
     return {
-      id: channel.publicId, // ! refactor this to be clear that it;s using publicId, not internal id
+      id: channel.publicId, // ! refactor this to be clear that it's using publicId, not internal id
       type: 'text', // TODO: Change when voice is added
       name: channel.name,
+      messages: channel.messages.map((m) => ({
+        senderId: m.senderId,
+        senderName: m.sender.name,
+        content: m.content,
+        icon: m.sender.icon ?? undefined,
+        date: m.createdAt,
+      })),
+    };
+  }
+
+  async getDirectChannel(request: GetChannelRequest): Promise<GetChannelResponse> {
+    // TODO: Check if user is apart of the channel when auth is added
+
+    const channel = await this.prisma.directChannel.findFirst({
+      where: {
+        publicId: request.channelId,
+      },
+      include: {
+        users: {
+          where: {
+            NOT: {
+              userId: -1, // TODO: Get current user Id
+            },
+          },
+          include: {
+            user: true,
+          },
+        },
+        messages: {
+          include: {
+            sender: true,
+          },
+        },
+      },
+    });
+
+    if (!channel) return null;
+
+    return {
+      id: channel.publicId, // ! refactor this to be clear that it's using publicId, not internal id
+      type: 'text', // TODO: Change when voice is added
+      name: channel.users.map((u) => u.user.name).join(', '), // TODO: Add custom name to channels
       messages: channel.messages.map((m) => ({
         senderId: m.senderId,
         senderName: m.sender.name,

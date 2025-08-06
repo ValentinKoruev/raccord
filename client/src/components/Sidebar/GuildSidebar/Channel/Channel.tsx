@@ -8,6 +8,7 @@ import { setChatChannel } from 'src/redux/slices/chatSlice';
 import { GetChannelResponse } from '@shared/types/getChannel';
 import Icon from '@shared/components/Icon';
 import styles from './Channel.module.scss';
+import { formatGuildChannel } from '@shared/utils/channelFormater';
 
 export type ChannelType = 'text' | 'voice';
 
@@ -25,7 +26,7 @@ const Channel: FC<ChannelProps> = ({ type, name, isActive, isUnread, channelId }
 
   const channelMutate = useMutation({
     mutationFn: async (channelId: string): Promise<GetChannelResponse> => {
-      const response = await axios.get(`${config.apiUrl}/channel/${channelId}`);
+      const response = await axios.get(`${config.apiUrl}/channels/${formatGuildChannel(channelId)}`);
 
       return response.data;
     },
@@ -39,7 +40,7 @@ const Channel: FC<ChannelProps> = ({ type, name, isActive, isUnread, channelId }
       dispatch(
         setChatChannel({
           channelName: channel.name,
-          channelId: channel.id,
+          channelId: formatGuildChannel(channel.id),
           messages: channel.messages,
         }),
       );

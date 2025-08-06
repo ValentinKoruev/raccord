@@ -34,6 +34,21 @@ export class UserService {
     return response;
   }
 
+  async getUserFriends(userId: number) {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+      include: {
+        friends: true,
+      },
+    });
+
+    if (!user) return;
+
+    return user.friends;
+  }
+
   async getAllUserChannels(userId: number) {
     const query = await this.prisma.user.findFirst({
       where: {
@@ -74,5 +89,29 @@ export class UserService {
         }));
       }),
     };
+  }
+
+  async getUserDirectChannels(userId: number) {
+    return await this.prisma.directChannel.findMany({
+      where: {
+        users: {
+          some: {
+            userId: userId,
+          },
+        },
+      },
+      include: {
+        users: {
+          where: {
+            NOT: {
+              userId: userId,
+            },
+          },
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
   }
 }

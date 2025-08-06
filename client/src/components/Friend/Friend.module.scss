@@ -3,29 +3,36 @@
 $imageSize: 35px;
 
 .Friend {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 10px;
+  border-radius: 15px;
+  color: lightgray;
+  .ImageWrapper {
+    width: $imageSize;
+    height: $imageSize;
+    border-radius: 100%;
+    overflow: hidden;
+
+    .Image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .FriendName {
+    height: 100%;
     display: flex;
     flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    color: lightgray;
-    .ImageWrapper {
-        width: $imageSize;
-        height: $imageSize;
-        border-radius: 100%;
-        overflow: hidden;
 
-        .Image {
-            width: 100%;
-            height: 100%;
-        }
+    span {
+      font-size: $font-xs;
     }
-    .FriendName {
-        height: 100%;
-        display: flex;
-        flex-direction: row; 
+  }
 
-        span {
-            font-size: $font-xs;
-        }
-    }
+  &:hover {
+    background-color: $color-background-2;
+    cursor: pointer;
+  }
 }

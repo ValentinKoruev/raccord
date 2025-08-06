@@ -80,6 +80,14 @@ CREATE TABLE "DirectMessage" (
     CONSTRAINT "DirectMessage_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "_UserFriends" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL,
+
+    CONSTRAINT "_UserFriends_AB_pkey" PRIMARY KEY ("A","B")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_publicId_key" ON "User"("publicId");
 
@@ -94,6 +102,9 @@ CREATE UNIQUE INDEX "GuildChannel_publicId_key" ON "GuildChannel"("publicId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "DirectChannel_publicId_key" ON "DirectChannel"("publicId");
+
+-- CreateIndex
+CREATE INDEX "_UserFriends_B_index" ON "_UserFriends"("B");
 
 -- AddForeignKey
 ALTER TABLE "Guild" ADD CONSTRAINT "Guild_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -124,3 +135,9 @@ ALTER TABLE "DirectMessage" ADD CONSTRAINT "DirectMessage_senderId_fkey" FOREIGN
 
 -- AddForeignKey
 ALTER TABLE "DirectMessage" ADD CONSTRAINT "DirectMessage_directChannelId_fkey" FOREIGN KEY ("directChannelId") REFERENCES "DirectChannel"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_UserFriends" ADD CONSTRAINT "_UserFriends_A_fkey" FOREIGN KEY ("A") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_UserFriends" ADD CONSTRAINT "_UserFriends_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

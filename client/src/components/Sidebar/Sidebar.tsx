@@ -12,17 +12,23 @@ export type SidebarProps = {
 export type SidebarState = {
   type: 'direct' | 'guild';
   currentGuild?: GuildDto;
+  friends?: {
+    publicId: string;
+    name: string;
+    icon: string;
+  }[];
 };
 
 const initialState: SidebarState = {
   type: 'direct',
+  friends: [],
 };
 
 const Sidebar: FC<SidebarProps> = ({ guilds }) => {
   const [sidebar, setSidebar] = useState<SidebarState>(initialState);
 
   const renderSidebar = (sidebar: SidebarState) => {
-    if (sidebar.type == 'direct') return <DirectSidebar />;
+    if (sidebar.type == 'direct' && sidebar.friends) return <DirectSidebar friends={sidebar.friends} />;
 
     if (sidebar.type == 'guild' && sidebar.currentGuild) return <GuildSidebar guild={sidebar.currentGuild} />;
 

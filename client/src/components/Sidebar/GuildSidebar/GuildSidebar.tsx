@@ -5,6 +5,7 @@ import Channel from '@components/Sidebar/GuildSidebar/Channel';
 import ChannelCategory from '@components/Sidebar/GuildSidebar/ChannelCategory';
 import Icon from '@shared/components/Icon';
 import styles from './GuildSidebar.module.scss';
+import { formatGuildChannel } from '@shared/utils/channelFormater';
 
 export type GuildSidebarProps = {
   guild: GuildDto;
@@ -34,7 +35,7 @@ const GuildSidebar: FC<GuildSidebarProps> = ({ guild }) => {
             key={`channel-${index}`}
             type="text"
             name={c.name}
-            isActive={c.id == activeChannelId}
+            isActive={formatGuildChannel(c.id) == activeChannelId}
             isUnread={unreadFlags[c.id]}
             channelId={c.id}
           />
