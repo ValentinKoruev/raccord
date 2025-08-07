@@ -1,7 +1,7 @@
 import { GuildDto } from "./dto/Guild";
 
 export type GetGuildRequest = {
-  guildId: number;
+  guildId: string;
 };
 
 export type GetGuildResponse = GuildDto | null;

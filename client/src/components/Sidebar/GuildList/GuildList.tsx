@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, FC } from 'react';
 import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import config from 'src/config';
-import { useAppDispatch } from 'src/redux/store';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { setChatChannel } from 'src/redux/slices/chatSlice';
 import { SidebarState } from '../Sidebar';
 import { GuildDto } from '@shared/types/dto/Guild';
@@ -10,7 +10,9 @@ import { GetGuildResponse } from '@shared/types/getGuild';
 import { GetChannelResponse } from '@shared/types/getChannel';
 import GuildListElement from '@components/Sidebar/GuildList/GuildListElement';
 import styles from './GuildList.module.scss';
-import { formatGuildChannel } from '@shared/utils/channelFormater';
+import { formatGuildChannel } from '@shared/utils/channelFormatter';
+import { setTabDirect, setTabGuild, setActiveChannel, selectUnreadByGuilds } from 'src/redux/slices/sessionSlice';
+import { useSelector } from 'react-redux';
 
 type GuildListProps = {
   guilds: Array<GuildDto>;
@@ -19,9 +21,11 @@ type GuildListProps = {
 
 const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
   const dispatch = useAppDispatch();
+  const activeTabId = useAppSelector((state) => state.session.activeTabId);
+  const unreadGuilds = useSelector(selectUnreadByGuilds);
 
   const guildMutate = useMutation({
-    mutationFn: async (guildId: number): Promise<GetGuildResponse> => {
+    mutationFn: async (guildId: string): Promise<GetGuildResponse> => {
       const response = await axios.get(`${config.apiUrl}/guild/${guildId}`);
 
       return response.data;
@@ -33,7 +37,7 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
 
       if (guild.channels) {
         const channelResponse = await axios.get<GetChannelResponse>(
-          `${config.apiUrl}/channels/${formatGuildChannel(guild.channels[0].id)}`,
+          `${config.apiUrl}/channels/${formatGuildChannel(guild.guildId, guild.channels[0].id)}`,
         );
 
         // TODO: Change it to last visited channel when it is supported
@@ -45,10 +49,11 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
           return;
         }
 
+        dispatch(setTabGuild(guild.guildId));
+        dispatch(setActiveChannel({ type: 'guild', channelId: initialGuildChannel.id, guildId: guild.guildId }));
         dispatch(
           setChatChannel({
             channelName: initialGuildChannel.name,
-            channelId: formatGuildChannel(initialGuildChannel.id),
             messages: initialGuildChannel.messages,
           }),
         );
@@ -70,6 +75,8 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
         icon: d.users[0].user.icon,
       }));
 
+      dispatch(setTabDirect());
+      // dispatch(setActiveChannel({type: 'direct', channelId: i}))
       setSidebar({ type: 'direct', friends: directChannelsF });
     },
   });
@@ -84,16 +91,25 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
 
   return (
     <div className={styles.ListContainer}>
-      <GuildListElement onClick={() => onDirectMessagesClick()} name="Direct Messages" />
-      {guilds.map((guild, index) => (
-        <GuildListElement
-          onClick={() => onGuildClick(guild)}
-          key={`guild-${index}`}
-          name={`${guild.guildName}`}
-          guildId={guild.guildId}
-          image={`${guild.icon}`}
-        />
-      ))}
+      <GuildListElement
+        isActive={activeTabId == 'direct'}
+        isUnread={unreadGuilds['direct'] !== undefined}
+        onClick={() => onDirectMessagesClick()}
+        name="Direct Messages"
+      />
+      {guilds.map((guild, index) => {
+        return (
+          <GuildListElement
+            onClick={() => onGuildClick(guild)}
+            key={`guild-${index}`}
+            name={`${guild.guildName}`}
+            guildId={guild.guildId}
+            image={`${guild.icon}`}
+            isActive={activeTabId == guild.guildId}
+            isUnread={unreadGuilds[guild.guildId] !== undefined}
+          />
+        );
+      })}
     </div>
   );
 };

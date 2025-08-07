@@ -8,7 +8,8 @@ import { setChatChannel } from 'src/redux/slices/chatSlice';
 import { GetChannelResponse } from '@shared/types/getChannel';
 import Icon from '@shared/components/Icon';
 import styles from './Channel.module.scss';
-import { formatGuildChannel } from '@shared/utils/channelFormater';
+import { parseChannel } from '@shared/utils/channelFormatter';
+import { setActiveChannel } from 'src/redux/slices/sessionSlice';
 
 export type ChannelType = 'text' | 'voice';
 
@@ -26,7 +27,7 @@ const Channel: FC<ChannelProps> = ({ type, name, isActive, isUnread, channelId }
 
   const channelMutate = useMutation({
     mutationFn: async (channelId: string): Promise<GetChannelResponse> => {
-      const response = await axios.get(`${config.apiUrl}/channels/${formatGuildChannel(channelId)}`);
+      const response = await axios.get(`${config.apiUrl}/channels/${channelId}`);
 
       return response.data;
     },
@@ -37,10 +38,12 @@ const Channel: FC<ChannelProps> = ({ type, name, isActive, isUnread, channelId }
         return;
       }
 
+      const channelInfo = parseChannel(channelId); // !NOTE: preferable avoid this and change it in the future
+      if (channelInfo.type != 'guild') return;
+      dispatch(setActiveChannel({ type: 'guild', channelId: channelInfo.channelId, guildId: channelInfo.guildId }));
       dispatch(
         setChatChannel({
           channelName: channel.name,
-          channelId: formatGuildChannel(channel.id),
           messages: channel.messages,
         }),
       );

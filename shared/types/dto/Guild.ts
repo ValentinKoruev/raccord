@@ -1,7 +1,7 @@
 import { ChannelDto } from "./Channel";
 
 export type GuildDto = {
-  guildId;
+  guildId: string;
   guildName: string;
   icon?: string;
   banner?: string;

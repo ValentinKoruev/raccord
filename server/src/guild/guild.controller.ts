@@ -7,8 +7,7 @@ export class GuildController {
 
   @Get('/:id')
   getGuild(@Param() params: any) {
-    const guildId: number = Number.parseInt(params.id);
-    return this.guildService.getGuild({ guildId });
+    return this.guildService.getGuild({ guildId: params.id });
   }
 
   @Get('/:id/channels')

@@ -1,8 +1,11 @@
 const fs = require("fs/promises");
 const path = require("path");
 
-const CLIENT_DIR = "../client/src/shared/types";
-const SERVER_DIR = "../server/src/shared/types";
+const CLIENT_DIR_TYPES = "../client/src/shared/types";
+const SERVER_DIR_TYPES = "../server/src/shared/types";
+
+const CLIENT_DIR_UTILS = "../client/src/shared/utils";
+const SERVER_DIR_UTILS = "../server/src/shared/utils";
 
 async function copyDirectoryContents(srcDir, destDir) {
   try {
@@ -31,6 +34,8 @@ async function copyDirectoryContents(srcDir, destDir) {
 }
 
 Promise.all([
-  copyDirectoryContents("./types", CLIENT_DIR),
-  copyDirectoryContents("./types", SERVER_DIR),
+  copyDirectoryContents("./types", CLIENT_DIR_TYPES),
+  copyDirectoryContents("./types", SERVER_DIR_TYPES),
+  copyDirectoryContents("./utils", CLIENT_DIR_UTILS),
+  copyDirectoryContents("./utils", SERVER_DIR_UTILS),
 ]);

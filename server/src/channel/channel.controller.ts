@@ -1,5 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ChannelService } from './channel.service';
+import { parseChannel } from '@shared/utils/channelFormatter';
 
 @Controller('channels')
 export class ChannelController {
@@ -7,12 +8,12 @@ export class ChannelController {
 
   @Get('/:id')
   getChannel(@Param() params: { id: string }) {
-    // ? Id can be formatted like G_[channelId] or D_[channelId] depending on what type of channel it is
-    const channelInfo = params.id.split('_');
+    // ? Id can be formatted like G_[guildId]:[channelId] or D_[channelId] depending on what type of channel it is
+    const channelInfo = parseChannel(params.id);
 
-    if (channelInfo[0] == 'G') return this.channelService.getGuildChannel({ channelId: channelInfo[1] });
+    if (channelInfo.type == 'guild') return this.channelService.getGuildChannel({ channelId: channelInfo.channelId });
 
-    if (channelInfo[0] == 'D') return this.channelService.getDirectChannel({ channelId: channelInfo[1] });
+    if (channelInfo.type == 'direct') return this.channelService.getDirectChannel({ channelId: channelInfo.channelId });
 
     return null;
   }

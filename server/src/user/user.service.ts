@@ -25,7 +25,7 @@ export class UserService {
     });
 
     const response: GetUserGuildsResponse = query.map((g) => ({
-      guildId: g.guildId,
+      guildId: g.guild.publicId,
       guildName: g.guild.name,
       icon: g.guild.icon ?? undefined,
       banner: g.guild.banner ?? undefined,

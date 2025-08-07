@@ -9,7 +9,7 @@ export class GuildService {
   async getGuild(request: GetGuildRequest): Promise<GetGuildResponse> {
     const guild = await this.prisma.guild.findFirst({
       where: {
-        id: request.guildId,
+        publicId: request.guildId,
       },
       include: {
         channels: {
@@ -28,7 +28,7 @@ export class GuildService {
     if (!guild) return null;
 
     return {
-      guildId: guild.id,
+      guildId: guild.publicId,
       guildName: guild.name,
       icon: guild.icon ?? undefined,
       banner: guild.banner ?? undefined,

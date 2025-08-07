@@ -5,15 +5,33 @@ import Channel from '@components/Sidebar/GuildSidebar/Channel';
 import ChannelCategory from '@components/Sidebar/GuildSidebar/ChannelCategory';
 import Icon from '@shared/components/Icon';
 import styles from './GuildSidebar.module.scss';
-import { formatGuildChannel } from '@shared/utils/channelFormater';
+import { formatGuildChannel } from '@shared/utils/channelFormatter';
 
 export type GuildSidebarProps = {
   guild: GuildDto;
 };
 
 const GuildSidebar: FC<GuildSidebarProps> = ({ guild }) => {
-  const activeChannelId = useAppSelector((state) => state.chat.activeChannelId);
-  const unreadFlags = useAppSelector((state) => state.chat.unreadFlags);
+  const activeChannelId = useAppSelector((state) => state.session.activeChannelId);
+  const unreadFlags = useAppSelector((state) => state.session.unreadChannelFlags);
+
+  //? Can be memoised
+  const channelList = (guild: GuildDto) => {
+    return guild.channels?.map((c, index) => {
+      const formattedGuildChannel = formatGuildChannel(guild.guildId, c.id);
+
+      return (
+        <Channel
+          key={`channel-${index}`}
+          type="text"
+          name={c.name}
+          isActive={formattedGuildChannel == activeChannelId}
+          isUnread={unreadFlags[formattedGuildChannel]}
+          channelId={formattedGuildChannel}
+        />
+      );
+    });
+  };
 
   return (
     <div className={styles.GuildSidebar}>
@@ -29,18 +47,7 @@ const GuildSidebar: FC<GuildSidebarProps> = ({ guild }) => {
         )}
       </div>
       {guild.banner && <div className={styles.BannerWhitespace} aria-label="hidden" /> /* whitespace for banner */}
-      <div className={styles.ChannelsContainer}>
-        {guild.channels?.map((c, index) => (
-          <Channel
-            key={`channel-${index}`}
-            type="text"
-            name={c.name}
-            isActive={formatGuildChannel(c.id) == activeChannelId}
-            isUnread={unreadFlags[c.id]}
-            channelId={c.id}
-          />
-        ))}
-      </div>
+      <div className={styles.ChannelsContainer}>{channelList(guild)}</div>
     </div>
   );
 };

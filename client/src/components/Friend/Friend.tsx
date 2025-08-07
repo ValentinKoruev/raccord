@@ -6,7 +6,8 @@ import axios from 'axios';
 import { useAppDispatch } from 'src/redux/store';
 import { setChatChannel } from 'src/redux/slices/chatSlice';
 import config from 'src/config';
-import { formatDirectChannel } from '@shared/utils/channelFormater';
+import { formatDirectChannel } from '@shared/utils/channelFormatter';
+import { setActiveChannel } from 'src/redux/slices/sessionSlice';
 
 export type FriendProps = {
   userId: string;
@@ -20,8 +21,7 @@ const Friend: FC<FriendProps> = ({ image, name, userId }) => {
 
   const friendMutate = useMutation({
     mutationFn: async (channelId: string): Promise<GetChannelResponse> => {
-      const response = await axios.get(`${config.apiUrl}/channels/${formatDirectChannel(channelId)}`);
-
+      const response = await axios.get(`${config.apiUrl}/channels/${formatDirectChannel(channelId)}`); //? NOTE: passing unformated channelId, maybe make it default to formated?
       return response.data;
     },
     onSuccess: async (channel) => {
@@ -31,10 +31,10 @@ const Friend: FC<FriendProps> = ({ image, name, userId }) => {
         return;
       }
 
+      dispatch(setActiveChannel({ type: 'direct', channelId: channel.id }));
       dispatch(
         setChatChannel({
           channelName: channel.name,
-          channelId: formatDirectChannel(channel.id),
           messages: channel.messages,
         }),
       );

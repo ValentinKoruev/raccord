@@ -1,18 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { MessageDto } from '@shared/types/dto/Message';
+import { parseChannel } from '@shared/utils/channelFormatter';
 
 @Injectable()
 export class MessageService {
   constructor(private prisma: PrismaService) {}
 
   createMessage = async ({ channelInfo, message }: { channelInfo: string; message: MessageDto }) => {
-    const [channelType = undefined, channelId = undefined] = channelInfo.split('_', 2);
+    const parsedChannel = parseChannel(channelInfo);
 
-    if (channelType == 'G') {
+    if (parsedChannel.type == 'guild') {
       const channel = await this.prisma.guildChannel.findFirst({
         where: {
-          publicId: channelId,
+          publicId: parsedChannel.channelId,
         },
       });
 
@@ -38,10 +39,10 @@ export class MessageService {
       return result;
     }
 
-    if (channelType == 'D') {
+    if (parsedChannel.type == 'direct') {
       const channel = await this.prisma.directChannel.findFirst({
         where: {
-          publicId: channelId,
+          publicId: parsedChannel.channelId,
         },
       });
 
@@ -58,7 +59,7 @@ export class MessageService {
           },
           directChannel: {
             connect: {
-              publicId: channelId,
+              publicId: parsedChannel.channelId,
             },
           },
         },

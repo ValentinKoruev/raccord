@@ -6,10 +6,12 @@ export type GuildListElementProps = {
   name: string;
   onClick: Function;
   image?: string;
-  guildId?: number;
+  guildId?: string;
+  isActive?: boolean;
+  isUnread?: boolean;
 };
 
-const GuildListElement: FC<GuildListElementProps> = ({ guildId, name, onClick, image }) => {
+const GuildListElement: FC<GuildListElementProps> = ({ guildId, name, onClick, image, isActive, isUnread }) => {
   const renderIcon = (image?: string) => {
     if (image) return <img className={styles.Icon} src={image} alt={name} />;
 
@@ -22,7 +24,15 @@ const GuildListElement: FC<GuildListElementProps> = ({ guildId, name, onClick, i
 
   return (
     <div className={styles.ListElement}>
-      <div onClick={() => onClick(guildId)} className={classNames(styles.IconWrapper, styles.Colored)}>
+      <div
+        onClick={() => onClick(guildId)}
+        className={classNames(
+          styles.IconWrapper,
+          styles.Colored,
+          isActive ? styles.Active : '',
+          isUnread ? styles.Unread : '',
+        )}
+      >
         {renderIcon(image)}
         <div className={styles.TooltipContainer}>
           <div className={styles.Tooltip}>{name}</div>

@@ -4,7 +4,6 @@ $iconSize: 50px;
 
 .ListElement {
   position: relative;
-
   overflow: visible;
 
   width: 100%;
@@ -13,8 +12,11 @@ $iconSize: 50px;
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
 
   .IconWrapper {
+    display: flex;
+    align-items: center;
     width: $iconSize;
     height: $iconSize;
 
@@ -57,6 +59,38 @@ $iconSize: 50px;
 
         border-radius: 5%;
         font-size: $font-sm;
+      }
+    }
+
+    &::before {
+      content: '';
+      width: 4px;
+      height: 0px;
+      display: block;
+      position: absolute;
+      background-color: $color-white;
+      left: 0;
+      border-radius: 20px;
+      transition: all 0.1s ease-in;
+    }
+
+    &.Unread::before {
+      height: 10px;
+    }
+
+    &:hover::before {
+      height: 20px;
+      transition: all 0.1s ease-in;
+    }
+    &.Active::before,
+    &.Active:hover::before {
+      height: 30px;
+    }
+
+    &.Active {
+      border-radius: 30%;
+      &.Colored {
+        background-color: $color-primary;
       }
     }
 

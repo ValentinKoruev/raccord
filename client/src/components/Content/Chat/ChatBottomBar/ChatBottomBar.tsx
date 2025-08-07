@@ -5,7 +5,7 @@ import { useAppSelector } from 'src/redux/store';
 
 const ChatBottomBar = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const activeChannelId = useAppSelector((state) => state.chat.activeChannelId);
+  const activeChannelId = useAppSelector((state) => state.session.activeChannelId);
   const activeChannelIdRef = useRef(activeChannelId); // to be used for socketio callback fn
   const onInputParentFocus: MouseEventHandler = () => {
     inputRef.current && inputRef.current.focus();
