@@ -95,6 +95,7 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
         isActive={activeTabId == 'direct'}
         isUnread={unreadGuilds['direct'] !== undefined}
         onClick={() => onDirectMessagesClick()}
+        image="src/assets/raccoon_creppy.png"
         name="Direct Messages"
       />
       {guilds.map((guild, index) => {
