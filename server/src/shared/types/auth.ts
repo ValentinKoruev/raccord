@@ -8,9 +8,6 @@ export interface AuthOutput {
   username: string;
 }
 
-// ? Might be a better idea to use AuthOutput as an object, but the jwt structures looks different since userId is sub as per convention.
 export interface TokenData {
   accessToken: string;
-  userId: string;
-  username: string;
 }
