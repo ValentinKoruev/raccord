@@ -14,6 +14,14 @@ export class UserService {
     });
   }
 
+  async getUserByName(username: string) {
+    return await this.prisma.user.findFirst({
+      where: {
+        name: username,
+      },
+    });
+  }
+
   async getUserGuilds(getUserGuildsReq: GetUserGuildsRequest): Promise<GetUserGuildsResponse> {
     const query = await this.prisma.userOnGuild.findMany({
       where: {
