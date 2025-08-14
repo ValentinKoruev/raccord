@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, FC } from 'react';
-import axios from 'axios';
+import axios from '@queries/axios';
 import { useMutation } from '@tanstack/react-query';
 import config from 'src/config';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -63,7 +63,7 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
 
   const directMutate = useMutation({
     mutationFn: async () => {
-      const response = await axios.get(`${config.apiUrl}/user/direct`);
+      const response = await axios.get(`${config.apiUrl}/users/direct`);
 
       return response.data;
     },

@@ -1,7 +1,7 @@
 import { MessageDto } from "./dto/Message";
 
 export type MessageSocketRequest = {
-  senderId: number;
+  senderId: string;
   channelId: string;
   content: string;
 };

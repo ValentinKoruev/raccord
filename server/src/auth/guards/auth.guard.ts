@@ -7,8 +7,8 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
-    const authorization: string = request.headers.authorization;
-    const token = authorization?.split(' ')[1];
+
+    const token = request.cookies['raccord_session'];
 
     if (!token) throw new UnauthorizedException();
 

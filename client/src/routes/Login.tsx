@@ -1,7 +1,8 @@
 import { TokenData } from '@shared/types/auth';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import axios, { AxiosError } from 'axios';
+import axios from '@queries/axios';
+import { AxiosError, isAxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import { UNAUTHORIZED } from 'src/queries/statusCodes';
 import { setAuth } from 'src/redux/slices/authSlice';
@@ -43,7 +44,7 @@ const LoginPage = () => {
 
       navigate(routesConfig.HOME);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
+      if (isAxiosError(error)) {
         const axiosError = error as AxiosError;
 
         if (axiosError.status == UNAUTHORIZED) {

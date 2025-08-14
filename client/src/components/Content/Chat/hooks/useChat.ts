@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { MessageSocketResponse } from '@shared/types/messageSocket';
-import { socket } from 'src/socket';
+import { getSocket } from 'src/socket';
 import { handleIncomingMessage } from 'src/redux/thunks/messageThunk';
 
 const useChat = () => {
@@ -15,10 +15,10 @@ const useChat = () => {
   };
 
   useEffect(() => {
-    socket.on('message', onMessage);
+    getSocket().on('message', onMessage);
 
     return () => {
-      socket.off('message', onMessage);
+      getSocket().off('message', onMessage);
     };
   }, []);
 

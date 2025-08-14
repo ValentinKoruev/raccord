@@ -90,6 +90,19 @@ async function main() {
     },
   });
 
+  await prisma.userOnGuild.createMany({
+    data: [
+      {
+        userId: raccford.id,
+        guildId: -1,
+      },
+      {
+        userId: raccford.id,
+        guildId: -2,
+      },
+    ],
+  });
+
   const channel = await prisma.directChannel.create({
     data: {
       users: {

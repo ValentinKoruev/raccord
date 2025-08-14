@@ -1,14 +1,15 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // TODO: Get servers for current logged in user when auth is added, temp using id of -1, which is the seeded user
-  @Get('guilds')
-  getUserServers() {
-    return this.userService.getUserGuilds({ userId: -1 });
+  @UseGuards(AuthGuard)
+  @Get('/guilds')
+  getUserGuilds(@Req() request) {
+    return this.userService.getUserGuilds({ userId: request.user.userId });
   }
 
   @Get('channels')
@@ -21,8 +22,9 @@ export class UserController {
     return this.userService.getUserFriends(-1);
   }
 
+  @UseGuards(AuthGuard)
   @Get('direct')
-  getUserDirectChannels() {
-    return this.userService.getUserDirectChannels(-1);
+  getUserDirectChannels(@Req() request) {
+    return this.userService.getUserDirectChannels(request.user.userId);
   }
 }

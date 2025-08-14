@@ -27,7 +27,7 @@ export class ChannelService {
       type: 'text', // TODO: Change when voice is added
       name: channel.name,
       messages: channel.messages.map((m) => ({
-        senderId: m.senderId,
+        senderId: m.sender.publicId,
         senderName: m.sender.name,
         content: m.content,
         icon: m.sender.icon ?? undefined,
@@ -69,7 +69,7 @@ export class ChannelService {
       type: 'text', // TODO: Change when voice is added
       name: channel.users.map((u) => u.user.name).join(', '), // TODO: Add custom name to channels
       messages: channel.messages.map((m) => ({
-        senderId: m.senderId,
+        senderId: m.sender.publicId,
         senderName: m.sender.name,
         content: m.content,
         icon: m.sender.icon ?? undefined,

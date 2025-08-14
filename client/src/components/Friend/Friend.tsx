@@ -1,13 +1,13 @@
 import { FC } from 'react';
-import styles from './Friend.module.scss';
+import axios from '@queries/axios';
 import { useMutation } from '@tanstack/react-query';
 import { GetChannelResponse } from '@shared/types/getChannel';
-import axios from 'axios';
 import { useAppDispatch } from 'src/redux/store';
 import { setChatChannel } from 'src/redux/slices/chatSlice';
 import config from 'src/config';
 import { formatDirectChannel } from '@shared/utils/channelFormatter';
 import { setActiveChannel } from 'src/redux/slices/sessionSlice';
+import styles from './Friend.module.scss';
 
 export type FriendProps = {
   userId: string;

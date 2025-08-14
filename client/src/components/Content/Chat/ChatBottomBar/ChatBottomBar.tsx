@@ -1,5 +1,5 @@
 import { MouseEventHandler, useEffect, useRef } from 'react';
-import { socket } from 'src/socket';
+import { getSocket } from 'src/socket';
 import styles from './ChatBottomBar.module.scss';
 import { useAppSelector } from 'src/redux/store';
 
@@ -21,7 +21,7 @@ const ChatBottomBar = () => {
 
       if (inputCurrent.value.trim().length == 0) return;
 
-      socket.emit('message', {
+      getSocket().emit('message', {
         senderId: -1,
         content: inputCurrent.value,
         channelId: activeChannelIdRef.current,

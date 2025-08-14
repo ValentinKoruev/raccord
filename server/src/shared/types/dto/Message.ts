@@ -1,5 +1,5 @@
 export type MessageDto = {
-  senderId: number;
+  senderId: string;
   senderName: string;
   content: string;
   icon?: string;

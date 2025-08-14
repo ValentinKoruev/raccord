@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import axios from 'axios';
+import axios from '@queries/axios';
 import classNames from 'classnames';
 import config from 'src/config';
 import { useMutation } from '@tanstack/react-query';

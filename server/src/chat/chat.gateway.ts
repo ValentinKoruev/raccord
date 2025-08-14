@@ -5,17 +5,21 @@ import {
   WebSocketGateway,
   WebSocketServer,
   OnGatewayConnection,
+  WsException,
 } from '@nestjs/websockets';
+import * as cookie from 'cookie';
 import { MessageSocketRequest, MessageSocketResponse } from '@shared/types/messageSocket';
 
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 import { UserService } from 'src/user/user.service';
 import { MessageService } from 'src/message/message.service';
+import { JwtService } from '@nestjs/jwt';
 
 @WebSocketGateway({
   cors: {
-    origin: '*',
+    origin: 'http://localhost:5173',
+    credentials: true,
   },
 })
 export class ChatGateway implements OnGatewayConnection {
@@ -23,28 +27,45 @@ export class ChatGateway implements OnGatewayConnection {
     private readonly chatService: ChatService,
     private readonly userService: UserService,
     private readonly messageService: MessageService,
+    private readonly jwtService: JwtService,
   ) {}
 
   @WebSocketServer()
   server: Server;
 
-  async handleConnection(client: Socket) {
-    // TODO: validate and search for current user when auth is added
-    const channels = await this.userService.getAllUserChannels(-1);
+  async handleConnection(client) {
+    try {
+      const cookies = client.handshake.headers.cookie;
 
-    if (!channels) return;
+      if (!cookies) throw new WsException('Session cookie not found. Connection refused.');
 
-    for (let channel of channels.guildChannels) {
-      client.join(`G_${channel.guildPublicId}:${channel.publicId}`);
+      const parsedCookies = cookie.parse(cookies);
+      const session = parsedCookies['raccord_session'];
+
+      if (!session) throw new WsException('Session not found. Connection refused.');
+
+      const tokenPayload = await this.jwtService.verifyAsync(session);
+      client.user = {
+        userId: tokenPayload.sub,
+        username: tokenPayload.username,
+      };
+
+      // TODO: validate and search for current user when auth is added
+      const channels = await this.userService.getAllUserChannels(-1);
+
+      if (!channels) return;
+
+      for (let channel of channels.guildChannels) {
+        client.join(`G_${channel.guildPublicId}:${channel.publicId}`);
+      }
+    } catch (err) {
+      client.disconnect();
     }
   }
 
   @SubscribeMessage('message')
-  async handleMessage(
-    @ConnectedSocket() client: Socket,
-    @MessageBody() messageRequest: MessageSocketRequest,
-  ): Promise<void> {
-    const user = await this.userService.getUser(messageRequest.senderId);
+  async handleMessage(@ConnectedSocket() client, @MessageBody() messageRequest: MessageSocketRequest): Promise<void> {
+    const user = await this.userService.getUser(client.user.userId);
 
     if (!user) return;
 
@@ -52,7 +73,7 @@ export class ChatGateway implements OnGatewayConnection {
     // for now just use dummy data
     const messageResponse: MessageSocketResponse = {
       message: {
-        senderId: user.id,
+        senderId: user.publicId,
         senderName: user.name,
         icon: user.icon ?? undefined,
         content: messageRequest.content,

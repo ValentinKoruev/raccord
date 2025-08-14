@@ -11,7 +11,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Routes>
-        <Route path={routesConfig.HOME} element={<MainApp />} />
+        <Route path={routesConfig.HOME} element={ProtectedRoute(<MainApp />)} />
         {/* Auth test route */}
         <Route path={routesConfig.APP} element={ProtectedRoute(<MainApp />)} />
         <Route path={routesConfig.LOGIN} element={<LoginPage />} />

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GetUserGuildsRequest, GetUserGuildsResponse } from '@shared/types/getUserGuilds';
 
@@ -6,10 +6,10 @@ import { GetUserGuildsRequest, GetUserGuildsResponse } from '@shared/types/getUs
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async getUser(userId: number) {
+  async getUser(userId: string) {
     return await this.prisma.user.findFirst({
       where: {
-        id: userId,
+        publicId: userId,
       },
     });
   }
@@ -22,17 +22,24 @@ export class UserService {
     });
   }
 
-  async getUserGuilds(getUserGuildsReq: GetUserGuildsRequest): Promise<GetUserGuildsResponse> {
-    const query = await this.prisma.userOnGuild.findMany({
+  async getUserGuilds(request: GetUserGuildsRequest): Promise<GetUserGuildsResponse> {
+    const user = await this.prisma.user.findFirst({
       where: {
-        userId: getUserGuildsReq.userId,
+        publicId: request.userId,
       },
-      include: {
-        guild: true,
+      select: {
+        publicId: true,
+        joinedGuilds: {
+          include: {
+            guild: true,
+          },
+        },
       },
     });
 
-    const response: GetUserGuildsResponse = query.map((g) => ({
+    if (!user) throw new NotFoundException();
+
+    const response: GetUserGuildsResponse = user.joinedGuilds.map((g) => ({
       guildId: g.guild.publicId,
       guildName: g.guild.name,
       icon: g.guild.icon ?? undefined,
@@ -99,12 +106,14 @@ export class UserService {
     };
   }
 
-  async getUserDirectChannels(userId: number) {
+  async getUserDirectChannels(userId: string) {
     return await this.prisma.directChannel.findMany({
       where: {
         users: {
           some: {
-            userId: userId,
+            user: {
+              publicId: userId,
+            },
           },
         },
       },
@@ -112,7 +121,9 @@ export class UserService {
         users: {
           where: {
             NOT: {
-              userId: userId,
+              user: {
+                publicId: userId,
+              },
             },
           },
           include: {

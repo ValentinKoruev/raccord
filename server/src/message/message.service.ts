@@ -25,7 +25,7 @@ export class MessageService {
           createdAt: message.date,
           sender: {
             connect: {
-              id: message.senderId,
+              publicId: message.senderId,
             },
           },
           channel: {
@@ -54,7 +54,7 @@ export class MessageService {
           createdAt: message.date,
           sender: {
             connect: {
-              id: message.senderId,
+              publicId: message.senderId,
             },
           },
           directChannel: {
