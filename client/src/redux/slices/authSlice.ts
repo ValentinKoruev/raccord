@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AuthOutput, TokenData } from '@shared/types/auth';
+import { AuthOutput, TokenData } from '@shared/types/api';
 import { jwtDecode } from 'jwt-decode';
 
 interface AuthState {

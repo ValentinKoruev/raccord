@@ -12,14 +12,16 @@ export class UserController {
     return this.userService.getUserGuilds({ userId: request.user.userId });
   }
 
+  @UseGuards(AuthGuard)
   @Get('channels')
-  getUserChannels() {
-    return this.userService.getAllUserChannels(-1);
+  getUserChannels(@Req() request) {
+    return this.userService.getAllUserChannels(request.user.userId);
   }
 
+  @UseGuards(AuthGuard)
   @Get('friends')
-  getUserFriends() {
-    return this.userService.getUserFriends(-1);
+  getUserFriends(@Req() request) {
+    return this.userService.getUserFriends(request.user.userId);
   }
 
   @UseGuards(AuthGuard)

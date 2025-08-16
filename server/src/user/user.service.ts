@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GetUserGuildsRequest, GetUserGuildsResponse } from '@shared/types/getUserGuilds';
+import { GetUserDirectResponse, GetUserGuildsRequest, GetUserGuildsResponse } from '@shared/types/api';
 
 @Injectable()
 export class UserService {
@@ -49,10 +49,10 @@ export class UserService {
     return response;
   }
 
-  async getUserFriends(userId: number) {
+  async getUserFriends(userId: string) {
     const user = await this.prisma.user.findFirst({
       where: {
-        id: userId,
+        publicId: userId,
       },
       include: {
         friends: true,
@@ -64,10 +64,10 @@ export class UserService {
     return user.friends;
   }
 
-  async getAllUserChannels(userId: number) {
+  async getAllUserChannels(userId: string) {
     const query = await this.prisma.user.findFirst({
       where: {
-        id: userId,
+        publicId: userId,
       },
       select: {
         directChannels: true,
@@ -106,8 +106,8 @@ export class UserService {
     };
   }
 
-  async getUserDirectChannels(userId: string) {
-    return await this.prisma.directChannel.findMany({
+  async getUserDirectChannels(userId: string): Promise<GetUserDirectResponse> {
+    const channels = await this.prisma.directChannel.findMany({
       where: {
         users: {
           some: {
@@ -132,5 +132,12 @@ export class UserService {
         },
       },
     });
+
+    return channels.map((c) => ({
+      publicId: c.publicId,
+      name: c.users.map((u) => u.user.name).join(', '),
+      users: c.users,
+      icon: c.users.length > 1 ? c.users[0].user.name[0] : (c.users[0].user.icon ?? undefined),
+    }));
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GetChannelRequest, GetChannelResponse } from '@shared/types/getChannel';
+import { GetChannelRequest, GetChannelResponse } from '@shared/types/api';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class ChannelService {
     if (!channel) return null;
 
     return {
-      id: channel.publicId, // ! refactor this to be clear that it's using publicId, not internal id
+      id: channel.publicId,
       type: 'text', // TODO: Change when voice is added
       name: channel.name,
       messages: channel.messages.map((m) => ({
@@ -47,7 +47,9 @@ export class ChannelService {
         users: {
           where: {
             NOT: {
-              userId: -1, // TODO: Get current user Id
+              user: {
+                publicId: request.userId,
+              },
             },
           },
           include: {
@@ -65,7 +67,7 @@ export class ChannelService {
     if (!channel) return null;
 
     return {
-      id: channel.publicId, // ! refactor this to be clear that it's using publicId, not internal id
+      id: channel.publicId,
       type: 'text', // TODO: Change when voice is added
       name: channel.users.map((u) => u.user.name).join(', '), // TODO: Add custom name to channels
       messages: channel.messages.map((m) => ({

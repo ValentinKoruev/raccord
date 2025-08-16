@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { GetGuildRequest, GetGuildResponse } from '@shared/types/getGuild';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { GetGuildRequest, GetGuildResponse } from '@shared/types/api';
 
 @Injectable()
 export class GuildService {

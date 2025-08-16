@@ -1,12 +1,11 @@
 import { FC } from 'react';
-import axios from '@queries/axios';
 import { useMutation } from '@tanstack/react-query';
-import { GetChannelResponse } from '@shared/types/getChannel';
-import { useAppDispatch } from 'src/redux/store';
-import { setChatChannel } from 'src/redux/slices/chatSlice';
-import config from 'src/config';
+import { GetChannelResponse } from '@shared/types/api';
+import { useAppDispatch } from '@redux/store';
+import { setChatChannel } from '@redux/slices/chatSlice';
+import { setActiveChannel } from '@redux/slices/sessionSlice';
+import apiQueries from '@queries/api';
 import { formatDirectChannel } from '@shared/utils/channelFormatter';
-import { setActiveChannel } from 'src/redux/slices/sessionSlice';
 import styles from './Friend.module.scss';
 
 export type FriendProps = {
@@ -21,7 +20,7 @@ const Friend: FC<FriendProps> = ({ image, name, userId }) => {
 
   const friendMutate = useMutation({
     mutationFn: async (channelId: string): Promise<GetChannelResponse> => {
-      const response = await axios.get(`${config.apiUrl}/channels/${formatDirectChannel(channelId)}`); //? NOTE: passing unformated channelId, maybe make it default to formated?
+      const response = await apiQueries.channelQueries.getChannel(formatDirectChannel(channelId));
       return response.data;
     },
     onSuccess: async (channel) => {

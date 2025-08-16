@@ -1,4 +1,4 @@
-import { GuildDto } from "./dto/Guild";
+import { GuildDto } from "../dto/Guild";
 
 export type GetGuildRequest = {
   guildId: string;

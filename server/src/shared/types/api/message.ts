@@ -1,4 +1,4 @@
-import { MessageDto } from "./dto/Message";
+import { MessageDto } from "../dto/Message";
 
 export type MessageSocketRequest = {
   senderId: string;

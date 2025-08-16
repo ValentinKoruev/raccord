@@ -1,15 +1,14 @@
 import { FC } from 'react';
-import axios from '@queries/axios';
 import classNames from 'classnames';
-import config from 'src/config';
 import { useMutation } from '@tanstack/react-query';
-import { useAppDispatch } from 'src/redux/store';
-import { setChatChannel } from 'src/redux/slices/chatSlice';
-import { GetChannelResponse } from '@shared/types/getChannel';
+import { useAppDispatch } from '@redux/store';
+import { setChatChannel } from '@redux/slices/chatSlice';
+import { setActiveChannel } from '@redux/slices/sessionSlice';
+import { GetChannelResponse } from '@shared/types/api';
+import apiQueries from '@queries/api';
+import { parseChannel } from '@shared/utils/channelFormatter';
 import Icon from '@shared/components/Icon';
 import styles from './Channel.module.scss';
-import { parseChannel } from '@shared/utils/channelFormatter';
-import { setActiveChannel } from 'src/redux/slices/sessionSlice';
 
 export type ChannelType = 'text' | 'voice';
 
@@ -27,7 +26,7 @@ const Channel: FC<ChannelProps> = ({ type, name, isActive, isUnread, channelId }
 
   const channelMutate = useMutation({
     mutationFn: async (channelId: string): Promise<GetChannelResponse> => {
-      const response = await axios.get(`${config.apiUrl}/channels/${channelId}`);
+      const response = await apiQueries.channelQueries.getChannel(channelId);
 
       return response.data;
     },

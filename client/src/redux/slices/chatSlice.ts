@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { MessageDto } from '@shared/types/dto/Message';
-import { MessageSocketResponse } from '@shared/types/messageSocket';
+import { MessageSocketResponse } from '@shared/types/api';
 
 interface ChatState {
   title: string;

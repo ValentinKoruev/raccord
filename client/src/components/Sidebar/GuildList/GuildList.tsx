@@ -1,18 +1,15 @@
 import { Dispatch, SetStateAction, FC } from 'react';
-import axios from '@queries/axios';
 import { useMutation } from '@tanstack/react-query';
-import config from 'src/config';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { setChatChannel } from 'src/redux/slices/chatSlice';
-import { SidebarState } from '../Sidebar';
+import { useAppDispatch, useAppSelector } from '@redux/store';
+import { setChatChannel } from '@redux/slices/chatSlice';
+import { setTabDirect, setTabGuild, setActiveChannel, selectUnreadByGuilds } from '@redux/slices/sessionSlice';
+import apiQueries from '@queries/api';
 import { GuildDto } from '@shared/types/dto/Guild';
-import { GetGuildResponse } from '@shared/types/getGuild';
-import { GetChannelResponse } from '@shared/types/getChannel';
-import GuildListElement from '@components/Sidebar/GuildList/GuildListElement';
-import styles from './GuildList.module.scss';
+import { GetGuildResponse } from '@shared/types/api';
 import { formatGuildChannel } from '@shared/utils/channelFormatter';
-import { setTabDirect, setTabGuild, setActiveChannel, selectUnreadByGuilds } from 'src/redux/slices/sessionSlice';
-import { useSelector } from 'react-redux';
+import GuildListElement from '@components/Sidebar/GuildList/GuildListElement';
+import { SidebarState } from '../Sidebar';
+import styles from './GuildList.module.scss';
 
 type GuildListProps = {
   guilds: Array<GuildDto>;
@@ -22,11 +19,11 @@ type GuildListProps = {
 const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
   const dispatch = useAppDispatch();
   const activeTabId = useAppSelector((state) => state.session.activeTabId);
-  const unreadGuilds = useSelector(selectUnreadByGuilds);
+  const unreadGuilds = useAppSelector(selectUnreadByGuilds);
 
   const guildMutate = useMutation({
     mutationFn: async (guildId: string): Promise<GetGuildResponse> => {
-      const response = await axios.get(`${config.apiUrl}/guild/${guildId}`);
+      const response = await apiQueries.guildQueries.getGuild(guildId);
 
       return response.data;
     },
@@ -36,8 +33,8 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
       setSidebar({ type: 'guild', currentGuild: guild });
 
       if (guild.channels) {
-        const channelResponse = await axios.get<GetChannelResponse>(
-          `${config.apiUrl}/channels/${formatGuildChannel(guild.guildId, guild.channels[0].id)}`,
+        const channelResponse = await apiQueries.channelQueries.getChannel(
+          formatGuildChannel(guild.guildId, guild.channels[0].id),
         );
 
         // TODO: Change it to last visited channel when it is supported
@@ -63,21 +60,20 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
 
   const directMutate = useMutation({
     mutationFn: async () => {
-      const response = await axios.get(`${config.apiUrl}/users/direct`);
+      const response = await apiQueries.userQueries.getUserDirect();
 
       return response.data;
     },
-    onSuccess: (directChannels: Array<any>) => {
-      // !NOTE: Lord forgive me
-      const directChannelsF = directChannels.map((d) => ({
+    onSuccess: (directChannels) => {
+      const directChannelsProps = directChannels.map((d) => ({
         publicId: d.publicId,
-        name: d.users[0].user.name,
-        icon: d.users[0].user.icon,
+        name: d.name,
+        icon: d.icon ?? d.name[0],
       }));
 
       dispatch(setTabDirect());
       // dispatch(setActiveChannel({type: 'direct', channelId: i}))
-      setSidebar({ type: 'direct', friends: directChannelsF });
+      setSidebar({ type: 'direct', friends: directChannelsProps });
     },
   });
 

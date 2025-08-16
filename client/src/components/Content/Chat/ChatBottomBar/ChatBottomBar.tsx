@@ -22,7 +22,6 @@ const ChatBottomBar = () => {
       if (inputCurrent.value.trim().length == 0) return;
 
       getSocket().emit('message', {
-        senderId: -1,
         content: inputCurrent.value,
         channelId: activeChannelIdRef.current,
       });

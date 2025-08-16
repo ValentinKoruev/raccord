@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import { useAppSelector } from 'src/redux/store';
+import { useAppSelector } from '@redux/store';
 import { GuildDto } from '@shared/types/dto/Guild';
+import { formatGuildChannel } from '@shared/utils/channelFormatter';
 import Channel from '@components/Sidebar/GuildSidebar/Channel';
 import ChannelCategory from '@components/Sidebar/GuildSidebar/ChannelCategory';
 import Icon from '@shared/components/Icon';
 import styles from './GuildSidebar.module.scss';
-import { formatGuildChannel } from '@shared/utils/channelFormatter';
 
 export type GuildSidebarProps = {
   guild: GuildDto;

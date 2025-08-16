@@ -7,18 +7,17 @@ import {
   OnGatewayConnection,
   WsException,
 } from '@nestjs/websockets';
+import { Server } from 'socket.io';
 import * as cookie from 'cookie';
-import { MessageSocketRequest, MessageSocketResponse } from '@shared/types/messageSocket';
-
-import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 import { UserService } from 'src/user/user.service';
 import { MessageService } from 'src/message/message.service';
 import { JwtService } from '@nestjs/jwt';
+import { MessageSocketRequest, MessageSocketResponse } from '@shared/types/api';
 
 @WebSocketGateway({
   cors: {
-    origin: 'http://localhost:5173',
+    origin: process.env.CLIENT_URL,
     credentials: true,
   },
 })
@@ -50,8 +49,7 @@ export class ChatGateway implements OnGatewayConnection {
         username: tokenPayload.username,
       };
 
-      // TODO: validate and search for current user when auth is added
-      const channels = await this.userService.getAllUserChannels(-1);
+      const channels = await this.userService.getAllUserChannels(client.user.userId);
 
       if (!channels) return;
 

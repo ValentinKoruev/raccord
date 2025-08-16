@@ -1,4 +1,4 @@
-import { MessageSocketResponse } from '@shared/types/messageSocket';
+import { MessageSocketResponse } from '@shared/types/api';
 import { AppDispatch, RootState } from '../store';
 import { receiveMessage } from '../slices/chatSlice';
 import { setUnreadChannel } from '../slices/sessionSlice';

@@ -1,13 +1,13 @@
-import { TokenData } from '@shared/types/auth';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import axios from '@queries/axios';
+import { useDispatch } from 'react-redux';
 import { AxiosError, isAxiosError } from 'axios';
 import Cookies from 'js-cookie';
-import { UNAUTHORIZED } from 'src/queries/statusCodes';
-import { setAuth } from 'src/redux/slices/authSlice';
-import { routesConfig } from './config';
-import { useDispatch } from 'react-redux';
+import routes from './config';
+import { setAuth } from '@redux/slices/authSlice';
+import apiQueries from '@queries/api';
+import { UNAUTHORIZED } from '@queries/statusCodes';
+import { TokenData } from '@shared/types/api';
 
 interface LoginFormData {
   username: string;
@@ -35,20 +35,20 @@ const LoginPage = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:4000/auth/login', form);
+      const response = await apiQueries.authQueries.login(form);
       const data: TokenData = response.data;
 
       Cookies.set('raccord_session', data.accessToken, { expires: 1, secure: true, sameSite: 'Strict' });
 
       dispatch(setAuth(data));
 
-      navigate(routesConfig.HOME);
+      navigate(routes.HOME);
     } catch (error) {
       if (isAxiosError(error)) {
         const axiosError = error as AxiosError;
 
         if (axiosError.status == UNAUTHORIZED) {
-          setError('Username or password are wrong');
+          setError('Username and/or password are wrong');
           return;
         }
       }
