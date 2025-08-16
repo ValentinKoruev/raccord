@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, FC } from 'react';
+import { Dispatch, SetStateAction, FC, useEffect, useRef } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '@redux/store';
 import { setChatChannel } from '@redux/slices/chatSlice';
@@ -19,6 +19,7 @@ type GuildListProps = {
 const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
   const dispatch = useAppDispatch();
   const activeTabId = useAppSelector((state) => state.session.activeTabId);
+  const activeDirectChannelId = useAppSelector((state) => state.session.activeDirectChannelId);
   const unreadGuilds = useAppSelector(selectUnreadByGuilds);
 
   const guildMutate = useMutation({
@@ -64,15 +65,35 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
 
       return response.data;
     },
-    onSuccess: (directChannels) => {
+    onSuccess: async (directChannels) => {
       const directChannelsProps = directChannels.map((d) => ({
         publicId: d.publicId,
         name: d.name,
         icon: d.icon ?? d.name[0],
       }));
 
+      if (activeDirectChannelId) {
+        try {
+          const response = await apiQueries.channelQueries.getChannel(activeDirectChannelId);
+          const activeChannel = response.data;
+
+          dispatch(
+            setChatChannel({
+              channelName: activeChannel?.name,
+              messages: activeChannel?.messages,
+            }),
+          );
+        } catch (err) {
+          dispatch(
+            setChatChannel({
+              channelName: null,
+              messages: [],
+            }),
+          );
+        }
+      }
+
       dispatch(setTabDirect());
-      // dispatch(setActiveChannel({type: 'direct', channelId: i}))
       setSidebar({ type: 'direct', friends: directChannelsProps });
     },
   });

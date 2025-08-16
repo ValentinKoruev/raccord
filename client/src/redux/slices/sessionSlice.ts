@@ -5,12 +5,14 @@ import { RootState } from '../store';
 interface SessionState {
   activeTabId: 'direct' | string | null;
   activeChannelId: string | null;
+  activeDirectChannelId: string | null; //? for persistance when opening direct messages
   unreadChannelFlags: Record<string, boolean>; //? change type to number if storing how much unreads is needed
 }
 
 const initialState: SessionState = {
   activeTabId: null,
   activeChannelId: null,
+  activeDirectChannelId: null,
   unreadChannelFlags: {},
 };
 
@@ -20,6 +22,7 @@ export const sessionSlice = createSlice({
   reducers: {
     setTabDirect(state) {
       state.activeTabId = 'direct';
+      state.activeChannelId = state.activeDirectChannelId;
     },
     setTabGuild(state, action: PayloadAction<string>) {
       state.activeTabId = action.payload;
@@ -36,6 +39,7 @@ export const sessionSlice = createSlice({
       if (type === 'direct') {
         const formattedChannelId = formatDirectChannel(action.payload.channelId);
         state.activeChannelId = formattedChannelId;
+        state.activeDirectChannelId = formattedChannelId;
         delete state.unreadChannelFlags[formattedChannelId];
         return;
       }
