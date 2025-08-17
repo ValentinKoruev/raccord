@@ -16,6 +16,7 @@ $iconSize: 50px;
 
   .IconWrapper {
     display: flex;
+    justify-content: center;
     align-items: center;
     width: $iconSize;
     height: $iconSize;
@@ -30,6 +31,12 @@ $iconSize: 50px;
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+
+    svg {
+      fill: $color-white;
+      width: 30px;
+      height: 30px;
     }
 
     .NoIcon {

@@ -1,12 +1,13 @@
 import { Dispatch, SetStateAction, FC } from 'react';
 import { useAppSelector } from '@redux/store';
 import { selectUnreadByGuilds } from '@redux/slices/sessionSlice';
-import { GuildDto } from '@shared/types/dto/Guild';
-import GuildListElement from '@components/Sidebar/GuildList/GuildListElement';
-import { SidebarState } from '../Sidebar';
-import styles from './GuildList.module.scss';
 import useGuildMutate from './hooks/useGuildMutate';
 import useDirectMutate from './hooks/useDirectMutate';
+import { GuildDto } from '@shared/types/dto/Guild';
+import GuildListElement from '@components/Sidebar/GuildList/GuildListElement';
+import Icon from '@shared/components/Icon';
+import { SidebarState } from '../Sidebar';
+import styles from './GuildList.module.scss';
 
 type GuildListProps = {
   guilds: Array<GuildDto>;
@@ -25,6 +26,10 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
 
   const onGuildClick = (guild: GuildDto) => {
     guildMutate.mutate(guild.guildId);
+  };
+
+  const onAddServerClick = () => {
+    console.log('create server');
   };
 
   return (
@@ -49,6 +54,7 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
           />
         );
       })}
+      <GuildListElement image={<Icon name="circle-plus" />} onClick={() => onAddServerClick()} name="Add server" />
     </div>
   );
 };

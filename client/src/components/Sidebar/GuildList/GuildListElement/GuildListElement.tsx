@@ -1,19 +1,24 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import classNames from 'classnames';
 import styles from './GuildListElement.module.scss';
 
 export type GuildListElementProps = {
   name: string;
   onClick: Function;
-  image?: string;
+  image?: string | ReactNode;
+
   guildId?: string;
   isActive?: boolean;
   isUnread?: boolean;
 };
 
 const GuildListElement: FC<GuildListElementProps> = ({ guildId, name, onClick, image, isActive, isUnread }) => {
-  const renderIcon = (image?: string) => {
-    if (image) return <img className={styles.Icon} src={image} alt={name} />;
+  const renderIcon = (image?: string | ReactNode) => {
+    if (typeof image === 'string') return <img className={styles.Icon} src={image} alt={name} />;
+
+    if (image) {
+      return <>{image}</>;
+    }
 
     return (
       <div className={styles.NoIcon}>
