@@ -66,6 +66,11 @@ export class GuildService {
         members: {
           create: { user: { connect: { publicId: request.userId } } },
         },
+        channels: {
+          create: {
+            name: 'General',
+          },
+        },
       },
     });
 

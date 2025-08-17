@@ -19,6 +19,7 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
   const dispatch = useAppDispatch();
   const activeTabId = useAppSelector((state) => state.session.activeTabId);
   const unreadGuilds = useAppSelector(selectUnreadByGuilds);
+  const isAddServerOpen = useAppSelector((state) => state.modal.type == 'addServer');
   const guildMutate = useGuildMutate({ setSidebar });
   const directMutate = useDirectMutate({ setSidebar });
 
@@ -56,7 +57,12 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
           />
         );
       })}
-      <GuildListElement image={<Icon name="circle-plus" />} onClick={() => onAddServerClick()} name="Add server" />
+      <GuildListElement
+        image={<Icon name="circle-plus" />}
+        onClick={() => onAddServerClick()}
+        name="Add server"
+        isActive={isAddServerOpen}
+      />
     </div>
   );
 };

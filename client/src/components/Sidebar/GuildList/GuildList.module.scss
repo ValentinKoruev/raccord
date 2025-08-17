@@ -10,4 +10,12 @@
 
   width: 80px;
   height: 100%;
+
+  // !NOTE: THIS BREAKS TOOLTIPS, IMPLEMENT A PORTAL BASED JS SOLUTION FOR TOOLTIPS
+  overflow: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
 }
