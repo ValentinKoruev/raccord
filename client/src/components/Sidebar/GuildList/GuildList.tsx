@@ -1,15 +1,12 @@
-import { Dispatch, SetStateAction, FC, useEffect, useRef } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { useAppDispatch, useAppSelector } from '@redux/store';
-import { setChatChannel } from '@redux/slices/chatSlice';
-import { setTabDirect, setTabGuild, setActiveChannel, selectUnreadByGuilds } from '@redux/slices/sessionSlice';
-import apiQueries from '@queries/api';
+import { Dispatch, SetStateAction, FC } from 'react';
+import { useAppSelector } from '@redux/store';
+import { selectUnreadByGuilds } from '@redux/slices/sessionSlice';
 import { GuildDto } from '@shared/types/dto/Guild';
-import { GetGuildResponse } from '@shared/types/api';
-import { formatGuildChannel } from '@shared/utils/channelFormatter';
 import GuildListElement from '@components/Sidebar/GuildList/GuildListElement';
 import { SidebarState } from '../Sidebar';
 import styles from './GuildList.module.scss';
+import useGuildMutate from './hooks/useGuildMutate';
+import useDirectMutate from './hooks/useDirectMutate';
 
 type GuildListProps = {
   guilds: Array<GuildDto>;
@@ -17,86 +14,10 @@ type GuildListProps = {
 };
 
 const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
-  const dispatch = useAppDispatch();
   const activeTabId = useAppSelector((state) => state.session.activeTabId);
-  const activeDirectChannelId = useAppSelector((state) => state.session.activeDirectChannelId);
   const unreadGuilds = useAppSelector(selectUnreadByGuilds);
-
-  const guildMutate = useMutation({
-    mutationFn: async (guildId: string): Promise<GetGuildResponse> => {
-      const response = await apiQueries.guildQueries.getGuild(guildId);
-
-      return response.data;
-    },
-    onSuccess: async (guild) => {
-      if (!guild) return;
-
-      setSidebar({ type: 'guild', currentGuild: guild });
-
-      if (guild.channels) {
-        const channelResponse = await apiQueries.channelQueries.getChannel(
-          formatGuildChannel(guild.guildId, guild.channels[0].id),
-        );
-
-        // TODO: Change it to last visited channel when it is supported
-        const initialGuildChannel = channelResponse.data;
-
-        // TODO: expand this error handler
-        if (!initialGuildChannel) {
-          console.assert('Error: No channel found');
-          return;
-        }
-
-        dispatch(setTabGuild(guild.guildId));
-        dispatch(setActiveChannel({ type: 'guild', channelId: initialGuildChannel.id, guildId: guild.guildId }));
-        dispatch(
-          setChatChannel({
-            channelName: initialGuildChannel.name,
-            messages: initialGuildChannel.messages,
-          }),
-        );
-      }
-    },
-  });
-
-  const directMutate = useMutation({
-    mutationFn: async () => {
-      const response = await apiQueries.userQueries.getUserDirect();
-
-      return response.data;
-    },
-    onSuccess: async (directChannels) => {
-      const directChannelsProps = directChannels.map((d) => ({
-        publicId: d.publicId,
-        name: d.name,
-        icon: d.icon ?? d.name[0],
-      }));
-
-      if (activeDirectChannelId) {
-        try {
-          const response = await apiQueries.channelQueries.getChannel(activeDirectChannelId);
-          const activeChannel = response.data;
-
-          dispatch(
-            setChatChannel({
-              channelName: activeChannel?.name,
-              messages: activeChannel?.messages,
-            }),
-          );
-        } catch (err) {
-          dispatch(
-            setChatChannel({
-              channelName: null,
-              messages: [],
-            }),
-          );
-        }
-      }
-
-      dispatch(setTabDirect());
-      setSidebar({ type: 'direct', friends: directChannelsProps });
-    },
-  });
+  const guildMutate = useGuildMutate({ setSidebar });
+  const directMutate = useDirectMutate({ setSidebar });
 
   const onDirectMessagesClick = () => {
     directMutate.mutate();
