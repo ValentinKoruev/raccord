@@ -5,3 +5,14 @@ export type GetGuildRequest = {
 };
 
 export type GetGuildResponse = GuildDto | null;
+
+export type CreateGuildRequest = {
+  userId: string;
+  guildName: string;
+  guildIcon?: string;
+};
+
+export type JoinGuildRequest = {
+  userId: string;
+  guildId: string;
+};
