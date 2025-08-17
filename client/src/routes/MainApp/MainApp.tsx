@@ -6,6 +6,7 @@ import routes from '@routes/config';
 import apiQueries from '@queries/api';
 import { GuildDto } from '@shared/types/dto/Guild';
 import { GetUserGuildsResponse } from '@shared/types/api';
+import BaseModal from '@components/Modals';
 import Content from '@components/Content';
 import Sidebar from '@components/Sidebar';
 import styles from './MainApp.module.scss';
@@ -40,6 +41,7 @@ const MainApp = () => {
 
   return (
     <div className={styles.AppContainer}>
+      <BaseModal />
       <Sidebar guilds={guilds} />
       <Content />
     </div>

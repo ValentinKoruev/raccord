@@ -1,0 +1,52 @@
+@use '@styles/variables' as *;
+
+.FormContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .Form {
+    .FormInputContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      label {
+        font-size: $font-sm;
+      }
+      input {
+        border: 2px $color-background-1 solid;
+        outline: 0;
+        border-radius: 10px;
+        background-color: $color-background-3;
+        padding: 10px;
+        color: $color-white;
+      }
+    }
+  }
+
+  .ButtonsContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    .BackButton {
+      background: none;
+    }
+    .JoinButton {
+      padding: 10px 20px;
+      border-radius: 10px;
+      background-color: $color-primary;
+    }
+    .BackButton,
+    .JoinButton {
+      border: 0;
+      outline: 0;
+      font-size: $font-rg;
+
+      color: $color-white;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}

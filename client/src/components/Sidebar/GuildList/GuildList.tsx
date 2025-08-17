@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, FC } from 'react';
-import { useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import { selectUnreadByGuilds } from '@redux/slices/sessionSlice';
+import { openAddServerModal } from '@redux/slices/modalSlice';
 import useGuildMutate from './hooks/useGuildMutate';
 import useDirectMutate from './hooks/useDirectMutate';
 import { GuildDto } from '@shared/types/dto/Guild';
@@ -15,6 +16,7 @@ type GuildListProps = {
 };
 
 const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
+  const dispatch = useAppDispatch();
   const activeTabId = useAppSelector((state) => state.session.activeTabId);
   const unreadGuilds = useAppSelector(selectUnreadByGuilds);
   const guildMutate = useGuildMutate({ setSidebar });
@@ -29,7 +31,7 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
   };
 
   const onAddServerClick = () => {
-    console.log('create server');
+    dispatch(openAddServerModal({}));
   };
 
   return (

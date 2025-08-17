@@ -1,0 +1,65 @@
+@use '@styles/variables' as *;
+
+.AddServerContainer {
+  background-color: $color-background-2;
+  color: $color-white;
+  padding: 1em;
+
+  border: 1px $color-background-1 solid;
+  border-radius: 30px;
+
+  min-width: 300px;
+
+  .Header {
+    padding: 10px 10px 20px 10px;
+    font-size: $font-2xl;
+  }
+  .ActionOptionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    list-style: none;
+    .ActionOption {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      color: $color-white;
+      background-color: $color-background-2;
+      padding: 20px 15px;
+      border: 1px $color-background-1 solid;
+      border-radius: 20px;
+      outline: none;
+      user-select: none;
+      text-align: start;
+      font-size: $font-rg;
+
+      .ActionIcon {
+        fill: $color-dark-gray;
+        width: $font-rg;
+        height: $font-rg;
+      }
+
+      &:hover {
+        cursor: pointer;
+        background-color: $color-background-1;
+      }
+    }
+    .Seperator {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      .SeperatorContent {
+        width: fit-content;
+        text-align: center;
+        font-size: $font-sm;
+      }
+      .SeperatorLine {
+        flex-grow: 1;
+        height: 1px;
+        background-color: $color-background-1;
+      }
+    }
+  }
+}
