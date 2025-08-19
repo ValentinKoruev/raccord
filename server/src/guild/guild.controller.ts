@@ -13,8 +13,7 @@ export class GuildController {
 
   @Get('/:id/channels')
   getChannels(@Param() params: any) {
-    const guildId: number = Number.parseInt(params.id);
-    return this.guildService.getChannels(guildId);
+    return this.guildService.getChannels(params.id);
   }
 
   @UseGuards(AuthGuard)

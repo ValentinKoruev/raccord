@@ -104,10 +104,12 @@ export class GuildService {
     }
   }
 
-  async getChannels(guildId: number) {
+  async getChannels(guildId: string) {
     const channels = await this.prisma.guildChannel.findMany({
       where: {
-        guildId: guildId,
+        guild: {
+          publicId: guildId,
+        },
       },
       include: {
         guild: true,
