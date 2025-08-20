@@ -1,8 +1,11 @@
 import ChevronDown from '../icons/ChevronDown';
 import ChevronRight from '../icons/ChevronRight';
 import CirclePlus from '../icons/CirclePlus';
+import Gear from '../icons/Gear';
 import Hashtag from '../icons/Hashtag';
 import Plus from '../icons/Plus';
+import RightFromBracket from '../icons/RightFromBracket';
+import UserPlus from '../icons/UserPlus';
 import VolumeHigh from '../icons/VolumeHigh';
 
 const iconMap = {
@@ -12,6 +15,9 @@ const iconMap = {
   plus: Plus,
   'circle-plus': CirclePlus,
   'volume-high': VolumeHigh,
+  'user-plus': UserPlus,
+  gear: Gear,
+  'right-from-bracket': RightFromBracket,
 };
 
 export default iconMap;

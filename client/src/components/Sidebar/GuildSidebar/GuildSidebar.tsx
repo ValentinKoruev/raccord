@@ -1,9 +1,10 @@
-import { FC } from 'react';
+import { FC, useState, useRef } from 'react';
 import { useAppSelector } from '@redux/store';
 import { GuildDto } from '@shared/types/dto/Guild';
 import { formatGuildChannel } from '@shared/utils/channelFormatter';
 import Channel from '@components/Sidebar/GuildSidebar/Channel';
 import ChannelCategory from '@components/Sidebar/GuildSidebar/ChannelCategory';
+import OptionsMenu from './OptionsMenu';
 import Icon from '@shared/components/Icon';
 import styles from './GuildSidebar.module.scss';
 
@@ -12,6 +13,8 @@ export type GuildSidebarProps = {
 };
 
 const GuildSidebar: FC<GuildSidebarProps> = ({ guild }) => {
+  const [isOptionsOpen, setIsOptionsOpen] = useState(false);
+  const headerRef = useRef<HTMLDivElement>(null);
   const activeChannelId = useAppSelector((state) => state.session.activeChannelId);
   const unreadFlags = useAppSelector((state) => state.session.unreadChannelFlags);
 
@@ -33,9 +36,13 @@ const GuildSidebar: FC<GuildSidebarProps> = ({ guild }) => {
     });
   };
 
+  const onHeaderClick = () => {
+    setIsOptionsOpen((state) => !state);
+  };
+
   return (
     <div className={styles.GuildSidebar}>
-      <div className={styles.GuildHeader}>
+      <div ref={headerRef} onClick={onHeaderClick} className={styles.GuildHeader}>
         <div className={`${styles.GuildInfo} ${guild.banner ? '' : styles.Base}`}>
           <div className={styles.GuildName}>{guild.guildName}</div>
           <Icon name="arrow-down" fill="inherit" width="0.8em" height="0.8em" />
@@ -45,6 +52,7 @@ const GuildSidebar: FC<GuildSidebarProps> = ({ guild }) => {
             <img className={styles.GuildBanner} src={guild.banner} alt={`${guild.guildName} (banner)`} />
           </div>
         )}
+        <OptionsMenu isOpen={isOptionsOpen} setIsOpen={setIsOptionsOpen} headerRef={headerRef} />
       </div>
       {guild.banner && <div className={styles.BannerWhitespace} aria-label="hidden" /> /* whitespace for banner */}
       <div className={styles.ChannelsContainer}>{channelList(guild)}</div>

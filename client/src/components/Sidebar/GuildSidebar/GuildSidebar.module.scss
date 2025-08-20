@@ -9,6 +9,9 @@
   .GuildHeader {
     position: relative;
     box-shadow: 0 3px 4px -4px #000;
+
+    user-select: none;
+
     .GuildInfo {
       position: relative;
       width: 100%;

@@ -1,0 +1,56 @@
+@use '@styles/variables' as *;
+
+.OptionsMenuList {
+  position: absolute;
+  list-style: none;
+  background-color: $color-background-1;
+  color: $color-white;
+  margin-top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  min-width: 80%;
+
+  border: 1px $color-background-2 solid;
+  border-radius: 10px;
+  padding: 10px;
+  li {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: $font-xs;
+    padding: 10px 5px;
+
+    border-radius: 5px;
+
+    &:hover {
+      cursor: pointer;
+      background-color: $color-background-1-active;
+    }
+
+    svg {
+      fill: $color-white;
+      width: 20px;
+      height: 20px;
+
+      &.InviteUsersIcon {
+        position: relative;
+        left: 2px;
+      }
+    }
+
+    &.LeaveServer {
+      color: $color-pale-red;
+      svg {
+        fill: $color-pale-red;
+      }
+
+      &:hover {
+        background-color: rgba($color-pale-red, 0.1);
+      }
+    }
+  }
+}
