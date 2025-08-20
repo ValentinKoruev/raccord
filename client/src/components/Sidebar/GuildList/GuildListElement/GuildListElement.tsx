@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import classNames from 'classnames';
 import styles from './GuildListElement.module.scss';
 
@@ -13,11 +13,15 @@ export type GuildListElementProps = {
 };
 
 const GuildListElement: FC<GuildListElementProps> = ({ guildId, name, onClick, image, isActive, isUnread }) => {
-  const renderIcon = (image?: string | ReactNode) => {
-    if (typeof image === 'string') return <img className={styles.Icon} src={image} alt={name} />;
+  const [error, setError] = useState<boolean>(false);
+  const renderIcon = ({ image, error }: { image?: string | ReactNode; error: boolean }) => {
+    if (!error) {
+      if (typeof image === 'string')
+        return <img className={styles.Icon} src={image} alt={name} onError={() => setError(true)} />;
 
-    if (image) {
-      return <>{image}</>;
+      if (image) {
+        return <>{image}</>;
+      }
     }
 
     return (
@@ -38,7 +42,7 @@ const GuildListElement: FC<GuildListElementProps> = ({ guildId, name, onClick, i
           isUnread ? styles.Unread : '',
         )}
       >
-        {renderIcon(image)}
+        {renderIcon({ image, error })}
         <div className={styles.TooltipContainer}>
           <div className={styles.Tooltip}>{name}</div>
         </div>
