@@ -1,7 +1,7 @@
 import { MouseEventHandler, useEffect, useRef } from 'react';
-import { getSocket } from 'src/socket';
+import { getSocket } from '@socket';
 import styles from './ChatBottomBar.module.scss';
-import { useAppSelector } from 'src/redux/store';
+import { useAppSelector } from '@redux/store';
 
 const ChatBottomBar = () => {
   const inputRef = useRef<HTMLInputElement>(null);

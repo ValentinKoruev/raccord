@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@redux/store';
 import { handleIncomingMessage } from '@redux/thunks/messageThunk';
 import { MessageSocketResponse } from '@shared/types/api';
-import { getSocket } from 'src/socket';
+import { getSocket } from '@socket';
 
 const useChat = () => {
   const dispatch = useAppDispatch();

@@ -8,7 +8,10 @@
       "@shared/*": ["src/shared/*"],
       "@routes/*": ["src/routes/*"],
       "@queries/*": ["src/queries/*"],
-      "@redux/*": ["src/redux/*"]
+      "@redux/*": ["src/redux/*"],
+      "@config": ["src/config.ts"],
+      "@socket": ["src/socket.ts"],
+      "@tests/*": ["src/tests/*"]
     }
   }
 }

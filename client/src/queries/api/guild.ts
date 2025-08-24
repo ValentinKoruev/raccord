@@ -1,4 +1,4 @@
-import config from 'src/config';
+import config from '@config';
 import axios from '@queries/axios';
 import { GetGuildResponse } from '@shared/types/api';
 
