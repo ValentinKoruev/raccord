@@ -7,12 +7,13 @@ export type GuildListElementProps = {
   onClick: Function;
   image?: string | ReactNode;
 
+  testId?: string;
   guildId?: string;
   isActive?: boolean;
   isUnread?: boolean;
 };
 
-const GuildListElement: FC<GuildListElementProps> = ({ guildId, name, onClick, image, isActive, isUnread }) => {
+const GuildListElement: FC<GuildListElementProps> = ({ guildId, testId, name, onClick, image, isActive, isUnread }) => {
   const [error, setError] = useState<boolean>(false);
   const renderIcon = ({ image, error }: { image?: string | ReactNode; error: boolean }) => {
     if (!error) {
@@ -41,6 +42,7 @@ const GuildListElement: FC<GuildListElementProps> = ({ guildId, name, onClick, i
           isActive ? styles.Active : '',
           isUnread ? styles.Unread : '',
         )}
+        data-testid={`guild-list-element-${testId}`}
       >
         {renderIcon({ image, error })}
         <div className={styles.TooltipContainer}>

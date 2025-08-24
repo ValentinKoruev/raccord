@@ -34,7 +34,7 @@ const OptionsMenu: React.FC<OptionMenuProps> = ({ isOpen, setIsOpen, headerRef }
   );
 
   return (
-    <ul onClick={(e) => e.stopPropagation()} className={styles.OptionsMenuList}>
+    <ul data-testid="guild-sidebar-options" onClick={(e) => e.stopPropagation()} className={styles.OptionsMenuList}>
       <OptionsElement label="Invite users">
         <Icon name="user-plus" className={styles.InviteUsersIcon} />
       </OptionsElement>

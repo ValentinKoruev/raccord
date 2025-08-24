@@ -59,7 +59,7 @@ const CreateServerForm: FC<CreateServerFormProps> = ({ onBack }) => {
   };
 
   return (
-    <div className={styles.FormContainer}>
+    <div data-testid="create-server-form" className={styles.FormContainer}>
       {/* TODO: Extract this form into a reusable component */}
       <form className={styles.Form}>
         <div className={styles.FormInputContainer}>

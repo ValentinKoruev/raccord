@@ -43,7 +43,7 @@ const Chat: FC<ChatProps> = () => {
     <div className={styles.Chat}>
       <div className={styles.ChatHeader}>
         <div className={styles.ChatTitle}>
-          <Icon name="hashtag" className={styles.HeaderIcon} />
+          <Icon data-testid="chat-header-icon" name="hashtag" className={styles.HeaderIcon} />
           <span>{title}</span>
         </div>
         <div></div>

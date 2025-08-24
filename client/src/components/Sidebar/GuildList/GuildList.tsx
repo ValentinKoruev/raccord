@@ -43,6 +43,7 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
         onClick={() => onDirectMessagesClick()}
         image="src/assets/raccoon_creppy.png"
         name="Direct Messages"
+        testId="direct"
       />
       {guilds.map((guild, index) => {
         return (
@@ -54,6 +55,7 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
             image={`${guild.icon}`}
             isActive={activeTabId == guild.guildId}
             isUnread={unreadGuilds[guild.guildId] !== undefined}
+            testId={`${guild.guildId}`}
           />
         );
       })}
@@ -62,6 +64,7 @@ const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
         onClick={() => onAddServerClick()}
         name="Add server"
         isActive={isAddServerOpen}
+        testId="addServer"
       />
     </div>
   );

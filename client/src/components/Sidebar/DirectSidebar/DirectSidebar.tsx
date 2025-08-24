@@ -35,7 +35,7 @@ const DirectSidebar: FC<DirectSidebarProps> = ({ friends }) => {
   };
 
   return (
-    <div className={styles.DirectSidebar}>
+    <div data-testid="direct-sidebar" className={styles.DirectSidebar}>
       <div className={styles.DirectMessagesContainer}>
         <div className={styles.DirectMessagesHeader}>Direct Messages</div>
         <div className={styles.DirectMessagesList}>{directChannels(friends)}</div>

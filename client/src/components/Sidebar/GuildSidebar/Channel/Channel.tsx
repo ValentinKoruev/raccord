@@ -50,9 +50,9 @@ const Channel: FC<ChannelProps> = ({ type, name, isActive, isUnread, channelId }
   const renderIcon = (type: 'text' | 'voice') => {
     switch (type) {
       case 'text':
-        return <Icon name="hashtag" width={iconSize} height={iconSize} />;
+        return <Icon data-testid="text-icon" name="hashtag" width={iconSize} height={iconSize} />;
       case 'voice':
-        return <Icon name="volume-high" width={iconSize} height={iconSize} />;
+        return <Icon data-testid="voice-icon" name="volume-high" width={iconSize} height={iconSize} />;
     }
   };
 
@@ -60,6 +60,7 @@ const Channel: FC<ChannelProps> = ({ type, name, isActive, isUnread, channelId }
     <div
       onClick={() => channelMutate.mutate(channelId)}
       className={classNames(styles.Channel, isActive ? styles.Active : '', isUnread ? styles.Unread : '')}
+      data-testid={`guild-channel-${channelId}`}
     >
       {renderIcon(type)}
       <div className={styles.ChannelName}>{name}</div>

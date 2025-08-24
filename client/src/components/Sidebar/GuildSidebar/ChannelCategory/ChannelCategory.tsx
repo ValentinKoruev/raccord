@@ -22,11 +22,11 @@ const ChannelCategory = ({ name, channels = [] }: ChannelCategoryProps) => {
 
   return (
     <div className={styles.ChannelCategory}>
-      <div onClick={onHeaderClick} className={styles.CategoryHeader}>
+      <div data-testid="category-header" onClick={onHeaderClick} className={styles.CategoryHeader}>
         {channelsDropdown ? (
-          <Icon name="arrow-down" className={styles.Dropdown} />
+          <Icon data-testid="category-dropdown-icon-open" name="arrow-down" className={styles.Dropdown} />
         ) : (
-          <Icon name="arrow-right" className={styles.Dropdown} />
+          <Icon data-testid="category-dropdown-icon-closed" name="arrow-right" className={styles.Dropdown} />
         )}
         <div className={styles.CategoryName}>{name}</div>
         <button onClick={onCreateClick} className={styles.CreateButton}>

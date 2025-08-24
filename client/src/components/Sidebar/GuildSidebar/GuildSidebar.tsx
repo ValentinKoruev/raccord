@@ -41,8 +41,8 @@ const GuildSidebar: FC<GuildSidebarProps> = ({ guild }) => {
   };
 
   return (
-    <div className={styles.GuildSidebar}>
-      <div ref={headerRef} onClick={onHeaderClick} className={styles.GuildHeader}>
+    <div data-testid="guild-sidebar" className={styles.GuildSidebar}>
+      <div data-testid="guild-sidebar-header" ref={headerRef} onClick={onHeaderClick} className={styles.GuildHeader}>
         <div className={`${styles.GuildInfo} ${guild.banner ? '' : styles.Base}`}>
           <div className={styles.GuildName}>{guild.guildName}</div>
           <Icon name="arrow-down" fill="inherit" width="0.8em" height="0.8em" />

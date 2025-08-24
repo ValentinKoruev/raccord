@@ -47,6 +47,7 @@ const Friend: FC<FriendProps> = ({ image, name, userId, isActive, isUnread }) =>
     <div
       onClick={() => friendMutate.mutate(userId)}
       className={classNames(styles.Friend, isActive ? styles.isActive : '', isUnread ? styles.isUnread : '')}
+      data-testid={`friend-component-${userId}`}
     >
       {/* TODO: create a pfp component */}
       <div className={styles.ImageWrapper}>

@@ -57,7 +57,7 @@ const JoinServerForm: FC<JoinServerFormProps> = ({ onBack }) => {
     }
   };
   return (
-    <div className={styles.FormContainer}>
+    <div data-testid="join-server-form" className={styles.FormContainer}>
       {/* TODO: Extract this form into a reusable component */}
       <form className={styles.Form}>
         <div className={styles.FormInputContainer}>
