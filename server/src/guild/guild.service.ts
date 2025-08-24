@@ -95,7 +95,7 @@ export class GuildService {
           case 'P2002':
             throw new ConflictException('User is already a member of guild.');
           case 'P2025':
-            throw new BadRequestException('Guild or user not found');
+            throw new NotFoundException('Guild or user not found');
           default:
             throw error;
         }
