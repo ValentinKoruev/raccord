@@ -85,8 +85,16 @@ You can use the provided test users to test the application
 - ✅ Storing messages in database for persistence  
 - ✅ Guild channels with dynamic creation and management
 - ✅ Notifications system
+- ✅ Unit and integration tests for client
+- 🛠️ Unit and integration tests for server
 - 🛠️ Role-based access control
-- ⏳ Voice channels with WebRTC
-- ⏳ File sharing
+- ⏳ Direct Messages add and remove channels
+- ⏳ Group DMs
 - ⏳ Online/offline presence of users
+- ⏳ Advanced message options (edit/unsend/reply/forward/etc...)
+- ⏳ Message search (by keyword, user, date)
+- ⏳ Moderation tools (ban, kick, mute, report system)
+- ⏳ File sharing
+- ⏳ File previews (images, PDFs, videos)
+- ⏳ Voice channels with WebRTC
 ---
