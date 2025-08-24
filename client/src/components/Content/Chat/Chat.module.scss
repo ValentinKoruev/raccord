@@ -1,4 +1,5 @@
 @use '@styles/variables' as *;
+@use '@styles/scrollbar' as *;
 
 .Chat {
   display: flex;
@@ -44,10 +45,13 @@
   .ChatContent {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
     flex-grow: 1;
 
     .ChatMessages {
+      overflow: auto;
       flex-grow: 1;
+      @include scrollable($color-background-1, $color-background-4, 0, 20px);
     }
   }
 }
