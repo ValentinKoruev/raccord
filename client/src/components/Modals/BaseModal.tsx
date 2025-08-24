@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { useAppDispatch, useAppSelector } from '@redux/store';
 import { closeModal } from '@redux/slices/modalSlice';
 import AddServerModal from './AddServer';
+import InviteToServerModal from './InviteToServer';
 import styles from './BaseModal.module.scss';
 
 export const BaseModal = () => {
@@ -27,7 +28,10 @@ export const BaseModal = () => {
   let content;
   switch (type) {
     case 'addServer':
-      content = <AddServerModal {...props} onClose={handleClose} />;
+      content = <AddServerModal {...props} />;
+      break;
+    case 'inviteToServer':
+      content = <InviteToServerModal {...props} />;
       break;
     default:
       return null;

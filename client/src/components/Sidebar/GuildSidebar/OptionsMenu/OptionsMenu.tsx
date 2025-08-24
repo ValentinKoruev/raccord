@@ -1,4 +1,7 @@
 import { ReactNode, useEffect } from 'react';
+import { useAppDispatch } from '@redux/store';
+import { openInviteToServerModal } from '@redux/slices/modalSlice';
+import { GuildDto } from '@shared/types/dto/Guild';
 import Icon from '@shared/components/Icon';
 import styles from './OptionsMenu.module.scss';
 
@@ -6,6 +9,7 @@ type OptionMenuProps = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   headerRef: React.RefObject<HTMLDivElement | null>;
+  guild: GuildDto;
 };
 
 interface OptionMenuElementProps extends React.HTMLAttributes<HTMLLIElement> {
@@ -13,7 +17,8 @@ interface OptionMenuElementProps extends React.HTMLAttributes<HTMLLIElement> {
   children: ReactNode;
 }
 
-const OptionsMenu: React.FC<OptionMenuProps> = ({ isOpen, setIsOpen, headerRef }) => {
+const OptionsMenu: React.FC<OptionMenuProps> = ({ isOpen, setIsOpen, headerRef, guild }) => {
+  const dispatch = useAppDispatch();
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (headerRef?.current && !headerRef.current.contains(event.target as Node)) {
@@ -33,9 +38,13 @@ const OptionsMenu: React.FC<OptionMenuProps> = ({ isOpen, setIsOpen, headerRef }
     </li>
   );
 
+  const handleInviteToServer = () => {
+    dispatch(openInviteToServerModal({ guildId: guild.guildId }));
+  };
+
   return (
     <ul data-testid="guild-sidebar-options" onClick={(e) => e.stopPropagation()} className={styles.OptionsMenuList}>
-      <OptionsElement label="Invite users">
+      <OptionsElement onClick={handleInviteToServer} label="Invite users">
         <Icon name="user-plus" className={styles.InviteUsersIcon} />
       </OptionsElement>
       <OptionsElement label="Server settings">

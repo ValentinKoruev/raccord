@@ -52,7 +52,7 @@ const GuildSidebar: FC<GuildSidebarProps> = ({ guild }) => {
             <img className={styles.GuildBanner} src={guild.banner} alt={`${guild.guildName} (banner)`} />
           </div>
         )}
-        <OptionsMenu isOpen={isOptionsOpen} setIsOpen={setIsOptionsOpen} headerRef={headerRef} />
+        <OptionsMenu isOpen={isOptionsOpen} setIsOpen={setIsOptionsOpen} headerRef={headerRef} guild={guild} />
       </div>
       {guild.banner && <div className={styles.BannerWhitespace} aria-label="hidden" /> /* whitespace for banner */}
       <div className={styles.ChannelsContainer}>{channelList(guild)}</div>
