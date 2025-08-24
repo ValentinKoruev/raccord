@@ -16,7 +16,7 @@ const Message: FC<MessageProps> = ({ username, image, content, detailed, date, n
     <div className={`${styles.Message} ${detailed ? styles.Detailed : ''}`}>
       {detailed ? (
         <div className={styles.ImageWrapper}>
-          <img className={styles.Image} src={image} alt={`${name} (pfp)`} />
+          <img className={styles.Image} src={image} alt={`${username} (pfp)`} />
         </div>
       ) : (
         <div className={styles.ImageWhitespace}>

@@ -36,7 +36,7 @@ const ChannelCategory = ({ name, channels = [] }: ChannelCategoryProps) => {
       {channelsDropdown && (
         <div className={styles.ChannelList}>
           {channels.map((channel, index) => (
-            <Channel key={`channel-${index}`} type={channel.type} name={channel.name} />
+            <Channel key={`channel-${index}`} {...channel} />
           ))}
         </div>
       )}

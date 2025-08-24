@@ -24,6 +24,11 @@
     }
   }
 
+  .Error {
+    color: $color-pale-red;
+    font-size: $font-sm;
+  }
+
   .ButtonsContainer {
     display: flex;
     flex-direction: row;

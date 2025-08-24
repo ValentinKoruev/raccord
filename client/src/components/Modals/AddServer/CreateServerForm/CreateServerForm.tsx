@@ -5,6 +5,7 @@ import { useAppDispatch } from '@redux/store';
 import { closeModal } from '@redux/slices/modalSlice';
 import apiQueries from '@queries/api';
 import styles from './CreateServerForm.module.scss';
+import { UNAUTHORIZED } from '@queries/statusCodes';
 
 type CreateServerFormProps = {
   onBack: () => void;
@@ -19,6 +20,7 @@ const CreateServerForm: FC<CreateServerFormProps> = ({ onBack }) => {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const [form, setForm] = useState<CreateServerFormData>({ createServerName: '', createServerIcon: '' });
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -27,15 +29,15 @@ const CreateServerForm: FC<CreateServerFormProps> = ({ onBack }) => {
   const handleCreate = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (!form.createServerName) {
-      console.error('Guild name missing');
+    if (!form.createServerName || form.createServerName.trim() == '') {
+      setError('Guild name is empty');
       return;
     }
 
     try {
       const response = await apiQueries.guildQueries.createGuild({
-        guildName: form.createServerName,
-        guildIcon: form.createServerIcon,
+        guildName: form.createServerName.trim(),
+        guildIcon: form.createServerIcon.trim(),
       });
 
       queryClient.invalidateQueries({
@@ -46,9 +48,13 @@ const CreateServerForm: FC<CreateServerFormProps> = ({ onBack }) => {
     } catch (error) {
       if (isAxiosError(error)) {
         const axiosError = error as AxiosError;
+
+        if (axiosError.status == UNAUTHORIZED) {
+          setError('Error: Not authenticated. Please log in again.');
+        }
       }
 
-      throw new Error('Unexpecter Error: ' + error);
+      setError('Unexpected error occured. Please try again later.');
     }
   };
 
@@ -78,6 +84,11 @@ const CreateServerForm: FC<CreateServerFormProps> = ({ onBack }) => {
           />
         </div>
       </form>
+      {error && (
+        <div role="alert" className={styles.Error}>
+          {error}
+        </div>
+      )}
       <div className={styles.ButtonsContainer}>
         <button className={styles.BackButton} onClick={onBack}>
           Back

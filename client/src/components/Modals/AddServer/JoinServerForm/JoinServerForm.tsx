@@ -4,6 +4,7 @@ import { AxiosError, isAxiosError } from 'axios';
 import { useAppDispatch } from '@redux/store';
 import { closeModal } from '@redux/slices/modalSlice';
 import apiQueries from '@queries/api';
+import { NOT_FOUND } from '@queries/statusCodes';
 import styles from './JoinServerForm.module.scss';
 
 type JoinServerFormProps = {
@@ -18,6 +19,7 @@ const JoinServerForm: FC<JoinServerFormProps> = ({ onBack }) => {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const [form, setForm] = useState<JoinServerFormData>({ joinServerId: '' });
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -26,14 +28,14 @@ const JoinServerForm: FC<JoinServerFormProps> = ({ onBack }) => {
   const handleJoin = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (!form.joinServerId) {
-      console.error('Guild id missing');
+    if (!form.joinServerId || form.joinServerId.trim() == '') {
+      setError('Guild id is empty');
       return;
     }
 
     try {
-      const response = await apiQueries.guildQueries.join({
-        guildId: form.joinServerId,
+      await apiQueries.guildQueries.join({
+        guildId: form.joinServerId.trim(),
       });
 
       queryClient.invalidateQueries({
@@ -44,9 +46,14 @@ const JoinServerForm: FC<JoinServerFormProps> = ({ onBack }) => {
     } catch (error) {
       if (isAxiosError(error)) {
         const axiosError = error as AxiosError;
+
+        if (axiosError.status == NOT_FOUND) {
+          setError('Error: Server id not found');
+          return;
+        }
       }
 
-      throw new Error('Unexpecter Error: ' + error);
+      setError('Unexpected error occured. Please try again later.');
     }
   };
   return (
@@ -64,6 +71,11 @@ const JoinServerForm: FC<JoinServerFormProps> = ({ onBack }) => {
           />
         </div>
       </form>
+      {error && (
+        <div role="alert" className={styles.Error}>
+          {error}
+        </div>
+      )}
       <div className={styles.ButtonsContainer}>
         <button className={styles.BackButton} onClick={onBack}>
           Back

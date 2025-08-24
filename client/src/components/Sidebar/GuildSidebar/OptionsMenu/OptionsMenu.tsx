@@ -5,7 +5,7 @@ import styles from './OptionsMenu.module.scss';
 type OptionMenuProps = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  headerRef: React.RefObject<HTMLDivElement> | null;
+  headerRef: React.RefObject<HTMLDivElement | null>;
 };
 
 interface OptionMenuElementProps extends React.HTMLAttributes<HTMLLIElement> {

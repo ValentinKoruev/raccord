@@ -10,12 +10,10 @@ import { parseChannel } from '@shared/utils/channelFormatter';
 import Icon from '@shared/components/Icon';
 import styles from './Channel.module.scss';
 
-export type ChannelType = 'text' | 'voice';
-
 export type ChannelProps = {
   channelId: string;
   name: string;
-  type: ChannelType;
+  type: 'text' | 'voice';
   isActive: boolean;
   isUnread: boolean;
 };
@@ -49,7 +47,7 @@ const Channel: FC<ChannelProps> = ({ type, name, isActive, isUnread, channelId }
     },
   });
 
-  const renderIcon = (type: ChannelType) => {
+  const renderIcon = (type: 'text' | 'voice') => {
     switch (type) {
       case 'text':
         return <Icon name="hashtag" width={iconSize} height={iconSize} />;

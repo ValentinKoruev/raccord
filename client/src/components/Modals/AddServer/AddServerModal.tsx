@@ -4,9 +4,7 @@ import CreateServerForm from './CreateServerForm';
 import JoinServerForm from './JoinServerForm';
 import styles from './AddServerModal.module.scss';
 
-type AddServerModalProps = {
-  onClose: () => any;
-};
+type AddServerModalProps = {};
 
 type AddServerState = 'base' | 'join' | 'create';
 
