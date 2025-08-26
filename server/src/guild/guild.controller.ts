@@ -38,4 +38,14 @@ export class GuildController {
       guildId: body.guildId,
     });
   }
+
+  @UseGuards(AuthGuard)
+  @HttpCode(200)
+  @Post('/leave')
+  async delete(@Req() request, @Body() body: { guildId: string }) {
+    const guild = await this.guildService.leaveGuild({
+      userId: request.user.userId,
+      guildId: body.guildId,
+    });
+  }
 }

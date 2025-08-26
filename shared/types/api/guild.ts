@@ -16,3 +16,8 @@ export type JoinGuildRequest = {
   userId: string;
   guildId: string;
 };
+
+export type RemoveGuildRequest = {
+  userId: string;
+  guildId: string;
+};

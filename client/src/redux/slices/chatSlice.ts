@@ -25,9 +25,13 @@ export const chatSlice = createSlice({
       const msg = action.payload as MessageSocketResponse;
       state.messages.push(msg.message);
     },
+    clearChat: (state) => {
+      state.messages = [];
+      state.title = '';
+    },
   },
 });
 
-export const { setChatChannel, receiveMessage } = chatSlice.actions;
+export const { setChatChannel, receiveMessage, clearChat } = chatSlice.actions;
 
 export default chatSlice.reducer;

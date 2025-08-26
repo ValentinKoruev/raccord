@@ -1,6 +1,12 @@
 import { ReactNode, useEffect } from 'react';
+import { AxiosError, isAxiosError } from 'axios';
 import { useAppDispatch } from '@redux/store';
-import { openInviteToServerModal } from '@redux/slices/modalSlice';
+import { useQueryClient } from '@tanstack/react-query';
+import { closeModal, openInviteToServerModal } from '@redux/slices/modalSlice';
+import { clearChat } from '@redux/slices/chatSlice';
+import { clearActiveChannel } from '@redux/slices/sessionSlice';
+import apiQueries from '@queries/api';
+import { NOT_FOUND, UNAUTHORIZED } from '@queries/statusCodes';
 import { GuildDto } from '@shared/types/dto/Guild';
 import Icon from '@shared/components/Icon';
 import styles from './OptionsMenu.module.scss';
@@ -19,6 +25,7 @@ interface OptionMenuElementProps extends React.HTMLAttributes<HTMLLIElement> {
 
 const OptionsMenu: React.FC<OptionMenuProps> = ({ isOpen, setIsOpen, headerRef, guild }) => {
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (headerRef?.current && !headerRef.current.contains(event.target as Node)) {
@@ -42,6 +49,39 @@ const OptionsMenu: React.FC<OptionMenuProps> = ({ isOpen, setIsOpen, headerRef, 
     dispatch(openInviteToServerModal({ guildId: guild.guildId }));
   };
 
+  const handleLeaveServer = async () => {
+    try {
+      await apiQueries.guildQueries.leaveGuild({
+        guildId: guild.guildId,
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ['userguilds'],
+      });
+
+      // TODO: also clear sidebar
+      dispatch(clearActiveChannel());
+      dispatch(clearChat());
+      dispatch(closeModal());
+    } catch (error) {
+      if (isAxiosError(error)) {
+        const axiosError = error as AxiosError;
+
+        if (axiosError.status == UNAUTHORIZED) {
+          console.log('Not authorised');
+          return;
+        }
+        if (axiosError.status == NOT_FOUND) {
+          console.log('Not found');
+          return;
+        }
+      }
+
+      // setError('Unexpected error occured. Please try again later.');
+      throw new Error('Unexpected error occured: ' + error);
+    }
+  };
+
   return (
     <ul data-testid="guild-sidebar-options" onClick={(e) => e.stopPropagation()} className={styles.OptionsMenuList}>
       <OptionsElement onClick={handleInviteToServer} label="Invite users">
@@ -52,7 +92,7 @@ const OptionsMenu: React.FC<OptionMenuProps> = ({ isOpen, setIsOpen, headerRef, 
       </OptionsElement>
       {/* <li>Create channel</li>
         <li>Create category</li> */}
-      <OptionsElement label="Leave server" className={styles.LeaveServer}>
+      <OptionsElement onClick={handleLeaveServer} label="Leave server" className={styles.LeaveServer}>
         <Icon name="right-from-bracket" />
       </OptionsElement>
     </ul>

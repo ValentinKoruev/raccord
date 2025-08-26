@@ -12,6 +12,9 @@ const guildQueries = {
   async join(data: { guildId: string }) {
     return await axios.post(`${config.apiUrl}/guild/join`, data);
   },
+  async leaveGuild(data: { guildId: string }) {
+    return await axios.post(`${config.apiUrl}/guild/leave`, data);
+  },
 };
 
 export default guildQueries;

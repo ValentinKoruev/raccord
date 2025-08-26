@@ -49,6 +49,11 @@ export const sessionSlice = createSlice({
     setUnreadChannel(state, action: PayloadAction<string>) {
       state.unreadChannelFlags[action.payload] = true;
     },
+    clearActiveChannel(state) {
+      state.activeTabId = null;
+      state.activeChannelId = null;
+      state.activeDirectChannelId = null;
+    },
   },
 });
 
@@ -70,6 +75,7 @@ export const selectUnreadByGuilds = createSelector([selectUnreadFlags], (unreadF
   return result;
 });
 
-export const { setTabDirect, setTabGuild, setActiveChannel, setUnreadChannel } = sessionSlice.actions;
+export const { setTabDirect, setTabGuild, setActiveChannel, setUnreadChannel, clearActiveChannel } =
+  sessionSlice.actions;
 
 export default sessionSlice.reducer;

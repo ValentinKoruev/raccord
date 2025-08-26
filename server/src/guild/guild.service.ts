@@ -1,7 +1,13 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/runtime/library';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateGuildRequest, GetGuildRequest, GetGuildResponse, JoinGuildRequest } from '@shared/types/api';
+import {
+  CreateGuildRequest,
+  GetGuildRequest,
+  GetGuildResponse,
+  JoinGuildRequest,
+  RemoveGuildRequest,
+} from '@shared/types/api';
 
 @Injectable()
 export class GuildService {
@@ -102,6 +108,28 @@ export class GuildService {
       }
       throw error; //? non-Prisma errors
     }
+  }
+
+  async leaveGuild(request: RemoveGuildRequest) {
+    const query = await this.prisma.userOnGuild.findFirst({
+      where: {
+        user: { publicId: request.userId },
+        guild: { publicId: request.guildId },
+      },
+    });
+
+    if (!query) {
+      throw new NotFoundException(`User not part of guild.`);
+    }
+
+    await this.prisma.userOnGuild.delete({
+      where: {
+        userId_guildId: {
+          userId: query.userId,
+          guildId: query.guildId,
+        },
+      },
+    });
   }
 
   async getChannels(guildId: string) {
