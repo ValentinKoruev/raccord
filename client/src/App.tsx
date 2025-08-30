@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import MainApp from '@routes/MainApp';
 import LoginPage from '@routes/Login';
 import routes from '@routes/config';
-import ProtectedRoute from '@components/ProtectedRoute';
+import ProtectedRoute from '@components/Auth/ProtectedRoute';
 
 const queryClient = new QueryClient();
 
