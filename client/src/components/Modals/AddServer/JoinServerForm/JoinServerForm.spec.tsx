@@ -3,7 +3,6 @@ import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { renderWithProviders } from '@tests/renderWithProviders';
 import apiQueries from '@queries/api';
-import { closeModal } from '@redux/slices/modalSlice';
 
 import JoinServerForm from './JoinServerForm';
 
@@ -58,9 +57,14 @@ describe('JoinServerForm', () => {
     const mockQueryClient = { invalidateQueries: vi.fn() };
     mockedUseQueryClient.mockReturnValue(mockQueryClient);
 
-    const { store } = renderWithProviders(<JoinServerForm onBack={onBack} />);
-
-    const dispatchSpy = vi.spyOn(store, 'dispatch');
+    const { store } = renderWithProviders(<JoinServerForm onBack={onBack} />, {
+      preloadedState: {
+        modal: {
+          type: 'addServer',
+          props: {},
+        },
+      },
+    });
 
     const input = screen.getByPlaceholderText(/server id/i);
     fireEvent.change(input, { target: { value: 'guild-123' } });
@@ -78,9 +82,9 @@ describe('JoinServerForm', () => {
         queryKey: ['userguilds'],
       });
 
-      const actions = dispatchSpy.mock.calls.map((args) => args[0]);
+      const state = store.getState();
 
-      expect(actions.some((a: any) => a.type === closeModal.type)).toBe(true);
+      expect(state.modal.type).toBe(null);
     });
   });
 

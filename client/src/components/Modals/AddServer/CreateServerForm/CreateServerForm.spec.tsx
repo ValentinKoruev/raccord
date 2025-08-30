@@ -4,7 +4,6 @@ import { renderWithProviders } from '@tests/renderWithProviders';
 import CreateServerForm from './CreateServerForm';
 import { useQueryClient } from '@tanstack/react-query';
 import apiQueries from '@queries/api';
-import { closeModal } from '@redux/slices/modalSlice';
 
 vi.mock('@queries/api', () => {
   return {
@@ -58,9 +57,17 @@ describe('CreateServerForm', () => {
     const mockQueryClient = { invalidateQueries: vi.fn() };
     mockedUseQueryClient.mockReturnValue(mockQueryClient);
 
-    const { store } = renderWithProviders(<CreateServerForm onBack={onBack} />);
+    const createMock = apiQueries.guildQueries.createGuild as Mock;
+    createMock.mockResolvedValue({ success: true });
 
-    const dispatchSpy = vi.spyOn(store, 'dispatch');
+    const { store } = renderWithProviders(<CreateServerForm onBack={onBack} />, {
+      preloadedState: {
+        modal: {
+          type: 'addServer',
+          props: {},
+        },
+      },
+    });
 
     const nameInput = screen.getByPlaceholderText(/server name/i);
     const iconInput = screen.getByPlaceholderText(/server icon/i);
@@ -70,9 +77,6 @@ describe('CreateServerForm', () => {
 
     const createButton = screen.getByText(/create/i);
     fireEvent.click(createButton);
-
-    const createMock = apiQueries.guildQueries.createGuild as Mock;
-    createMock.mockResolvedValue({ success: true });
 
     await waitFor(() => {
       expect(apiQueries.guildQueries.createGuild).toHaveBeenCalledWith({
@@ -85,9 +89,9 @@ describe('CreateServerForm', () => {
         queryKey: ['userguilds'],
       });
 
-      const actions = dispatchSpy.mock.calls.map((args) => args[0]);
+      const state = store.getState();
 
-      expect(actions.some((a: any) => a.type === closeModal.type)).toBe(true);
+      expect(state.modal.type).toBe(null);
     });
   });
 

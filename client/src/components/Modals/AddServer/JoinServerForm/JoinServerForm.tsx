@@ -1,90 +1,61 @@
+import { FC } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { FC, useState, MouseEvent } from 'react';
 import { AxiosError, isAxiosError } from 'axios';
 import { useAppDispatch } from '@redux/store';
 import { closeModal } from '@redux/slices/modalSlice';
 import apiQueries from '@queries/api';
 import { NOT_FOUND } from '@queries/statusCodes';
-import styles from './JoinServerForm.module.scss';
+import Form from '@components/UI/Form';
 
-type JoinServerFormProps = {
+interface JoinServerFormProps {
   onBack: () => void;
-};
+}
 
-type JoinServerFormData = {
+interface JoinServerFormData {
   joinServerId: string;
-};
+}
 
 const JoinServerForm: FC<JoinServerFormProps> = ({ onBack }) => {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
-  const [form, setForm] = useState<JoinServerFormData>({ joinServerId: '' });
-  const [error, setError] = useState<string | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleSubmit = async (values: JoinServerFormData) => {
+    await apiQueries.guildQueries.join({
+      guildId: values.joinServerId.trim(),
+    });
+
+    queryClient.invalidateQueries({ queryKey: ['userguilds'] });
+    dispatch(closeModal());
   };
 
-  const handleJoin = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const validate = (values: JoinServerFormData) => {
+    if (!values.joinServerId.trim()) return 'Guild id is empty';
+    return null;
+  };
 
-    if (!form.joinServerId || form.joinServerId.trim() == '') {
-      setError('Guild id is empty');
-      return;
-    }
+  const formatError = (error: any): string | null => {
+    if (isAxiosError(error)) {
+      const axiosError = error as AxiosError;
 
-    try {
-      await apiQueries.guildQueries.join({
-        guildId: form.joinServerId.trim(),
-      });
-
-      queryClient.invalidateQueries({
-        queryKey: ['userguilds'],
-      });
-
-      dispatch(closeModal());
-    } catch (error) {
-      if (isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-
-        if (axiosError.status == NOT_FOUND) {
-          setError('Error: Server id not found');
-          return;
-        }
+      if (axiosError.status == NOT_FOUND) {
+        return 'Guild is not found';
       }
-
-      setError('Unexpected error occured. Please try again later.');
     }
+
+    return null;
   };
+
   return (
-    <div data-testid="join-server-form" className={styles.FormContainer}>
-      {/* TODO: Extract this form into a reusable component */}
-      <form className={styles.Form}>
-        <div className={styles.FormInputContainer}>
-          <label htmlFor="joinServerId">Server id</label>
-          <input
-            id="joinServerId"
-            name="joinServerId"
-            placeholder="Server id..."
-            value={form.joinServerId}
-            onChange={handleChange}
-          />
-        </div>
-      </form>
-      {error && (
-        <div role="alert" className={styles.Error}>
-          {error}
-        </div>
-      )}
-      <div className={styles.ButtonsContainer}>
-        <button className={styles.BackButton} onClick={onBack}>
-          Back
-        </button>
-        <button className={styles.JoinButton} onClick={handleJoin}>
-          Join
-        </button>
-      </div>
-    </div>
+    <Form<JoinServerFormData>
+      initialValues={{ joinServerId: '' }}
+      fields={[{ name: 'joinServerId', label: 'Server Id', placeholder: 'Server id...' }]}
+      onSubmit={handleSubmit}
+      validate={validate}
+      onBack={onBack}
+      submitText="Join"
+      testId="join-server-form"
+      formatError={formatError}
+    />
   );
 };
 

@@ -6,10 +6,13 @@
   gap: 20px;
 
   .Form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     .FormInputContainer {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 10px;
       label {
         font-size: $font-sm;
       }
