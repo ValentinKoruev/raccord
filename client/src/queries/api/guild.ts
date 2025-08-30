@@ -15,6 +15,11 @@ const guildQueries = {
   async leaveGuild(data: { guildId: string }) {
     return await axios.post(`${config.apiUrl}/guild/leave`, data);
   },
+  async createGuildChannel(data: { guildId: string; channelName: string }) {
+    return await axios.post(`${config.apiUrl}/guild/${data.guildId}/channels`, {
+      channelName: data.channelName,
+    });
+  },
 };
 
 export default guildQueries;

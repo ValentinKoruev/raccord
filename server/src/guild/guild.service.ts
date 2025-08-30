@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/runtime/library';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
@@ -29,6 +29,7 @@ export class GuildService {
             },
           },
         },
+        owner: true,
       },
     });
 
@@ -37,6 +38,7 @@ export class GuildService {
     return {
       guildId: guild.publicId,
       guildName: guild.name,
+      ownerId: guild.owner.publicId,
       icon: guild.icon ?? undefined,
       banner: guild.banner ?? undefined,
       channels: guild.channels.map((c) => {
@@ -150,5 +152,26 @@ export class GuildService {
     });
 
     return channels;
+  }
+
+  async createChannel({ guildId, userId, channelName }: { guildId: string; userId: string; channelName: string }) {
+    const guild = await this.prisma.guild.findUnique({
+      where: { publicId: guildId },
+      select: { id: true, owner: true },
+    });
+
+    if (!guild) throw new NotFoundException('Guild not found');
+
+    if (guild.owner.publicId !== userId) {
+      throw new ForbiddenException('Only the guild owner can create channels');
+    }
+
+    // Create the channel
+    return this.prisma.guildChannel.create({
+      data: {
+        name: channelName,
+        guildId: guild.id,
+      },
+    });
   }
 }

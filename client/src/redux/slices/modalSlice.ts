@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ModalState {
-  type: 'addServer' | 'inviteToServer' | null;
+  type: 'addServer' | 'inviteToServer' | 'createChannel' | null;
   props: any;
 }
 
@@ -22,6 +22,10 @@ export const modalSlice = createSlice({
       state.type = 'inviteToServer';
       state.props = action.payload;
     },
+    openCreateChannelModal: (state, action: PayloadAction<any>) => {
+      state.type = 'createChannel';
+      state.props = action.payload;
+    },
     closeModal: (state) => {
       state.type = null;
       state.props = {};
@@ -29,6 +33,6 @@ export const modalSlice = createSlice({
   },
 });
 
-export const { openAddServerModal, openInviteToServerModal, closeModal } = modalSlice.actions;
+export const { openAddServerModal, openInviteToServerModal, openCreateChannelModal, closeModal } = modalSlice.actions;
 
 export default modalSlice.reducer;

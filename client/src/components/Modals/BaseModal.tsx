@@ -5,6 +5,7 @@ import { closeModal } from '@redux/slices/modalSlice';
 import AddServerModal from './AddServer';
 import InviteToServerModal from './InviteToServer';
 import styles from './BaseModal.module.scss';
+import CreateChannelModal from './CreateChannel';
 
 export const BaseModal = () => {
   const dispatch = useAppDispatch();
@@ -32,6 +33,9 @@ export const BaseModal = () => {
       break;
     case 'inviteToServer':
       content = <InviteToServerModal {...props} />;
+      break;
+    case 'createChannel':
+      content = <CreateChannelModal {...props} />;
       break;
     default:
       return null;

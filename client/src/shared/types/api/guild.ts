@@ -21,3 +21,8 @@ export type RemoveGuildRequest = {
   userId: string;
   guildId: string;
 };
+
+export type CreateGuildChannelRequest = {
+  channelName: string;
+  // TODO: add support for text/voice
+};

@@ -1,0 +1,23 @@
+@use '@styles/variables' as *;
+
+.CreateChannelContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  border-radius: 15px;
+  background-color: $color-background-1;
+  color: $color-white;
+
+  min-width: 400px;
+
+  .Header {
+    text-align: center;
+    font-size: $font-xl;
+  }
+
+  .GuildId {
+    padding: 10px;
+    background-color: $color-background-3;
+  }
+}

@@ -31,7 +31,11 @@ export class UserService {
         publicId: true,
         joinedGuilds: {
           include: {
-            guild: true,
+            guild: {
+              include: {
+                owner: true,
+              },
+            },
           },
         },
       },
@@ -42,6 +46,7 @@ export class UserService {
     const response: GetUserGuildsResponse = user.joinedGuilds.map((g) => ({
       guildId: g.guild.publicId,
       guildName: g.guild.name,
+      ownerId: g.guild.owner.publicId,
       icon: g.guild.icon ?? undefined,
       banner: g.guild.banner ?? undefined,
     }));

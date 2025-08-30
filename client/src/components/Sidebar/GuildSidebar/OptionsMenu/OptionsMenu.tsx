@@ -2,7 +2,7 @@ import { ReactNode, useEffect } from 'react';
 import { AxiosError, isAxiosError } from 'axios';
 import { useAppDispatch } from '@redux/store';
 import { useQueryClient } from '@tanstack/react-query';
-import { closeModal, openInviteToServerModal } from '@redux/slices/modalSlice';
+import { closeModal, openCreateChannelModal, openInviteToServerModal } from '@redux/slices/modalSlice';
 import { clearChat } from '@redux/slices/chatSlice';
 import { clearActiveChannel } from '@redux/slices/sessionSlice';
 import apiQueries from '@queries/api';
@@ -10,6 +10,7 @@ import { NOT_FOUND, UNAUTHORIZED } from '@queries/statusCodes';
 import { GuildDto } from '@shared/types/dto/Guild';
 import Icon from '@shared/components/Icon';
 import styles from './OptionsMenu.module.scss';
+import OwnerOnly from '@components/Auth/OwnerOnly/OwnerOnly';
 
 type OptionMenuProps = {
   isOpen: boolean;
@@ -49,6 +50,10 @@ const OptionsMenu: React.FC<OptionMenuProps> = ({ isOpen, setIsOpen, headerRef, 
     dispatch(openInviteToServerModal({ guildId: guild.guildId }));
   };
 
+  const handleChannelCreate = () => {
+    dispatch(openCreateChannelModal({ guildId: guild.guildId }));
+  };
+
   const handleLeaveServer = async () => {
     try {
       await apiQueries.guildQueries.leaveGuild({
@@ -59,7 +64,6 @@ const OptionsMenu: React.FC<OptionMenuProps> = ({ isOpen, setIsOpen, headerRef, 
         queryKey: ['userguilds'],
       });
 
-      // TODO: also clear sidebar
       dispatch(clearActiveChannel());
       dispatch(clearChat());
       dispatch(closeModal());
@@ -77,7 +81,6 @@ const OptionsMenu: React.FC<OptionMenuProps> = ({ isOpen, setIsOpen, headerRef, 
         }
       }
 
-      // setError('Unexpected error occured. Please try again later.');
       throw new Error('Unexpected error occured: ' + error);
     }
   };
@@ -87,11 +90,14 @@ const OptionsMenu: React.FC<OptionMenuProps> = ({ isOpen, setIsOpen, headerRef, 
       <OptionsElement onClick={handleInviteToServer} label="Invite users">
         <Icon name="user-plus" className={styles.InviteUsersIcon} />
       </OptionsElement>
-      <OptionsElement label="Server settings">
-        <Icon name="gear" />
-      </OptionsElement>
-      {/* <li>Create channel</li>
-        <li>Create category</li> */}
+      <OwnerOnly ownerId={guild.ownerId}>
+        <OptionsElement label="Server settings">
+          <Icon name="gear" />
+        </OptionsElement>
+        <OptionsElement onClick={handleChannelCreate} label="Create channel">
+          <Icon name="circle-plus" />
+        </OptionsElement>
+      </OwnerOnly>
       <OptionsElement onClick={handleLeaveServer} label="Leave server" className={styles.LeaveServer}>
         <Icon name="right-from-bracket" />
       </OptionsElement>

@@ -1,20 +1,11 @@
 import { Body, Controller, Get, HttpCode, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { GuildService } from './guild.service';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { CreateGuildChannelRequest } from '@shared/types/api';
 
 @Controller('guild')
 export class GuildController {
   constructor(private readonly guildService: GuildService) {}
-
-  @Get('/:id')
-  getGuild(@Param() params: any) {
-    return this.guildService.getGuild({ guildId: params.id });
-  }
-
-  @Get('/:id/channels')
-  getChannels(@Param() params: any) {
-    return this.guildService.getChannels(params.id);
-  }
 
   @UseGuards(AuthGuard)
   @HttpCode(200)
@@ -46,6 +37,32 @@ export class GuildController {
     const guild = await this.guildService.leaveGuild({
       userId: request.user.userId,
       guildId: body.guildId,
+    });
+  }
+
+  @Get('/:id')
+  getGuild(@Param() params: any) {
+    return this.guildService.getGuild({ guildId: params.id });
+  }
+
+  @Get('/:id/channels')
+  getChannels(@Param() params: any) {
+    return this.guildService.getChannels(params.id);
+  }
+
+  @UseGuards(AuthGuard)
+  @HttpCode(200)
+  @Post('/:id/channels')
+  createChannel(@Req() request, @Param() params, @Body() body: CreateGuildChannelRequest) {
+    console.log({
+      guildId: params.id,
+      userId: request.user.userId,
+      channelName: body.channelName,
+    });
+    return this.guildService.createChannel({
+      guildId: params.id,
+      userId: request.user.userId,
+      channelName: body.channelName,
     });
   }
 }
