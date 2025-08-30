@@ -1,4 +1,5 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
+import { useAppSelector } from '@redux/store';
 import { GuildDto } from '@shared/types/dto/Guild';
 import DirectSidebar from './DirectSidebar';
 import GuildSidebar from './GuildSidebar';
@@ -9,36 +10,19 @@ export type SidebarProps = {
   guilds: Array<GuildDto>;
 };
 
-export type SidebarState = {
-  type: 'direct' | 'guild';
-  currentGuild?: GuildDto;
-  friends?: {
-    publicId: string;
-    name: string;
-    icon: string;
-  }[];
-};
-
-const initialState: SidebarState = {
-  type: 'direct',
-  friends: [],
-};
-
 const Sidebar: FC<SidebarProps> = ({ guilds }) => {
-  const [sidebar, setSidebar] = useState<SidebarState>(initialState);
+  const activeTabId = useAppSelector((state) => state.session.activeTabId);
 
-  const renderSidebar = (sidebar: SidebarState) => {
-    if (sidebar.type == 'direct' && sidebar.friends) return <DirectSidebar friends={sidebar.friends} />;
+  const renderSidebar = () => {
+    if (activeTabId && activeTabId !== 'direct') return <GuildSidebar guildId={activeTabId} />;
 
-    if (sidebar.type == 'guild' && sidebar.currentGuild) return <GuildSidebar guild={sidebar.currentGuild} />;
-
-    return null;
+    return <DirectSidebar />;
   };
 
   return (
     <div className={styles.Sidebar}>
-      <GuildList guilds={guilds} setSidebar={setSidebar} />
-      {renderSidebar(sidebar)}
+      <GuildList guilds={guilds} />
+      {renderSidebar()}
     </div>
   );
 };

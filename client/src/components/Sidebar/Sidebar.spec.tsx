@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Sidebar from '../Sidebar';
 import { renderWithProviders } from '@tests/renderWithProviders';
@@ -14,32 +14,58 @@ const guilds: Array<GuildDto> = [
   },
 ];
 
+const DMs = [
+  {
+    publicId: 'u1',
+    name: 'Raccoon1',
+    icon: 'racc.png',
+  },
+  { publicId: 'u2', name: 'Beaver', icon: 'beaver.png' },
+];
+
 vi.mock('@queries/api', () => {
   return {
     default: {
       guildQueries: {
         getGuild: vi.fn(),
       },
+      userQueries: {
+        getUserDirect: vi.fn(),
+      },
     },
   };
+});
+
+(apiQueries.userQueries.getUserDirect as any) = vi.fn().mockResolvedValue({
+  data: DMs,
 });
 
 describe('Sidebar', () => {
   it('renders GuildList initially', () => {
     renderWithProviders(<Sidebar guilds={guilds} />);
 
-    // This gets the guild elemnent, meaning guild list was rendered and rendered its children
+    // This gets the first guild in the list, meaning guild list was rendered and rendered its children
     expect(screen.getByTestId('guild-list-element-g1')).toBeInTheDocument();
   });
 
-  it('renders DirectSidebar when sidebar.type = direct', async () => {
+  it('renders DirectSidebar when active tab id is null', async () => {
+    renderWithProviders(<Sidebar guilds={guilds} />);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('direct-sidebar')).toBeInTheDocument();
+    });
+  });
+
+  it('renders DirectSidebar when active tab id is direct', async () => {
     const user = userEvent.setup();
+
     renderWithProviders(<Sidebar guilds={guilds} />);
 
     await user.click(screen.getByTestId('guild-list-element-direct'));
 
-    // DirectSidebar should render the friend
-    expect(await screen.queryByTestId('direct-sidebar')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId('direct-sidebar')).toBeInTheDocument();
+    });
   });
 
   it('renders GuildSidebar when sidebar.type = guild', async () => {

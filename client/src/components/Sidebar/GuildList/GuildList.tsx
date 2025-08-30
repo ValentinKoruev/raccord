@@ -1,34 +1,28 @@
-import { Dispatch, SetStateAction, FC } from 'react';
+import { FC } from 'react';
 import { useAppDispatch, useAppSelector } from '@redux/store';
-import { selectUnreadByGuilds } from '@redux/slices/sessionSlice';
+import { selectUnreadByGuilds, setTabDirect, setTabGuild } from '@redux/slices/sessionSlice';
 import { openAddServerModal } from '@redux/slices/modalSlice';
-import useGuildMutate from './hooks/useGuildMutate';
-import useDirectMutate from './hooks/useDirectMutate';
 import { GuildDto } from '@shared/types/dto/Guild';
 import GuildListElement from '@components/Sidebar/GuildList/GuildListElement';
 import Icon from '@shared/components/Icon';
-import { SidebarState } from '../Sidebar';
 import styles from './GuildList.module.scss';
 
 type GuildListProps = {
   guilds: Array<GuildDto>;
-  setSidebar: Dispatch<SetStateAction<SidebarState>>;
 };
 
-const GuildList: FC<GuildListProps> = ({ guilds, setSidebar }) => {
+const GuildList: FC<GuildListProps> = ({ guilds }) => {
   const dispatch = useAppDispatch();
   const activeTabId = useAppSelector((state) => state.session.activeTabId);
   const unreadGuilds = useAppSelector(selectUnreadByGuilds);
   const isAddServerOpen = useAppSelector((state) => state.modal.type == 'addServer');
-  const guildMutate = useGuildMutate({ setSidebar });
-  const directMutate = useDirectMutate({ setSidebar });
 
   const onDirectMessagesClick = () => {
-    directMutate.mutate();
+    dispatch(setTabDirect());
   };
 
   const onGuildClick = (guild: GuildDto) => {
-    guildMutate.mutate(guild.guildId);
+    dispatch(setTabGuild(guild.guildId));
   };
 
   const onAddServerClick = () => {

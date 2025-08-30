@@ -1,5 +1,9 @@
-import { FC, useState, useRef } from 'react';
-import { useAppSelector } from '@redux/store';
+import { FC, useState, useRef, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useAppDispatch, useAppSelector } from '@redux/store';
+import { setChatChannel } from '@redux/slices/chatSlice';
+import { setActiveChannel } from '@redux/slices/sessionSlice';
+import apiQueries from '@queries/api';
 import { GuildDto } from '@shared/types/dto/Guild';
 import { formatGuildChannel } from '@shared/utils/channelFormatter';
 import Channel from '@components/Sidebar/GuildSidebar/Channel';
@@ -9,14 +13,70 @@ import Icon from '@shared/components/Icon';
 import styles from './GuildSidebar.module.scss';
 
 export type GuildSidebarProps = {
-  guild: GuildDto;
+  guildId: string;
 };
 
-const GuildSidebar: FC<GuildSidebarProps> = ({ guild }) => {
+const GuildSidebar: FC<GuildSidebarProps> = ({ guildId }) => {
+  const dispatch = useAppDispatch();
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
   const activeChannelId = useAppSelector((state) => state.session.activeChannelId);
   const unreadFlags = useAppSelector((state) => state.session.unreadChannelFlags);
+
+  const {
+    data: guild,
+    isSuccess,
+    isFetching,
+  } = useQuery({
+    queryKey: ['guild', guildId],
+    queryFn: async () => {
+      const response = await apiQueries.guildQueries.getGuild(guildId!);
+      return response.data;
+    },
+    enabled: !!guildId,
+  });
+
+  const initialChannelQuery = useQuery({
+    queryKey: ['g-channel', guild?.channels![0]],
+    queryFn: async () => {
+      const formattedChannel = formatGuildChannel(guildId, guild?.channels![0].id!);
+      const response = await apiQueries.channelQueries.getChannel(formattedChannel);
+      return response.data;
+    },
+    enabled: false,
+  });
+
+  useEffect(() => {
+    if (!guild || !isSuccess) return;
+
+    if (!guild.channels || guild.channels.length <= 0) {
+      dispatch(
+        setChatChannel({
+          channelName: null,
+          messages: [],
+        }),
+      );
+      return;
+    }
+
+    initialChannelQuery.refetch();
+  }, [guild, isSuccess]);
+
+  useEffect(() => {
+    if (!initialChannelQuery.data || !initialChannelQuery.isSuccess) return;
+
+    const channel = initialChannelQuery.data;
+
+    dispatch(setActiveChannel({ type: 'guild', channelId: channel.id, guildId: guild?.guildId }));
+    dispatch(
+      setChatChannel({
+        channelName: channel.name,
+        messages: channel.messages,
+      }),
+    );
+  }, [initialChannelQuery.data, initialChannelQuery.isSuccess]);
+
+  if (isFetching || !guild) return <div className={styles.GuildSidebar}>Loading sidebar</div>;
 
   //? Can be memoised
   const channelList = (guild: GuildDto) => {
