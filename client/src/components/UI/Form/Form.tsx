@@ -65,7 +65,7 @@ const Form = <T extends Record<string, any>>({
 
   return (
     <div data-testid={testId} className={styles.FormContainer}>
-      <form className={styles.Form}>
+      <form autoComplete="off" className={styles.Form}>
         {fields.map(({ name, label, placeholder, type }) => (
           <div key={name} className={styles.FormInputContainer}>
             <label htmlFor={name}>{label}</label>

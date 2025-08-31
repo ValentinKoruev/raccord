@@ -54,11 +54,6 @@ export class GuildController {
   @HttpCode(200)
   @Post('/:id/channels')
   createChannel(@Req() request, @Param() params, @Body() body: CreateGuildChannelRequest) {
-    console.log({
-      guildId: params.id,
-      userId: request.user.userId,
-      channelName: body.channelName,
-    });
     return this.guildService.createChannel({
       guildId: params.id,
       userId: request.user.userId,
