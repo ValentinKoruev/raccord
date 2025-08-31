@@ -1,0 +1,27 @@
+@use '@styles/variables' as *;
+
+.LoginPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: $color-background-1;
+
+  color: $color-white;
+
+  .Header {
+    width: 100%;
+  }
+
+  .FormContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    width: 400px;
+    background-color: $color-background-2;
+    border-radius: 20px;
+  }
+}
