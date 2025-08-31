@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi } from 'vitest';
+import userEvent from '@testing-library/user-event';
 
 import GuildListElement from './GuildListElement';
 
@@ -55,9 +56,19 @@ describe('GuildListElement', () => {
     expect(baseProps.onClick).toHaveBeenCalledWith('g1');
   });
 
-  it('renders tooltip with the guild name', () => {
+  it('renders tooltip with the guild name', async () => {
+    const user = userEvent.setup();
+
     render(<GuildListElement {...baseProps} />);
-    const tooltip = screen.getByText('Test Guild');
-    expect(tooltip).toBeInTheDocument();
+
+    const target = screen.getByTestId('guild-list-element-g1');
+
+    await user.hover(target);
+
+    expect(await screen.findByText('Test Guild')).toBeInTheDocument();
+
+    await user.unhover(target);
+
+    expect(screen.queryByText('Test Guild')).not.toBeInTheDocument();
   });
 });

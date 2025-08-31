@@ -50,25 +50,6 @@ $iconSize: 50px;
       color: $color-white;
     }
 
-    .TooltipContainer {
-      position: absolute;
-      display: none;
-      top: 0;
-      left: 105%;
-      height: 100%;
-      z-index: 999;
-
-      .Tooltip {
-        background-color: $color-background-4;
-        color: white;
-        text-wrap: nowrap;
-        padding: 0.5em;
-
-        border-radius: 5%;
-        font-size: $font-sm;
-      }
-    }
-
     &::before {
       content: '';
       width: 4px;
@@ -110,11 +91,25 @@ $iconSize: 50px;
       &.Colored {
         background-color: $color-primary;
       }
-
-      .TooltipContainer {
-        display: flex;
-        align-items: center;
-      }
     }
+  }
+}
+
+.TooltipContainer {
+  position: absolute;
+  z-index: 999;
+  min-width: 50px;
+
+  transform: translateY(-50%);
+  .Tooltip {
+    background-color: $color-background-4;
+    color: $color-white;
+    text-wrap: nowrap;
+    padding: 10px 20px;
+    text-align: center;
+
+    border: 1px solid $color-background-2;
+    border-radius: 10px;
+    font-size: $font-rg;
   }
 }

@@ -18,22 +18,22 @@ const preloadedState = {
 
 describe('GuildList', () => {
   const guilds: Array<GuildDto> = [
-    { guildId: 'g1', guildName: 'Guild One', icon: 'icon1.png' },
-    { guildId: 'g2', guildName: 'Guild Two', icon: 'icon2.png' },
+    { guildId: 'g1', guildName: 'Guild One', icon: 'icon1.png', ownerId: 'u2' },
+    { guildId: 'g2', guildName: 'Guild Two', icon: 'icon2.png', ownerId: 'u2' },
   ];
 
   it('renders guilds and special items', () => {
     renderWithProviders(<GuildList guilds={guilds} />, { preloadedState });
 
-    expect(screen.getByText(/Direct Messages/i)).toBeInTheDocument();
-    expect(screen.getByText(/Guild One/i)).toBeInTheDocument();
-    expect(screen.getByText(/Guild Two/i)).toBeInTheDocument();
-    expect(screen.getByText(/Add server/i)).toBeInTheDocument();
+    expect(screen.getByTestId('guild-list-element-direct')).toBeInTheDocument();
+    expect(screen.getByTestId('guild-list-element-g1')).toBeInTheDocument();
+    expect(screen.getByTestId('guild-list-element-g2')).toBeInTheDocument();
+    expect(screen.getByTestId('guild-list-element-addServer')).toBeInTheDocument();
   });
 
   it('activeTabId changes to direct when Direct Messages clicked', () => {
     const { store } = renderWithProviders(<GuildList guilds={guilds} />, { preloadedState });
-    fireEvent.click(screen.getByText(/Direct Messages/i));
+    fireEvent.click(screen.getByTestId('guild-list-element-direct'));
 
     const state = store.getState();
 
@@ -42,7 +42,7 @@ describe('GuildList', () => {
 
   it('activeTabId changes to guildId when guild clicked', () => {
     const { store } = renderWithProviders(<GuildList guilds={guilds} />, { preloadedState });
-    fireEvent.click(screen.getByText(/Guild Two/i));
+    fireEvent.click(screen.getByTestId('guild-list-element-g2'));
 
     const state = store.getState();
 
@@ -52,7 +52,7 @@ describe('GuildList', () => {
   it('dispatches openAddServerModal when Add server clicked', () => {
     const { store } = renderWithProviders(<GuildList guilds={[]} />, { preloadedState });
 
-    fireEvent.click(screen.getByText(/Add server/i));
+    fireEvent.click(screen.getByTestId('guild-list-element-addServer'));
 
     const state = store.getState();
 
