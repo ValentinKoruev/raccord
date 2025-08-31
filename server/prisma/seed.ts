@@ -1,5 +1,6 @@
 import { PrismaClient } from '../generated/prisma';
 const prisma = new PrismaClient();
+import * as bcrypt from 'bcrypt';
 
 async function main() {
   const dbeliq = await prisma.user.create({
@@ -7,7 +8,7 @@ async function main() {
       id: -1,
       email: 'dbelium@gmail.com',
       name: 'Dbeliq',
-      password: 'test123',
+      password: await bcrypt.hash('test123', 10),
       icon: '/src/assets/whatsapp.jpg',
       ownedGuilds: {
         create: [
@@ -75,7 +76,7 @@ async function main() {
       id: -2,
       email: 'raccford@gmail.com',
       name: 'Sir Raccford IV',
-      password: 'test123',
+      password: await bcrypt.hash('test123', 10),
       icon: '/src/assets/racc.jpeg',
       friends: {
         connect: {

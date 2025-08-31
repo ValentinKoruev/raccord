@@ -48,6 +48,10 @@ const LoginPage = () => {
     return null;
   };
 
+  const onRegisterNavigate = () => {
+    navigate(routes.REGISTER);
+  };
+
   return (
     <div className={styles.LoginPage}>
       <div className={styles.FormContainer}>
@@ -65,6 +69,8 @@ const LoginPage = () => {
           submitText="Sign in"
           testId="login-form"
           formatError={formatError}
+          onBack={onRegisterNavigate}
+          backButtonText="Register"
         />
       </div>
     </div>

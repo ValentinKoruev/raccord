@@ -12,3 +12,11 @@ export type GetUserDirectResponse = Array<{
   users: Array<any>; // TODO: user dto
   icon?: string | undefined;
 }>;
+
+export type RegisterData = {
+  username: string;
+  email: string;
+  password: string;
+  repassword: string;
+  icon?: string;
+};
