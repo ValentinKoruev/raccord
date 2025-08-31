@@ -1,17 +1,33 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GetUserDirectResponse, GetUserGuildsRequest, GetUserGuildsResponse } from '@shared/types/api';
+import { UserDto } from '@shared/types/dto/User';
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async getUser(userId: string) {
-    return await this.prisma.user.findFirst({
+  async getUser(userId: string): Promise<UserDto | null> {
+    const user = await this.prisma.user.findFirst({
       where: {
         publicId: userId,
       },
+      select: {
+        publicId: true,
+        name: true,
+        icon: true,
+        description: true,
+      },
     });
+
+    if (!user) return null;
+
+    return {
+      publicId: user.publicId,
+      name: user.name,
+      icon: user.icon ?? undefined,
+      description: user.description ?? undefined,
+    };
   }
 
   async getUserByName(username: string) {

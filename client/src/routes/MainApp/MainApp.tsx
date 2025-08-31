@@ -9,6 +9,7 @@ import { GetUserGuildsResponse } from '@shared/types/api';
 import BaseModal from '@components/Modals';
 import Content from '@components/Content';
 import Sidebar from '@components/Sidebar';
+import UserInfo from '@components/UserInfo';
 import styles from './MainApp.module.scss';
 
 const MainApp = () => {
@@ -42,7 +43,10 @@ const MainApp = () => {
   return (
     <div className={styles.AppContainer}>
       <BaseModal />
-      <Sidebar guilds={guilds} />
+      <aside className={styles.Aside}>
+        <Sidebar guilds={guilds} />
+        <UserInfo />
+      </aside>
       <Content />
     </div>
   );

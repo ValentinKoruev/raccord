@@ -3,7 +3,8 @@
 .Sidebar {
   display: flex;
   flex-direction: row;
-  flex: 0;
+  flex: 1;
+  overflow: auto;
 
   .EmptySidebar {
     height: 100%;

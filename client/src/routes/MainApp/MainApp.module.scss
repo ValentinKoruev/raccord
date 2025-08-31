@@ -4,4 +4,10 @@
   overflow-x: hidden;
   display: flex;
   flex-direction: row;
+
+  .Aside {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
 }

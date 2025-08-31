@@ -7,6 +7,12 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @UseGuards(AuthGuard)
+  @Get('/')
+  getUser(@Req() request) {
+    return this.userService.getUser(request.user.userId);
+  }
+
+  @UseGuards(AuthGuard)
   @Get('/guilds')
   getUserGuilds(@Req() request) {
     return this.userService.getUserGuilds({ userId: request.user.userId });

@@ -1,0 +1,38 @@
+@use '@styles/variables' as *;
+
+$user-icon-size: 36px;
+
+.UserInfoContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
+  height: 60px;
+  background-color: $color-background-4;
+
+  border-top: 1px solid $color-background-2;
+
+  .UserInfo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    .UserIconWrapper {
+      width: $user-icon-size;
+      height: $user-icon-size;
+      border-radius: 100%;
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    .Username {
+      font-weight: 500;
+      font-size: $font-sm;
+      color: $color-white;
+    }
+  }
+}
