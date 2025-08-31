@@ -30,6 +30,11 @@ export class GuildService {
           },
         },
         owner: true,
+        members: {
+          include: {
+            user: true,
+          },
+        },
       },
     });
 
@@ -48,6 +53,11 @@ export class GuildService {
           type: 'text', // TODO: Change this when voice support is added
         };
       }),
+      members: guild.members.map((e) => ({
+        publicId: e.user.publicId,
+        name: e.user.name,
+        icon: e.user.icon ?? undefined,
+      })),
     };
   }
 

@@ -6,6 +6,7 @@ import Icon from '@shared/components/Icon';
 import Message from './Message';
 import ChatBottomBar from '@components/Content/Chat/ChatBottomBar';
 import styles from './Chat.module.scss';
+import ExtraInfo from '../ExtraInfo';
 
 export type ChatProps = {};
 
@@ -48,9 +49,12 @@ const Chat: FC<ChatProps> = () => {
         </div>
         <div></div>
       </div>
-      <div className={styles.ChatContent}>
-        <div className={styles.ChatMessages}>{renderMessages()}</div>
-        <ChatBottomBar />
+      <div className={styles.ChatContentContainer}>
+        <div className={styles.ChatContent}>
+          <div className={styles.ChatMessages}>{renderMessages()}</div>
+          <ChatBottomBar />
+        </div>
+        <ExtraInfo />
       </div>
     </div>
   );

@@ -42,16 +42,22 @@
     }
   }
 
-  .ChatContent {
+  .ChatContentContainer {
     display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    flex-direction: row;
     flex-grow: 1;
-
-    .ChatMessages {
-      overflow: auto;
+    overflow: hidden;
+    .ChatContent {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
       flex-grow: 1;
-      @include scrollable($color-background-1, $color-background-4, 0, 20px);
+
+      .ChatMessages {
+        overflow: auto;
+        flex-grow: 1;
+        @include scrollable($color-background-1, $color-background-4, 0, 20px);
+      }
     }
   }
 }

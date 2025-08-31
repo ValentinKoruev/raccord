@@ -1,0 +1,38 @@
+@use '@styles/variables' as *;
+@use '@styles/scrollbar' as *;
+
+$icon-size: 32px;
+
+.ExtraInfoContainer {
+  min-width: 200px;
+  border-left: 1px solid $color-background-1;
+  background-color: $color-background-3;
+  padding: 10px;
+
+  .ExtraInfoElement {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 0;
+
+    .IconWrapper {
+      width: $icon-size;
+      height: $icon-size;
+      overflow: hidden;
+      border-radius: 100%;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        overflow-clip-margin: unset;
+      }
+    }
+
+    .Name {
+      color: $color-white;
+      font-size: $font-xs;
+      font-weight: 500;
+    }
+  }
+}
