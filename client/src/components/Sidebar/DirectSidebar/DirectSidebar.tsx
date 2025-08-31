@@ -1,9 +1,13 @@
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import classNames from 'classnames';
 import { useAppDispatch, useAppSelector } from '@redux/store';
-import { setChatChannel } from '@redux/slices/chatSlice';
+import { setChatChannel } from '@redux/slices/content/chatSlice';
+import { setContentVariant } from '@redux/slices/content';
+import { setActiveChannel } from '@redux/slices/sessionSlice';
 import apiQueries from '@queries/api';
-import { formatDirectChannel } from '@shared/utils/channelFormatter';
+import { formatDirectChannel, parseChannel } from '@shared/utils/channelFormatter';
+import Icon from '@shared/components/Icon';
 import Friend from '@components/Friend';
 import styles from './DirectSidebar.module.scss';
 
@@ -42,20 +46,19 @@ const DirectSidebar = () => {
   useEffect(() => {
     if (!DMs || !isDirectSuccess) return;
 
-    if (activeDirectChannelId) {
-      channelRefetch();
-    }
+    try {
+      if (parseChannel(activeDirectChannelId ?? '').type == 'direct') {
+        channelRefetch();
+        return;
+      }
+    } catch (_err) {}
+
+    dispatch(setContentVariant('friends'));
   }, [DMs, isDirectSuccess]);
 
   useEffect(() => {
     // TODO: should render all friends component
     if (!channel || !isChannelSuccess) {
-      dispatch(
-        setChatChannel({
-          channelName: null,
-          messages: [],
-        }),
-      );
       return;
     }
 
@@ -65,7 +68,13 @@ const DirectSidebar = () => {
         messages: channel.messages,
       }),
     );
+    dispatch(setContentVariant('chat'));
   }, [channel, isChannelSuccess]);
+
+  const handleFriendsClick = () => {
+    dispatch(setActiveChannel({ type: 'direct', channelId: 'friends' }));
+    dispatch(setContentVariant('friends'));
+  };
 
   if (isDirectFetching) return <div className={styles.DirectSidebar}>Loading sidebar</div>;
 
@@ -90,6 +99,15 @@ const DirectSidebar = () => {
 
   return (
     <div data-testid="direct-sidebar" className={styles.DirectSidebar}>
+      <div className={styles.DirectSidebarTabs}>
+        <div
+          onClick={handleFriendsClick}
+          className={classNames(styles.DirectSidebarTab, activeChanneldId == 'friends' ? styles.Active : null)}
+        >
+          <Icon name="user-group" />
+          <span>Friends</span>
+        </div>
+      </div>
       <div className={styles.DirectMessagesContainer}>
         <div className={styles.DirectMessagesHeader}>Direct Messages</div>
         <div className={styles.DirectMessagesList}>{directChannels(DMs)}</div>

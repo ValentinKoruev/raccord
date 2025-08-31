@@ -6,6 +6,9 @@ const channelQueries = {
   async getChannel(channelId: string) {
     return await axios.get<GetChannelResponse>(`${config.apiUrl}/channels/${channelId}`);
   },
+  async getFriendChannel(friendId: string) {
+    return await axios.get<GetChannelResponse>(`${config.apiUrl}/channels/friends/${friendId}`);
+  },
 };
 
 export default channelQueries;

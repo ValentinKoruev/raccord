@@ -4,15 +4,15 @@ import { RootState } from '../store';
 
 interface SessionState {
   activeTabId: 'direct' | string | null;
-  activeChannelId: string | null;
+  activeChannelId: 'friends' | string | null;
   activeDirectChannelId: string | null; //? for persistance when opening direct messages
   unreadChannelFlags: Record<string, boolean>; //? change type to number if storing how much unreads is needed
 }
 
 const initialState: SessionState = {
-  activeTabId: null,
-  activeChannelId: null,
-  activeDirectChannelId: null,
+  activeTabId: 'direct',
+  activeChannelId: 'friends',
+  activeDirectChannelId: 'friends',
   unreadChannelFlags: {},
 };
 
@@ -37,10 +37,16 @@ export const sessionSlice = createSlice({
         return;
       }
       if (type === 'direct') {
-        const formattedChannelId = formatDirectChannel(action.payload.channelId);
-        state.activeChannelId = formattedChannelId;
-        state.activeDirectChannelId = formattedChannelId;
-        delete state.unreadChannelFlags[formattedChannelId];
+        if (action.payload.channelId !== 'friends') {
+          const formattedChannelId = formatDirectChannel(action.payload.channelId);
+          state.activeChannelId = formattedChannelId;
+          state.activeDirectChannelId = formattedChannelId;
+          delete state.unreadChannelFlags[formattedChannelId];
+          return;
+        }
+
+        state.activeChannelId = action.payload.channelId;
+        state.activeDirectChannelId = action.payload.channelId;
         return;
       }
 

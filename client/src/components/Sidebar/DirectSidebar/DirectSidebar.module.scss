@@ -1,13 +1,47 @@
 @use '@styles/variables' as *;
 
+$tab-icon-size: 1.5em;
+
 .DirectSidebar {
   height: 100%;
   width: 250px;
+  padding: 10px;
 
   background-color: $color-background-3;
 
+  .DirectSidebarTabs {
+    color: $color-white;
+    font-size: $font-sm;
+    font-weight: 500;
+    padding: 10px 0;
+
+    .DirectSidebarTab {
+      display: flex;
+      flex-direction: row;
+      gap: 5px;
+      align-items: center;
+      padding: 10px 5px;
+      border-radius: 5px;
+
+      svg {
+        width: $tab-icon-size;
+        height: $tab-icon-size;
+        fill: $color-white;
+      }
+
+      &:hover {
+        cursor: pointer;
+        background-color: $color-background-2;
+      }
+
+      &.Active {
+        background-color: $color-background-1;
+        color: $color-white;
+      }
+    }
+  }
+
   .DirectMessagesContainer {
-    padding: 0.5em;
     .DirectMessagesHeader {
       font-size: $font-xs;
       color: lightgray;

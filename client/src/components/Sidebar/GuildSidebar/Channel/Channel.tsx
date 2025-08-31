@@ -2,7 +2,8 @@ import { FC } from 'react';
 import classNames from 'classnames';
 import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch } from '@redux/store';
-import { setChatChannel } from '@redux/slices/chatSlice';
+import { setContentVariant } from '@redux/slices/content';
+import { setChatChannel } from '@redux/slices/content/chatSlice';
 import { setActiveChannel } from '@redux/slices/sessionSlice';
 import { GetChannelResponse } from '@shared/types/api';
 import apiQueries from '@queries/api';
@@ -44,6 +45,7 @@ const Channel: FC<ChannelProps> = ({ type, name, isActive, isUnread, channelId }
           messages: channel.messages,
         }),
       );
+      dispatch(setContentVariant('chat'));
     },
   });
 

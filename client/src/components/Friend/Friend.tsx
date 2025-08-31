@@ -2,7 +2,8 @@ import { FC } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { useAppDispatch } from '@redux/store';
-import { setChatChannel } from '@redux/slices/chatSlice';
+import { setChatChannel } from '@redux/slices/content/chatSlice';
+import { setContentVariant } from '@redux/slices/content';
 import { setActiveChannel } from '@redux/slices/sessionSlice';
 import apiQueries from '@queries/api';
 import { GetChannelResponse } from '@shared/types/api';
@@ -40,6 +41,7 @@ const Friend: FC<FriendProps> = ({ image, name, userId, isActive, isUnread }) =>
           messages: channel.messages,
         }),
       );
+      dispatch(setContentVariant('chat'));
     },
   });
 

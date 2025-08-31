@@ -5,6 +5,7 @@ import Gear from '../icons/Gear';
 import Hashtag from '../icons/Hashtag';
 import Plus from '../icons/Plus';
 import RightFromBracket from '../icons/RightFromBracket';
+import UserGroup from '../icons/UserGroup';
 import UserPlus from '../icons/UserPlus';
 import VolumeHigh from '../icons/VolumeHigh';
 
@@ -16,6 +17,7 @@ const iconMap = {
   'circle-plus': CirclePlus,
   'volume-high': VolumeHigh,
   'user-plus': UserPlus,
+  'user-group': UserGroup,
   gear: Gear,
   'right-from-bracket': RightFromBracket,
 };

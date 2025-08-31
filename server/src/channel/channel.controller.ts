@@ -21,4 +21,10 @@ export class ChannelController {
 
     return null;
   }
+
+  @UseGuards(AuthGuard)
+  @Get('/friends/:id')
+  getFriendChannel(@Req() request, @Param() params: { id: string }) {
+    return this.channelService.getFriendDirectChannel({ userId: request.user.userId, friendId: params.id });
+  }
 }

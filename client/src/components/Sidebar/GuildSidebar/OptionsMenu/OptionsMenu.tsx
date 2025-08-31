@@ -3,7 +3,7 @@ import { AxiosError, isAxiosError } from 'axios';
 import { useAppDispatch } from '@redux/store';
 import { useQueryClient } from '@tanstack/react-query';
 import { closeModal, openCreateChannelModal, openInviteToServerModal } from '@redux/slices/modalSlice';
-import { clearChat } from '@redux/slices/chatSlice';
+import { clearChat } from '@redux/slices/content/chatSlice';
 import { clearActiveChannel } from '@redux/slices/sessionSlice';
 import apiQueries from '@queries/api';
 import { NOT_FOUND, UNAUTHORIZED } from '@queries/statusCodes';

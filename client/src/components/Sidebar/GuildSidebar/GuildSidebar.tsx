@@ -1,7 +1,8 @@
 import { FC, useState, useRef, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '@redux/store';
-import { setChatChannel } from '@redux/slices/chatSlice';
+import { setChatChannel } from '@redux/slices/content/chatSlice';
+import { setContentVariant } from '@redux/slices/content';
 import { setActiveChannel } from '@redux/slices/sessionSlice';
 import apiQueries from '@queries/api';
 import { GuildDto } from '@shared/types/dto/Guild';
@@ -74,6 +75,7 @@ const GuildSidebar: FC<GuildSidebarProps> = ({ guildId }) => {
         messages: channel.messages,
       }),
     );
+    dispatch(setContentVariant('chat'));
   }, [initialChannelQuery.data, initialChannelQuery.isSuccess]);
 
   if (isFetching || !guild) return <div className={styles.GuildSidebar}>Loading sidebar</div>;
