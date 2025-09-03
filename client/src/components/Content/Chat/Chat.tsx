@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { differenceInMinutes } from 'date-fns';
 import useChat from './hooks/useChat';
 import { MessageDto } from '@shared/types/dto/Message';
-import Icon from '@shared/components/Icon';
+import Icon from '@components/UI/Icon';
 import Message from './Message';
 import ChatBottomBar from '@components/Content/Chat/ChatBottomBar';
 import styles from './Chat.module.scss';

@@ -4,7 +4,7 @@ import { selectUnreadByGuilds, setTabDirect, setTabGuild } from '@redux/slices/s
 import { openAddServerModal } from '@redux/slices/modalSlice';
 import { GuildDto } from '@shared/types/dto/Guild';
 import GuildListElement from '@components/Sidebar/GuildList/GuildListElement';
-import Icon from '@shared/components/Icon';
+import Icon from '@components/UI/Icon';
 import styles from './GuildList.module.scss';
 
 type GuildListProps = {

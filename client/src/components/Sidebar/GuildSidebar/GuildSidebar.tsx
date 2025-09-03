@@ -10,7 +10,7 @@ import { formatGuildChannel } from '@shared/utils/channelFormatter';
 import Channel from '@components/Sidebar/GuildSidebar/Channel';
 import ChannelCategory from '@components/Sidebar/GuildSidebar/ChannelCategory';
 import OptionsMenu from './OptionsMenu';
-import Icon from '@shared/components/Icon';
+import Icon from '@components/UI/Icon';
 import styles from './GuildSidebar.module.scss';
 
 export type GuildSidebarProps = {

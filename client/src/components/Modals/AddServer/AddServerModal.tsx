@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import Icon from '@shared/components/Icon';
+import Icon from '@components/UI/Icon';
 import CreateServerForm from './CreateServerForm';
 import JoinServerForm from './JoinServerForm';
 import styles from './AddServerModal.module.scss';

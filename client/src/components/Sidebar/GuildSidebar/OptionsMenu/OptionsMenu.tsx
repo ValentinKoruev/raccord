@@ -8,7 +8,7 @@ import { clearActiveChannel } from '@redux/slices/sessionSlice';
 import apiQueries from '@queries/api';
 import { NOT_FOUND, UNAUTHORIZED } from '@queries/statusCodes';
 import { GuildDto } from '@shared/types/dto/Guild';
-import Icon from '@shared/components/Icon';
+import Icon from '@components/UI/Icon';
 import styles from './OptionsMenu.module.scss';
 import OwnerOnly from '@components/Auth/OwnerOnly/OwnerOnly';
 

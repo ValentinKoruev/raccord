@@ -1,6 +1,6 @@
 import { MouseEventHandler, useState } from 'react';
 import Channel, { ChannelProps } from '@components/Sidebar/GuildSidebar/Channel';
-import Icon from '@shared/components/Icon';
+import Icon from '@components/UI/Icon';
 import styles from './ChannelCategory.module.scss';
 
 export type ChannelCategoryProps = {

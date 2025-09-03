@@ -7,7 +7,7 @@ import { setContentVariant } from '@redux/slices/content';
 import { setActiveChannel } from '@redux/slices/sessionSlice';
 import apiQueries from '@queries/api';
 import { formatDirectChannel, parseChannel } from '@shared/utils/channelFormatter';
-import Icon from '@shared/components/Icon';
+import Icon from '@components/UI/Icon';
 import Friend from '@components/Friend';
 import styles from './DirectSidebar.module.scss';
 

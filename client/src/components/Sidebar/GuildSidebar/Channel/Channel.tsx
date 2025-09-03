@@ -8,7 +8,7 @@ import { setActiveChannel } from '@redux/slices/sessionSlice';
 import { GetChannelResponse } from '@shared/types/api';
 import apiQueries from '@queries/api';
 import { parseChannel } from '@shared/utils/channelFormatter';
-import Icon from '@shared/components/Icon';
+import Icon from '@components/UI/Icon';
 import styles from './Channel.module.scss';
 
 export type ChannelProps = {
