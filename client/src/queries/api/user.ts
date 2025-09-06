@@ -16,6 +16,9 @@ const userQueries = {
   async getUserFriends() {
     return await axios.get<UserDto[]>(`${config.apiUrl}/users/friends`);
   },
+  async addFriend(friendId: string) {
+    return await axios.post<void>(`${config.apiUrl}/users/friends`, { friendId });
+  },
 };
 
 export default userQueries;

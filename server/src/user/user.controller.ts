@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 
@@ -28,6 +28,12 @@ export class UserController {
   @Get('friends')
   getUserFriends(@Req() request) {
     return this.userService.getUserFriends(request.user.userId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('friends')
+  addFriend(@Req() request, @Body() body) {
+    return this.userService.addFriend({ userId: request.user.userId, friendId: body.friendId });
   }
 
   @UseGuards(AuthGuard)

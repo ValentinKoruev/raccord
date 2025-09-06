@@ -84,6 +84,7 @@ model GuildMessage {
 model DirectChannel {
   id        Int                   @id @default(autoincrement())
   publicId  String                @default(uuid()) @unique
+  isGroup   Boolean               @default(false)
   users     UserOnDirectChannel[]
   messages  DirectMessage[]
 }
@@ -91,6 +92,7 @@ model DirectChannel {
 model UserOnDirectChannel {
   userId          Int
   directChannelId Int
+  isHidden        Boolean           @default(false)
 
   user        User                  @relation(fields: [userId], references: [id])
   channel     DirectChannel         @relation(fields: [directChannelId], references: [id])

@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import classNames from 'classnames';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '@redux/store';
 import { setChatChannel } from '@redux/slices/content/chatSlice';
@@ -6,11 +8,16 @@ import { setContentVariant } from '@redux/slices/content';
 import apiQueries from '@queries/api';
 import { GetChannelResponse } from '@shared/types/api';
 import { UserDto } from '@shared/types/dto/User';
+import FriendListTab from './FriendsListTab';
+import AddFriendsTab from './AddFriendsTab';
 import styles from './FriendList.module.scss';
+
+type FriendTabState = 'allFriends' | 'addFriend';
 
 const FriendList = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth);
+  const [friendTab, setFriendTab] = useState<FriendTabState>('allFriends');
 
   const { data: friends, isFetching } = useQuery<UserDto[], Error>({
     queryKey: ['friends'],
@@ -47,22 +54,31 @@ const FriendList = () => {
 
   if (!friends || isFetching) return <div className={styles.FriendListContainer}>Loading friends</div>;
 
+  const renderFriendTab = () => {
+    switch (friendTab) {
+      case 'allFriends': {
+        return <FriendListTab friends={friends} friendMutate={friendMutate} />;
+      }
+      case 'addFriend': {
+        return <AddFriendsTab />;
+      }
+    }
+  };
+
   return (
     <div className={styles.FriendListContainer}>
-      <div className={styles.Header}>Friends</div>
-      <div className={styles.Friends}>
-        <div className={styles.FriendsLabel}>All friends - {friends.length}</div>
-        <ul className={styles.FriendList}>
-          {friends.map((f) => (
-            <li key={f.publicId} onClick={() => friendMutate.mutate(f.publicId)} className={styles.FriendListElement}>
-              <div className={styles.IconWrapper}>
-                <img src={f.icon} alt={`${f.name} pfp`} />
-              </div>
-              <span className={styles.FriendName}>{f.name}</span>
-            </li>
-          ))}
-        </ul>
+      <div className={styles.Header}>
+        <div onClick={() => setFriendTab('allFriends')} className={styles.FriendTabButton}>
+          Friends
+        </div>
+        <div
+          onClick={() => setFriendTab('addFriend')}
+          className={classNames(styles.FriendTabButton, styles.AddFriendsButton)}
+        >
+          Add friend
+        </div>
       </div>
+      {renderFriendTab()}
     </div>
   );
 };

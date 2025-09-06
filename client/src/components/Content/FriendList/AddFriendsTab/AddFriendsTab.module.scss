@@ -1,0 +1,41 @@
+@use '@styles/variables' as *;
+
+$border-radius: 20px;
+
+.AddFriendsContainer {
+  width: 100%;
+  padding: 10px;
+  color: $color-white;
+
+  .InputContainer {
+    display: flex;
+    flex-direction: row;
+  }
+  input {
+    padding: 15px;
+    background-color: $color-background-4;
+    color: inherit;
+    flex-grow: 1;
+    border: 0;
+    outline: 0;
+    border-top-left-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
+  }
+  button {
+    background-color: $color-primary;
+    padding: 10px;
+    color: inherit;
+    outline: 0;
+    border: 0;
+
+    border-top-right-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
+
+    font-weight: 600;
+    font-size: $font-xs;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

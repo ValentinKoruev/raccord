@@ -217,4 +217,65 @@ export class UserService {
       throw new InternalServerErrorException('Unexpected error occured');
     }
   }
+
+  async addFriend(request: { userId: string; friendId: string }) {
+    try {
+      await this.prisma.user.update({
+        where: {
+          publicId: request.userId,
+        },
+        data: {
+          friends: {
+            connect: {
+              publicId: request.friendId,
+            },
+          },
+          friendsOf: {
+            connect: {
+              publicId: request.friendId,
+            },
+          },
+        },
+      });
+
+      await this.prisma.directChannel.create({
+        data: {
+          users: {
+            create: [
+              {
+                user: {
+                  connect: {
+                    publicId: request.userId,
+                  },
+                },
+              },
+              {
+                user: {
+                  connect: {
+                    publicId: request.friendId,
+                  },
+                },
+              },
+            ],
+          },
+          isGroup: false,
+        },
+      });
+    } catch (error) {
+      //? Prisma specific errors:
+      //? P2025: Record not found, gets thrown when connect doesn't find a userId/friendId
+      //? P2002: Unique key constraint failed, in this case the id is [userId, friendId], so if user is already in the guild it gets thrown
+      if (error instanceof PrismaClientKnownRequestError) {
+        switch (error.code) {
+          case 'P2002':
+            throw new ConflictException('Friend already added.');
+          case 'P2025':
+            throw new NotFoundException('Friend not found.');
+          default:
+            throw error;
+        }
+      }
+      throw error; //? non-Prisma errors
+    }
+  }
 }

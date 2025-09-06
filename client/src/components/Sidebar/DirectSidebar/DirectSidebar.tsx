@@ -79,7 +79,8 @@ const DirectSidebar = () => {
   if (isDirectFetching) return <div className={styles.DirectSidebar}>Loading sidebar</div>;
 
   const directChannels = (directChannels: Array<any> | undefined) => {
-    if (!directChannels) return <div>No direct messages</div>;
+    if (!directChannels || directChannels.length == 0)
+      return <div className={styles.NoDirectMessages}>No direct messages found</div>;
 
     return directChannels.map((d) => {
       const formattedChannel = formatDirectChannel(d.publicId);
@@ -99,6 +100,7 @@ const DirectSidebar = () => {
 
   return (
     <div data-testid="direct-sidebar" className={styles.DirectSidebar}>
+      <div></div>
       <div className={styles.DirectSidebarTabs}>
         <div
           onClick={handleFriendsClick}

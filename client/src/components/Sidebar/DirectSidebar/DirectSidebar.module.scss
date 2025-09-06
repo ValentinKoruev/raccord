@@ -42,15 +42,16 @@ $tab-icon-size: 1.5em;
   }
 
   .DirectMessagesContainer {
+    color: $color-gray;
+    font-size: $font-xs;
     .DirectMessagesHeader {
-      font-size: $font-xs;
-      color: lightgray;
       margin-bottom: 5px;
     }
     .DirectMessagesList {
       display: flex;
+      font-size: $font-xl;
       flex-direction: column;
-      gap: 10px;
+      gap: 2px;
     }
   }
 }
