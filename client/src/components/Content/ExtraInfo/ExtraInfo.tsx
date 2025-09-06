@@ -2,6 +2,7 @@ import { useAppSelector } from '@redux/store';
 import { useQuery } from '@tanstack/react-query';
 import apiQueries from '@queries/api';
 import { GetGuildResponse } from '@shared/types/api';
+import Icon from '@components/UI/Icon';
 import styles from './ExtraInfo.module.scss';
 
 const ExtraInfo = () => {
@@ -22,16 +23,15 @@ const ExtraInfo = () => {
 
   if (!guild || !isSuccess || isFetching) return null;
 
-  console.log(guild);
-
   return (
     <div className={styles.ExtraInfoContainer}>
-      {guild.members?.map((e) => (
-        <div className={styles.ExtraInfoElement}>
+      {guild.members?.map((m, index) => (
+        <div key={`guild-member-${index}`} className={styles.ExtraInfoElement}>
           <div className={styles.IconWrapper}>
-            <img src={e.icon} alt={`${e.name} pfp`} />
+            <img src={m.icon} alt={`${m.name} pfp`} />
           </div>
-          <span className={styles.Name}>{e.name}</span>
+          <span className={styles.Name}>{m.name}</span>
+          {guild.ownerId == m.publicId && <Icon name="crown" className={styles.CrownIcon} />}
         </div>
       ))}
     </div>

@@ -1,6 +1,7 @@
 import ChevronDown from '../icons/ChevronDown';
 import ChevronRight from '../icons/ChevronRight';
 import CirclePlus from '../icons/CirclePlus';
+import Crown from '../icons/Crown';
 import Gear from '../icons/Gear';
 import Hashtag from '../icons/Hashtag';
 import Plus from '../icons/Plus';
@@ -19,6 +20,7 @@ const iconMap = {
   'user-plus': UserPlus,
   'user-group': UserGroup,
   gear: Gear,
+  crown: Crown,
   'right-from-bracket': RightFromBracket,
 };
 

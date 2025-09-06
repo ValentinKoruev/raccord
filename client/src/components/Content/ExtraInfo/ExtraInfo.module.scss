@@ -13,7 +13,7 @@ $icon-size: 32px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 10px;
+    gap: 7px;
     padding: 5px 0;
 
     .IconWrapper {
@@ -33,6 +33,12 @@ $icon-size: 32px;
       color: $color-white;
       font-size: $font-xs;
       font-weight: 500;
+    }
+
+    .CrownIcon {
+      width: 0.9em;
+      height: 0.9em;
+      fill: $color-gold;
     }
   }
 }
