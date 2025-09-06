@@ -41,20 +41,20 @@ export class GuildController {
   }
 
   @Get('/:id')
-  getGuild(@Param() params: any) {
-    return this.guildService.getGuild({ guildId: params.id });
+  async getGuild(@Param() params: any) {
+    return await this.guildService.getGuild({ guildId: params.id });
   }
 
   @Get('/:id/channels')
-  getChannels(@Param() params: any) {
-    return this.guildService.getChannels(params.id);
+  async getChannels(@Param() params: any) {
+    return await this.guildService.getChannels(params.id);
   }
 
   @UseGuards(AuthGuard)
   @HttpCode(200)
   @Post('/:id/channels')
-  createChannel(@Req() request, @Param() params, @Body() body: CreateGuildChannelRequest) {
-    return this.guildService.createChannel({
+  async createChannel(@Req() request, @Param() params, @Body() body: CreateGuildChannelRequest) {
+    return await this.guildService.createChannel({
       guildId: params.id,
       userId: request.user.userId,
       channelName: body.channelName,

@@ -9,14 +9,14 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  login(@Body() input: AuthInput) {
+  async login(@Body() input: AuthInput) {
     return this.authService.authenticate(input);
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('register')
-  createUser(@Body() request: RegisterData) {
-    return this.authService.register(request);
+  async createUser(@Body() request: RegisterData) {
+    return await this.authService.register(request);
   }
 
   // test route

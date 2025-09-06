@@ -8,37 +8,37 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Get('/')
-  getUser(@Req() request) {
-    return this.userService.getUser(request.user.userId);
+  async getUser(@Req() request) {
+    return await this.userService.getUser(request.user.userId);
   }
 
   @UseGuards(AuthGuard)
   @Get('/guilds')
-  getUserGuilds(@Req() request) {
-    return this.userService.getUserGuilds({ userId: request.user.userId });
+  async getUserGuilds(@Req() request) {
+    return await this.userService.getUserGuilds({ userId: request.user.userId });
   }
 
   @UseGuards(AuthGuard)
   @Get('channels')
-  getUserChannels(@Req() request) {
-    return this.userService.getAllUserChannels(request.user.userId);
+  async getUserChannels(@Req() request) {
+    return await this.userService.getAllUserChannels(request.user.userId);
   }
 
   @UseGuards(AuthGuard)
   @Get('friends')
-  getUserFriends(@Req() request) {
-    return this.userService.getUserFriends(request.user.userId);
+  async getUserFriends(@Req() request) {
+    return await this.userService.getUserFriends(request.user.userId);
   }
 
   @UseGuards(AuthGuard)
   @Post('friends')
-  addFriend(@Req() request, @Body() body) {
-    return this.userService.addFriend({ userId: request.user.userId, friendId: body.friendId });
+  async addFriend(@Req() request, @Body() body) {
+    return await this.userService.addFriend({ userId: request.user.userId, friendId: body.friendId });
   }
 
   @UseGuards(AuthGuard)
   @Get('direct')
-  getUserDirectChannels(@Req() request) {
-    return this.userService.getUserDirectChannels(request.user.userId);
+  async getUserDirectChannels(@Req() request) {
+    return await this.userService.getUserDirectChannels(request.user.userId);
   }
 }
