@@ -52,4 +52,16 @@ export class AuthService {
 
     return this.generateToken({ userId: user.publicId, username: user.name });
   }
+
+  async getLoggedUser(userId: string) {
+    const user = await this.userService.getUser(userId);
+
+    if (!user) throw new UnauthorizedException();
+
+    return {
+      userId: user.publicId,
+      username: user.name,
+      theme: user.theme ?? 'BLURPLE',
+    };
+  }
 }

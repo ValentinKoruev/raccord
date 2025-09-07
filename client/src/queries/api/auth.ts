@@ -1,6 +1,6 @@
 import config from '@config';
+import axios from '@queries/axios';
 import { RegisterData } from '@shared/types/api';
-import axios from 'axios';
 
 const authQueries = {
   async login(form: { username: string; password: string }) {
@@ -8,6 +8,9 @@ const authQueries = {
   },
   async register(form: RegisterData) {
     return await axios.post(`${config.apiUrl}/auth/register`, form);
+  },
+  async getUser() {
+    return await axios.get(`${config.apiUrl}/auth/user`);
   },
 };
 

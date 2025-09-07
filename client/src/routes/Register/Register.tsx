@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { AxiosError, isAxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import routes from '../config';
-import { setAuth } from '@redux/slices/authSlice';
+import { setAuthFromToken } from '@redux/slices/authSlice';
 import apiQueries from '@queries/api';
 import { BAD_REQUEST, CONFLICT } from '@queries/statusCodes';
 import { TokenData } from '@shared/types/api';
@@ -29,7 +29,7 @@ const RegisterPage = () => {
 
     Cookies.set('raccord_session', data.accessToken, { expires: 1, secure: true, sameSite: 'Strict' });
 
-    dispatch(setAuth(data));
+    dispatch(setAuthFromToken(data));
 
     navigate(routes.HOME);
   };

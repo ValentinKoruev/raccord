@@ -42,7 +42,7 @@
     .CreateButton {
       padding: 10px 20px;
       border-radius: 10px;
-      background-color: $color-primary;
+      background-color: var(--theme-color);
     }
     .BackButton,
     .CreateButton {

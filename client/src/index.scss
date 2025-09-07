@@ -1,3 +1,7 @@
+:root {
+  --theme-color: #7289da; // initial theme color, to be used as fallback if not set by client
+}
+
 * {
   margin: 0;
   padding: 0;

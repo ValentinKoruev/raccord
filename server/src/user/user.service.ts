@@ -24,6 +24,7 @@ export class UserService {
         publicId: true,
         name: true,
         icon: true,
+        themeColor: true,
         description: true,
       },
     });
@@ -33,6 +34,7 @@ export class UserService {
     return {
       publicId: user.publicId,
       name: user.name,
+      theme: user.themeColor ?? undefined,
       icon: user.icon ?? undefined,
       description: user.description ?? undefined,
     };

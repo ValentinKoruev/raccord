@@ -23,7 +23,7 @@
       padding: 8px 10px;
 
       &.AddFriendsButton {
-        background-color: $color-primary;
+        background-color: var(--theme-color);
         border-radius: 10px;
       }
       &:hover {

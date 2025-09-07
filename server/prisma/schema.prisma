@@ -8,12 +8,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Color {
+  BLURPLE
+  BLUE
+  GREEN
+  YELLOW
+  ORANGE
+  RED
+  PURPLE
+  MAGENTA
+  PINK
+  LIME
+  TURQUOISE
+  CYAN
+}
+
 model User {
   id              Int             @id @default(autoincrement())
   publicId        String          @default(uuid()) @unique
   email           String          @unique
   name            String
   password        String
+
+  themeColor      Color           @default(BLURPLE) // User selected theme color
+  iconAltColor    Color           @default(BLURPLE) // Used when user icon is not available, fallback
   description     String?
   icon            String?
 

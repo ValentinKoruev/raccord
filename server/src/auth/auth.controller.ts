@@ -19,10 +19,9 @@ export class AuthController {
     return await this.authService.register(request);
   }
 
-  // test route
   @UseGuards(AuthGuard)
-  @Get('protected')
-  getProtectedTestRoute(@Request() request) {
-    return request.user;
+  @Get('user')
+  async getProtectedTestRoute(@Request() request) {
+    return await this.authService.getLoggedUser(request.user.userId);
   }
 }

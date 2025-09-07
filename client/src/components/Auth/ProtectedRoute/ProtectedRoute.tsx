@@ -1,16 +1,34 @@
 import { ReactNode } from 'react';
-import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router';
-import routes from 'src/routes/config';
+import { useQuery } from '@tanstack/react-query';
+import { useAppDispatch } from '@redux/store';
+import { setAuthFromObject } from '@redux/slices/authSlice';
+import routes from '@routes/config';
+import apiQueries from '@queries/api';
+import { getColorFromTheme } from '@shared/utils/colorUtil';
 
 const ProtectedRoute = (children: ReactNode) => {
-  const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
+  const dispatch = useAppDispatch();
   const location = useLocation();
+  const { data, isSuccess, isLoading } = useQuery({
+    queryKey: ['loggedUser'],
+    queryFn: async () => {
+      const response = await apiQueries.authQueries.getUser();
+      return response.data;
+    },
+    retry: true,
+  });
 
-  if (!isLoggedIn) {
+  if (isLoading) {
+    return null;
+  }
+
+  if (!data || !isSuccess) {
     return <Navigate to={routes.LOGIN} state={{ from: location }} replace />;
   }
 
+  dispatch(setAuthFromObject(data));
+  document.documentElement.style.setProperty('--theme-color', getColorFromTheme(data.theme));
   return children;
 };
 

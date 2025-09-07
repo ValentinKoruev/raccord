@@ -22,7 +22,7 @@ $border-radius: 20px;
     border-bottom-left-radius: $border-radius;
   }
   button {
-    background-color: $color-primary;
+    background-color: var(--theme-color);
     padding: 10px;
     color: inherit;
     outline: 0;

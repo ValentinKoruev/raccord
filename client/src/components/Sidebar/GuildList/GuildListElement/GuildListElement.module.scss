@@ -79,7 +79,7 @@ $iconSize: 50px;
     &.Active {
       border-radius: 30%;
       &.Colored {
-        background-color: $color-primary;
+        background-color: var(--theme-color);
       }
     }
 
@@ -90,7 +90,7 @@ $iconSize: 50px;
       transition: all 0.2s ease-out;
 
       &.Colored {
-        background-color: $color-primary;
+        background-color: var(--theme-color);
       }
     }
   }

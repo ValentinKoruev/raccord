@@ -1,0 +1,6 @@
+-- CreateEnum
+CREATE TYPE "Color" AS ENUM ('BLURPLE', 'BLUE', 'GREEN', 'YELLOW', 'ORANGE', 'RED', 'PURPLE', 'MAGENTA', 'PINK', 'LIME', 'TURQUOISE', 'CYAN');
+
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "iconAltColor" "Color" NOT NULL DEFAULT 'BLURPLE',
+ADD COLUMN     "themeColor" "Color" NOT NULL DEFAULT 'BLURPLE';
