@@ -10,17 +10,23 @@ import { getColorFromTheme } from '@shared/utils/colorUtil';
 const ProtectedRoute = (children: ReactNode) => {
   const dispatch = useAppDispatch();
   const location = useLocation();
+
+  // Only run query if we're actually in a protected route context
+  const shouldCheckAuth = location.pathname !== routes.LOGIN && location.pathname !== routes.REGISTER;
+
   const { data, isSuccess, isLoading } = useQuery({
     queryKey: ['loggedUser'],
     queryFn: async () => {
       const response = await apiQueries.authQueries.getUser();
       return response.data;
     },
-    retry: true,
+    retry: false,
+    refetchOnWindowFocus: false,
+    enabled: shouldCheckAuth,
   });
 
   if (isLoading) {
-    return null;
+    return <div>Loading in...</div>;
   }
 
   if (!data || !isSuccess) {
