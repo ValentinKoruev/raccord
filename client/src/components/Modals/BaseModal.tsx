@@ -3,9 +3,10 @@ import { createPortal } from 'react-dom';
 import { useAppDispatch, useAppSelector } from '@redux/store';
 import { closeModal } from '@redux/slices/modalSlice';
 import AddServerModal from './AddServer';
+import CreateChannelModal from './CreateChannel';
+import { UserOptionsMenu } from './OptionsMenu';
 import InviteToServerModal from './InviteToServer';
 import styles from './BaseModal.module.scss';
-import CreateChannelModal from './CreateChannel';
 
 export const BaseModal = () => {
   const dispatch = useAppDispatch();
@@ -36,6 +37,9 @@ export const BaseModal = () => {
       break;
     case 'createChannel':
       content = <CreateChannelModal {...props} />;
+      break;
+    case 'optionsMenu':
+      content = <UserOptionsMenu />;
       break;
     default:
       return null;

@@ -1,10 +1,12 @@
 @use '@styles/variables' as *;
 
 $user-icon-size: 36px;
+$action-icon-size: 24px;
 
 .UserInfoContainer {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   padding: 10px;
   width: 100%;
@@ -34,6 +36,35 @@ $user-icon-size: 36px;
       font-weight: 500;
       font-size: $font-sm;
       color: $color-white;
+    }
+  }
+
+  .UserActions {
+    display: flex;
+    align-items: center;
+
+    button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: transparent;
+      fill: #9ca3af;
+      border: 0;
+      border-radius: 10px;
+      outline: 0;
+      padding: 5px;
+
+      transition: background-color 0.2s ease-in-out;
+
+      svg {
+        width: $action-icon-size;
+        height: $action-icon-size;
+      }
+
+      &:hover {
+        background-color: $color-background-2;
+        cursor: pointer;
+      }
     }
   }
 }

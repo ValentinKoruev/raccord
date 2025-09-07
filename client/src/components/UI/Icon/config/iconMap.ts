@@ -9,6 +9,7 @@ import RightFromBracket from '../icons/RightFromBracket';
 import UserGroup from '../icons/UserGroup';
 import UserPlus from '../icons/UserPlus';
 import VolumeHigh from '../icons/VolumeHigh';
+import XMark from '../icons/XMark';
 
 const iconMap = {
   'arrow-down': ChevronDown,
@@ -21,6 +22,7 @@ const iconMap = {
   'user-group': UserGroup,
   gear: Gear,
   crown: Crown,
+  'x-mark': XMark,
   'right-from-bracket': RightFromBracket,
 };
 

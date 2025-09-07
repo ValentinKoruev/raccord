@@ -9,6 +9,9 @@ const authQueries = {
   async register(form: RegisterData) {
     return await axios.post(`${config.apiUrl}/auth/register`, form);
   },
+  async logout() {
+    return await axios.post(`${config.apiUrl}/auth/logout`);
+  },
   async getUser() {
     return await axios.get(`${config.apiUrl}/auth/user`);
   },

@@ -1,0 +1,119 @@
+@use '@styles/variables' as *;
+
+$close-button-size: 24px;
+
+.OptionsMenuContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+
+  color: #696969;
+
+  .OptionsAside {
+    padding: 50px 20px;
+    background-color: $color-background-4;
+    width: 33%;
+    user-select: none;
+
+    .OptionsListContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      float: right;
+      min-width: 200px;
+      width: fit-content;
+
+      .OptionSet {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        .OptionsHeader {
+          font-size: $font-sm;
+        }
+
+        .OptionsList {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          list-style: none;
+          padding: 0;
+          margin: 0;
+
+          .OptionItem {
+            font-size: $font-xs;
+            cursor: pointer;
+
+            .OptionButton {
+              background-color: transparent;
+              text-align: left;
+              color: #696969;
+              font-weight: 600;
+              border: 0;
+              width: 100%;
+              padding: 5px 10px;
+              border-radius: 5px;
+
+              &:hover {
+                color: $color-white;
+                background-color: lighten($color-background-4, 5%);
+                cursor: pointer;
+              }
+
+              &.Active {
+                color: $color-white;
+                background-color: lighten($color-background-4, 5%);
+                font-weight: bold;
+              }
+
+              &.Danger {
+                color: $color-pale-red;
+
+                &:hover {
+                  background-color: rgba($color-pale-red, 0.1);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .OptionsContentContainer {
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    background-color: $color-background-3;
+    flex-grow: 1;
+
+    .OptionsContent {
+      width: 600px;
+    }
+
+    .CloseButton {
+      padding: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: transparent;
+      border: 1px solid #696969;
+      border-radius: 50%;
+
+      svg {
+        fill: #696969;
+        width: $close-button-size;
+        height: $close-button-size;
+      }
+
+      &:hover {
+        svg {
+          fill: $color-white;
+        }
+        border-color: $color-white;
+        cursor: pointer;
+      }
+    }
+  }
+}
