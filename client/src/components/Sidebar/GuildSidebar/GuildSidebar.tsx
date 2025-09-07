@@ -53,7 +53,7 @@ const GuildSidebar: FC<GuildSidebarProps> = ({ guildId }) => {
     if (!guild.channels || guild.channels.length <= 0) {
       dispatch(
         setChatChannel({
-          channelName: null,
+          channelContext: { type: 'text', title: '' },
           messages: [],
         }),
       );
@@ -71,8 +71,11 @@ const GuildSidebar: FC<GuildSidebarProps> = ({ guildId }) => {
     dispatch(setActiveChannel({ type: 'guild', channelId: channel.id, guildId: guild?.guildId }));
     dispatch(
       setChatChannel({
-        channelName: channel.name,
-        messages: channel.messages,
+        channelContext: {
+          type: 'text',
+          title: channel.name,
+        },
+        messages: channel.messages ?? [],
       }),
     );
     dispatch(setContentVariant('chat'));

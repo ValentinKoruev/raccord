@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
-import { useAppSelector } from '@redux/store';
+import { getSocket } from '@socket';
+import { useAppDispatch, useAppSelector } from '@redux/store';
+import { handleIncomingMessage } from '@redux/thunks/messageThunk';
 import routes from '@routes/config';
 import apiQueries from '@queries/api';
 import { GuildDto } from '@shared/types/dto/Guild';
-import { GetUserGuildsResponse } from '@shared/types/api';
+import { GetUserGuildsResponse, MessageSocketResponse } from '@shared/types/api';
 import BaseModal from '@components/Modals';
 import Content from '@components/Content';
 import Sidebar from '@components/Sidebar';
@@ -13,6 +15,7 @@ import UserInfo from '@components/UserInfo';
 import styles from './MainApp.module.scss';
 
 const MainApp = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [guilds, setGuilds] = useState<Array<GuildDto>>([]);
   const auth = useAppSelector((state) => state.auth);
@@ -39,6 +42,18 @@ const MainApp = () => {
       setGuilds(data);
     }
   }, [isSuccess, data]);
+
+  const onMessage = (messageResponse: MessageSocketResponse) => {
+    dispatch(handleIncomingMessage(messageResponse));
+  };
+
+  useEffect(() => {
+    getSocket().on('message', onMessage);
+
+    return () => {
+      getSocket().off('message', onMessage);
+    };
+  }, []);
 
   return (
     <div className={styles.AppContainer}>

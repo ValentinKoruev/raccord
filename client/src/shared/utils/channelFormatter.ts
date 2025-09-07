@@ -29,3 +29,20 @@ export const parseChannel = (key: string): ChannelInfo => {
 
   throw new Error("Invalid key format");
 };
+
+export const getChatSymbol = (
+  key: "text" | "voice" | "direct" | "directGroup"
+) => {
+  switch (key) {
+    case "text":
+      return "#";
+    case "voice":
+      return ""; //? Idk what to put here
+    case "direct":
+      return "@";
+    case "directGroup": //? Idk what to put here
+      return "";
+    default:
+      return "";
+  }
+};

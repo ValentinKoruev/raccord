@@ -44,8 +44,11 @@ const FriendList = () => {
       dispatch(setActiveChannel({ type: 'direct', channelId: channel.id }));
       dispatch(
         setChatChannel({
-          channelName: channel.name,
-          messages: channel.messages,
+          channelContext: {
+            type: 'direct',
+            title: channel.name,
+          },
+          messages: channel.messages ?? [],
         }),
       );
       dispatch(setContentVariant('chat'));

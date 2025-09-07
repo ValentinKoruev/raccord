@@ -69,6 +69,13 @@ export class ChannelService {
     return {
       id: channel.publicId,
       type: 'text', // TODO: Change when voice is added
+      //? For now, only users have icons. If we add group icons in the future, we can handle it here.
+      icon: !channel.isGroup
+        ? {
+            href: channel.users[0]?.user.icon ?? '',
+            altColor: '#0f0', // temporary color
+          }
+        : undefined,
       name: channel.users.map((u) => u.user.name).join(', '), // TODO: Add custom name to channels
       messages: channel.messages.map((m) => ({
         senderId: m.sender.publicId,

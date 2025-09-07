@@ -1,9 +1,13 @@
-import { MouseEventHandler, useEffect, useRef } from 'react';
+import { FC, MouseEventHandler, useEffect, useRef } from 'react';
 import { getSocket } from '@socket';
 import styles from './ChatBottomBar.module.scss';
 import { useAppSelector } from '@redux/store';
 
-const ChatBottomBar = () => {
+interface IChatBottomBarProps {
+  channelTitle?: string;
+}
+
+const ChatBottomBar: FC<IChatBottomBarProps> = ({ channelTitle }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const activeChannelId = useAppSelector((state) => state.session.activeChannelId);
   const activeChannelIdRef = useRef(activeChannelId); // to be used for socketio callback fn
@@ -45,7 +49,7 @@ const ChatBottomBar = () => {
   return (
     <div className={styles.ChatBottomBar}>
       <div onClick={onInputParentFocus} className={styles.InputContainer}>
-        <input ref={inputRef} className={styles.Input} type="text" placeholder="Message" />
+        <input ref={inputRef} className={styles.Input} type="text" placeholder={`Message ${channelTitle}`} />
       </div>
     </div>
   );

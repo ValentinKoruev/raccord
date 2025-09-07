@@ -37,8 +37,12 @@ const Friend: FC<FriendProps> = ({ image, name, userId, isActive, isUnread }) =>
       dispatch(setActiveChannel({ type: 'direct', channelId: channel.id }));
       dispatch(
         setChatChannel({
-          channelName: channel.name,
-          messages: channel.messages,
+          channelContext: {
+            type: 'direct',
+            title: channel.name,
+            icon: channel.icon,
+          },
+          messages: channel.messages ?? [],
         }),
       );
       dispatch(setContentVariant('chat'));

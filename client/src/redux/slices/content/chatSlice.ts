@@ -1,14 +1,27 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MessageDto } from '@shared/types/dto/Message';
 import { MessageSocketResponse } from '@shared/types/api';
 
-interface ChatState {
+// TODO: refactor the types into chat.types.ts
+
+type ChatType = 'text' | 'voice' | 'direct' | 'directGroup';
+
+type ChatContext = {
+  type: ChatType;
   title: string;
+  icon?: {
+    href: string;
+    altColor: string;
+  };
+};
+
+interface ChatState {
+  context: ChatContext;
   messages: Array<MessageDto>;
 }
 
 const initialState: ChatState = {
-  title: '',
+  context: { type: 'text', title: '' },
   messages: [],
 };
 
@@ -16,10 +29,10 @@ export const chatSlice = createSlice({
   name: 'chat',
   initialState,
   reducers: {
-    setChatChannel: (state, action) => {
-      const payload = action.payload as { channelName: string; messages: MessageDto[] };
+    setChatChannel: (state, action: PayloadAction<{ channelContext: ChatContext; messages: MessageDto[] }>) => {
+      const payload = action.payload;
       state.messages = [...payload.messages];
-      state.title = payload.channelName;
+      state.context = payload.channelContext;
     },
     receiveMessage: (state, action) => {
       const msg = action.payload as MessageSocketResponse;
@@ -27,7 +40,7 @@ export const chatSlice = createSlice({
     },
     clearChat: (state) => {
       state.messages = [];
-      state.title = '';
+      state.context = { type: 'text', title: '' };
     },
   },
 });

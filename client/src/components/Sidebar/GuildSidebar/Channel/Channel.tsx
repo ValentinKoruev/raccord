@@ -38,11 +38,12 @@ const Channel: FC<ChannelProps> = ({ type, name, isActive, isUnread, channelId }
 
       const channelInfo = parseChannel(channelId); // !NOTE: preferable avoid this and change it in the future
       if (channelInfo.type != 'guild') return;
+
       dispatch(setActiveChannel({ type: 'guild', channelId: channelInfo.channelId, guildId: channelInfo.guildId }));
       dispatch(
         setChatChannel({
-          channelName: channel.name,
-          messages: channel.messages,
+          channelContext: { type: 'text', title: name },
+          messages: channel.messages ?? [],
         }),
       );
       dispatch(setContentVariant('chat'));

@@ -64,8 +64,12 @@ const DirectSidebar = () => {
 
     dispatch(
       setChatChannel({
-        channelName: channel.name,
-        messages: channel.messages,
+        channelContext: {
+          type: 'direct',
+          title: channel.name,
+          icon: channel.icon,
+        },
+        messages: channel.messages ?? [],
       }),
     );
     dispatch(setContentVariant('chat'));
