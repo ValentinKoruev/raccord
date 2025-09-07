@@ -47,6 +47,7 @@ const FriendList = () => {
           channelContext: {
             type: 'direct',
             title: channel.name,
+            icon: channel.icon,
           },
           messages: channel.messages ?? [],
         }),

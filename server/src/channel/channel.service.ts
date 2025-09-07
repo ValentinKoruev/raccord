@@ -127,6 +127,12 @@ export class ChannelService {
       id: channel.publicId,
       type: 'text', // TODO: Change when voice is added
       name: channel.users.map((u) => u.user.name).join(', '), // TODO: Add custom name to channels
+      icon: !channel.isGroup
+        ? {
+            href: channel.users[0]?.user.icon ?? '',
+            altColor: '#0f0', // temporary color
+          }
+        : undefined,
       messages: channel.messages.map((m) => ({
         senderId: m.sender.publicId,
         senderName: m.sender.name,
