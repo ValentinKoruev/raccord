@@ -9,6 +9,7 @@ $imageSize: 45px;
   gap: 1em;
 
   .ImageWrapper {
+    flex-shrink: 0;
     width: $imageSize;
     height: $imageSize;
     border-radius: 100%;
@@ -23,6 +24,7 @@ $imageSize: 45px;
   }
 
   .ImageWhitespace {
+    flex-shrink: 0;
     width: $imageSize;
     display: flex;
     justify-content: center;
